@@ -1,13 +1,11 @@
-package superDamageCalculator;
-
 /*
 A hashmap of moves from the Pokemon games. Modeled in Move.java. If a boolean wasn't set, it is
 assumed to be false.
 
 Data from Pokemon Showdown's moves file: https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js
-This was converted to JSON using this tool: http://www.teria.com/~koseki/memo/javascript/realtime_eval.html
 */
 
+package superDamageCalculator;
 import java.util.HashMap;
 
 public class Movedex
@@ -2003,7 +2001,7 @@ public class Movedex
 		movedex.put("Head Charge", headcharge);
 
 		Move returnMove = new Move("Return");
-		returnMove.setBP(0);
+		returnMove.setBP(102);
 		returnMove.setZBP(160);
 		returnMove.setCategory(1);
 		returnMove.setType("Normal");
@@ -2938,7 +2936,7 @@ public class Movedex
 		movedex.put("Accelerock", accelerock);
 
 		Move frustration = new Move("Frustration");
-		frustration.setBP(0);
+		frustration.setBP(102);
 		frustration.setZBP(160);
 		frustration.setCategory(1);
 		frustration.setType("Normal");

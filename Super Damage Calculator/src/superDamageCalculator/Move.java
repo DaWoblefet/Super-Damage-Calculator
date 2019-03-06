@@ -1,7 +1,7 @@
-package superDamageCalculator;
-
 /* Models a move. Mostly getters and setters for various properties.
 TODO: maybe refactor category in a similar way to typeConstants? */
+
+package superDamageCalculator;
 
 public class Move
 {
@@ -11,17 +11,17 @@ public class Move
 	private int category; //0 = status; 1 = physical; 2 = special, 3 = Psyshock effect
 	private String type;
 
-	boolean isSpread;
-	boolean makesContact;
-	boolean hasSecondaryEffect;
-	boolean isSignatureZ;
-	boolean hasRecoil;
-	boolean isTwoHit;
-	boolean isMultiHit;
-	boolean isPunch;
-	boolean isPulse;
-	boolean isBite;
-	boolean ignoresDefenseBoosts;
+	private boolean isSpread;
+	private boolean makesContact;
+	private boolean hasSecondaryEffect;
+	private boolean isSignatureZ;
+	private boolean hasRecoil;
+	private boolean isTwoHit;
+	private boolean isMultiHit;
+	private boolean isPunch;
+	private boolean isPulse;
+	private boolean isBite;
+	private boolean ignoresDefenseBoosts;
 
 
 	public Move(String name)

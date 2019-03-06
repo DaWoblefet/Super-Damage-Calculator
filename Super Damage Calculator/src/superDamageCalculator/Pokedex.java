@@ -1,11 +1,7 @@
+/* A hashmap of moves from the Pokemon games. Modeled in Pokemon.java. Formes could use a refactor.
+ * Data from Pokemon Showdown's Pokedex file: https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/pokedex.js */
+
 package superDamageCalculator;
-
-/*
-A hashmap of moves from the Pokemon games. Modeled in Pokemon.java. Formes could use a refactor.
-
-Data from Pokemon Showdown's Pokedex file: https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/pokedex.js
-This was converted to JSON using this tool: http://www.teria.com/~koseki/memo/javascript/realtime_eval.html
-*/
 
 import java.util.HashMap;
 
