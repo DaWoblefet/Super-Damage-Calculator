@@ -445,8 +445,10 @@ public class SuperDamageCalculator extends Application
 		mainPane.setCenter(subPane);
 
 		Scene scene = new Scene(mainPane, 1200, 675);
-		primaryStage.setScene(scene);
+		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
+		primaryStage.getIcons().add(icon);
 		primaryStage.setTitle("Super Damage Calculator");
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
@@ -503,6 +505,7 @@ public class SuperDamageCalculator extends Application
 	}
 
 	//The logic for importing the sets from GUI.
+	//TODO: Sprites will crash with this right now.
 	public void setImportedData(Stage stage, String text, int side)
 	{
 		ShowdownImport psImport = new ShowdownImport(text);
@@ -567,7 +570,7 @@ public class SuperDamageCalculator extends Application
 		String credits = "";
 		try
 		{
-			Scanner input = new Scanner(new File("Credits.txt"));
+			Scanner input = new Scanner((getClass().getResourceAsStream("/resources/Credits.txt")));
 			while (input.hasNextLine())
 			{
 				credits += input.nextLine() + "\n";
@@ -605,11 +608,6 @@ public class SuperDamageCalculator extends Application
 
 	public void updateDamageCalcs(PokemonSide attacker, PokemonSide defender)
 	{
-		/*
-		updateCalc task = new updateCalc(attacker, defender);
-		Thread thread = new Thread(task);
-		thread.start();
-		*/
 		attacker.topMoveNames.clear();
 		//Left side vs. right side
 		for (int i = 0; i < 4; i++)
@@ -727,16 +725,20 @@ public class SuperDamageCalculator extends Application
 
 	public int parseChangeValue(String changeValue)
 	{
-		int result = 0;
-		if (changeValue.charAt(0) == '+') //Attack / Sp. Atk
+		int result;
+		
+		if (changeValue.charAt(1) == '-') //Neutral boost
+		{
+			result = 0;
+		}
+		else if (changeValue.charAt(0) == '+') //Positive boost
 		{
 			result = Character.getNumericValue(changeValue.charAt(1));
 		}
-		else if (changeValue.charAt(0) == '-')
+		else
 		{
-			result -= Character.getNumericValue(changeValue.charAt(1));
+			result = 0 - Character.getNumericValue(changeValue.charAt(1));
 		}
-		else {result = 0;}
 
 		return result;
 	}
@@ -744,136 +746,5 @@ public class SuperDamageCalculator extends Application
 	public static void main(String args[])
 	{
 		launch(args);
-	}
-
-	/* This didn't end up working the way it was supposed to work. It functions better without multithreading right now. */
-	class updateCalc implements Runnable
-	{
-		private PokemonSide attacker;
-		private PokemonSide defender;
-
-		public updateCalc(PokemonSide attacker, PokemonSide defender)
-		{
-			this.attacker = attacker;
-			this.defender = defender;
-		}
-
-		@Override
-		public void run()
-		{
-			attacker.topMoveNames.clear();
-			//Left side vs. right side
-			for (int i = 0; i < 4; i++)
-			{
-				int attackingStatToUse = 0;
-				int defendingStatToUse = 0;
-				String category = (String) attacker.category[i].getValue();
-				if (category.equals("Physical"))
-				{
-					attackingStatToUse = StatConstants.ATK;
-					defendingStatToUse = StatConstants.DEF;
-				}
-				else if (category.equals("Special"))
-				{
-					attackingStatToUse = StatConstants.SATK;
-					defendingStatToUse = StatConstants.SDEF;
-				}
-				else if (category.equals("Psyshock effect"))
-				{
-					attackingStatToUse = StatConstants.SATK;
-					defendingStatToUse = StatConstants.DEF;
-				}
-
-				//Parsing value from the +6 to -6 combobox
-				String offenseChange = (String) attacker.statChanges[attackingStatToUse].getValue();
-				int offenseChangeValue = parseChangeValue(offenseChange);
-				String speedAttackerChange = (String) attacker.statChanges[StatConstants.SPE].getValue();
-				int speedAttackerChangeValue = parseChangeValue(speedAttackerChange);
-				String defenseChange = (String) defender.statChanges[defendingStatToUse].getValue();
-				int defenseChangeValue = parseChangeValue(defenseChange);
-				String speedDefenderChange = (String) attacker.statChanges[StatConstants.SPE].getValue();
-				int speedDefenderChangeValue = parseChangeValue(speedDefenderChange);
-
-				Object[] damageVariablesLeft = new Object[20];
-				damageVariablesLeft[0] = (String) attacker.teamData[attacker.currentPokemon].getName();
-				damageVariablesLeft[1] = (String) attacker.typeLeft.getValue();
-				damageVariablesLeft[2] = (String) attacker.typeRight.getValue();
-				damageVariablesLeft[3] = Integer.parseInt((String) attacker.level.getText());
-				damageVariablesLeft[4] = (String) attacker.forme.getValue();
-				damageVariablesLeft[5] = Integer.parseInt((String) attacker.calculatedStats[attackingStatToUse].getText());
-				damageVariablesLeft[6] = Integer.parseInt((String) attacker.EVsField[attackingStatToUse].getText());
-				damageVariablesLeft[7] = Integer.parseInt((String) attacker.calculatedStats[StatConstants.SPE].getText());
-				damageVariablesLeft[8] = offenseChangeValue;
-				damageVariablesLeft[9] = speedAttackerChangeValue;
-				damageVariablesLeft[10] = (String) attacker.nature.getValue();
-				damageVariablesLeft[11] = (String) attacker.ability.getValue();
-				damageVariablesLeft[12] = (String) attacker.item.getValue();
-				damageVariablesLeft[13] = (String) attacker.status.getValue();
-				damageVariablesLeft[14] = (String) attacker.moveData[i].getName();
-				damageVariablesLeft[15] = Integer.parseInt((String) attacker.basePower[i].getText());
-				damageVariablesLeft[16] = (String) attacker.type[i].getValue();
-				damageVariablesLeft[17] = (String) attacker.category[i].getValue();
-				damageVariablesLeft[18] = (boolean) attacker.crit[i].isSelected();
-				damageVariablesLeft[19] = (boolean) attacker.zOption[i].isSelected();
-
-				Object[] damageVariablesRight = new Object[15];
-				damageVariablesRight[0] = (String) defender.teamData[defender.currentPokemon].getName();
-				damageVariablesRight[1] = (String) defender.typeLeft.getValue();
-				damageVariablesRight[2] = (String) defender.typeRight.getValue();
-				damageVariablesRight[3] = (String) defender.forme.getValue();
-				damageVariablesRight[4] = Integer.parseInt((String) defender.calculatedStats[StatConstants.HP].getText());
-				damageVariablesRight[5] = Integer.parseInt((String) defender.EVsField[StatConstants.HP].getText());
-				damageVariablesRight[6] = Integer.parseInt((String) defender.calculatedStats[defendingStatToUse].getText());
-				damageVariablesRight[7] = Integer.parseInt((String) defender.EVsField[defendingStatToUse].getText());
-				damageVariablesRight[8] = Integer.parseInt((String) defender.calculatedStats[StatConstants.SPE].getText());
-				damageVariablesRight[9] = defenseChangeValue;
-				damageVariablesRight[10] = speedDefenderChangeValue;
-				damageVariablesRight[11] = (String) defender.nature.getValue();
-				damageVariablesRight[12] = (String) defender.ability.getValue();
-				damageVariablesRight[13] = (String) defender.item.getValue();
-				damageVariablesRight[14] = (String) defender.status.getValue();
-
-				Object[] damageVariablesCenter = new Object[9];
-				damageVariablesCenter[0] = (String) format.getSelectionModel().getSelectedItem();
-				damageVariablesCenter[1] = (String) terrains.getSelectionModel().getSelectedItem();
-				damageVariablesCenter[2] = (String) weathers.getSelectionModel().getSelectedItem();
-				//damageVariablesCenter[3] = (String) auras.getSelectionModel().getSelectedItem(); Auras not implemented yet
-				if (attacker.equals(leftMon))
-				{
-					damageVariablesCenter[4] = (boolean) leftHelpingHand.isSelected();
-					damageVariablesCenter[5] = (boolean) rightProtect.isSelected();
-					damageVariablesCenter[6] = (boolean) rightReflect.isSelected();
-					damageVariablesCenter[7] = (boolean) rightLightScreen.isSelected();
-					if (rightAuroraVeil.isSelected()) //Set Reflect and Light Screen to be true
-					{
-						damageVariablesCenter[6] = true;
-						damageVariablesCenter[7] = true;
-					}
-					damageVariablesCenter[8] = (boolean) rightFriendGuard.isSelected();
-				}
-				else //the attacker is the right side
-				{
-					damageVariablesCenter[4] = (boolean) rightHelpingHand.isSelected();
-					damageVariablesCenter[5] = (boolean) leftProtect.isSelected();
-					damageVariablesCenter[6] = (boolean) leftReflect.isSelected();
-					damageVariablesCenter[7] = (boolean) leftLightScreen.isSelected();
-					if (leftAuroraVeil.isSelected()) //Set Reflect and Light Screen to be true
-					{
-						damageVariablesCenter[6] = true;
-						damageVariablesCenter[7] = true;
-					}
-					damageVariablesCenter[8] = (boolean) leftFriendGuard.isSelected();
-				}
-
-				CalculateDamage damagecalc = new CalculateDamage(damageVariablesLeft, damageVariablesRight, damageVariablesCenter);
-				attacker.damageOutput[i] = damagecalc.getDamageOutput();
-				attacker.damageOutputShort[i] = damagecalc.getDamageOutputShort();
-				attacker.damageRolls[i] = damagecalc.getDamageRolls();
-				attacker.topMoveNames.add((String) attacker.movesComboBox[i].getValue() + " " + attacker.damageOutputShort[i]);
-			}
-
-			mainDamageResultLabel.setText(leftMon.damageOutput[leftMon.currentMoveslot]);
-			mainDamageRollsLabel.setText(Arrays.toString(leftMon.damageRolls[leftMon.currentMoveslot]));
-		}
 	}
 }

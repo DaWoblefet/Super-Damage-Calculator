@@ -26,9 +26,9 @@ public class PokemonSide
 {
 	private HashMap<String, Pokemon> pokedex = new Pokedex().pokedex;
 	private HashMap<String, Move> movedex = new Movedex().movedex;
+	private HashMap<String, Item> items = new Itemdex().items;
 	private HashMap<String, Integer> natures = new Nature().natures;
 	private HashMap<String, Integer> abilities = new Abilitydex().abilities;
-	private HashMap<String, Integer> items = new Itemdex().items;
 	private HashMap<String, Integer> types = new Type().types;
 
 	public BorderPane pokemonSide;
