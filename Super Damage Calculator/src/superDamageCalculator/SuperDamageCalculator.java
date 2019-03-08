@@ -82,6 +82,9 @@ public class SuperDamageCalculator extends Application
 
 		MenuItem psImport = new MenuItem("Import from Showdown");
 		psImport.setOnAction(e -> openPSImport());
+		
+		MenuItem koChanceWidget = new MenuItem("KO Chance Calculator");
+		koChanceWidget.setOnAction(e -> openKOChanceCalculator());
 
 		MenuItem additionalOptions = new MenuItem("Additional Options");
 		additionalOptions.setOnAction(e -> openAdditionalOptions());
@@ -89,7 +92,7 @@ public class SuperDamageCalculator extends Application
 		MenuItem menuExit = new MenuItem("Exit");
 		menuExit.setOnAction(e -> {System.exit(0);});
 		//menuFile.getItems().addAll(additionalOptions, psImport, menuExit); //There are no additional options atm.
-		menuFile.getItems().addAll(psImport, menuExit);
+		menuFile.getItems().addAll(psImport, koChanceWidget, menuExit);
 
 		Menu menuLinks = new Menu("Links");
 		MenuItem ttHome = new MenuItem("Trainer Tower");
@@ -478,6 +481,14 @@ public class SuperDamageCalculator extends Application
 		stage.setTitle("Additional Options");
 		stage.show();
 	}
+	
+	public void openKOChanceCalculator()
+	{
+		Stage stage = new Stage();
+		KOChanceGUI koChanceGUI = new KOChanceGUI();
+		koChanceGUI.start(stage);
+	}
+	
 
 	//The GUI for importing sets from Showdown.
 	public void openPSImport()

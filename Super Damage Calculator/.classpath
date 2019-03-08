@@ -6,5 +6,7 @@
 			<accessrule kind="accessible" pattern="javafx/**"/>
 		</accessrules>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/dawob/Documents/Programming/Super Damage Calculator/controlsfx-8.40.14/controlsfx-8.40.14.jar"/>
+	<classpathentry kind="lib" path="C:/Users/dawob/Documents/Programming/Super Damage Calculator/controlsfx-8.40.14/fxsampler-1.0.10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

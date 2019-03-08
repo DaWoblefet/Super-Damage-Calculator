@@ -1,9 +1,6 @@
-/*
-A hashmap of moves from the Pokemon games. Modeled in Move.java. If a boolean wasn't set, it is
-assumed to be false.
-
-Data from Pokemon Showdown's moves file: https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js
-*/
+/* A hashmap of moves from the Pokemon games. Modeled in Move.java. If a boolean wasn't set, it is
+ * assumed to be false.
+ * Data from Pokemon Showdown's moves file: https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js */
 
 package superDamageCalculator;
 import java.util.HashMap;

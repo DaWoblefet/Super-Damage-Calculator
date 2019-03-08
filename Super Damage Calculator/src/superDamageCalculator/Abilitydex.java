@@ -1,8 +1,7 @@
-package superDamageCalculator;
-
 /* Associates an Ability with a particular number. Mostly for the
-Ability combobox, CalculateDamage handles the actual effects. */
+ * Ability combobox; CalculateDamage handles the actual effects. */
 
+package superDamageCalculator;
 import java.util.HashMap;
 
 public class Abilitydex

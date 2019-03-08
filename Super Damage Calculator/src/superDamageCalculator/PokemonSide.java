@@ -1,7 +1,8 @@
 /* This GUI is what constitutes each Pokemon of the GUI. A majority of the GUI elements
-are declared as public global variables for easier communication between classes. */
-package superDamageCalculator;
+ * are declared as public global variables for easier communication between classes.
+ * Autocomplete feature from ControlsFX (license BSD 3-Clause)*/
 
+package superDamageCalculator;
 import javafx.collections.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -19,6 +20,9 @@ import java.util.Map.*;
 import java.util.Objects;
 import java.util.Iterator;
 import java.util.Set;
+
+import org.controlsfx.control.textfield.TextFields;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -123,7 +127,7 @@ public class PokemonSide
 
 		spriteMain = new ImageView(new Image("/resources/Sprites/Abomasnow.png"));
 		chooseMon = new ComboBox<String>(pokemonNames);
-		//new AutoCompleteComboBoxListener<>(chooseMon);
+		TextFields.bindAutoCompletion(chooseMon.getEditor(), chooseMon.getItems());
 		chooseMon.setEditable(true);
 		chooseMon.setPrefWidth(150);
 		mon.addRow(0, spriteMain, chooseMon);
@@ -184,6 +188,11 @@ public class PokemonSide
 			statChanges[i] = new ComboBox<String>(statChangesNames);
 			statChanges[i].setPrefWidth(60);
 			statChanges[i].setValue("--");
+			if (i == 0)
+			{
+				statChanges[i].setVisible(false);
+			}
+
 			teamSpriteLabels[i] = new Label("Mon " + (i+1));
 			try
 			{
@@ -218,11 +227,13 @@ public class PokemonSide
 
 		Label abilityLabel = new Label("Ability");
 		ability = new ComboBox<String>(abilityNames);
+		TextFields.bindAutoCompletion(ability.getEditor(), ability.getItems());
 		ability.setPrefWidth(120);
 		ability.setEditable(true);
 
 		Label itemLabel = new Label("Item");
 		item = new ComboBox<String>(itemNames);
+		TextFields.bindAutoCompletion(item.getEditor(), item.getItems());
 		item.setPrefWidth(120);
 		item.setEditable(true);
 		NAISstructure.addRow(0, natureLabel, nature, new Label(""), new Label(""), itemLabel, item);
@@ -265,6 +276,7 @@ public class PokemonSide
 		for (int i = 0; i < 4; i++)
 		{
 			movesComboBox[i] = new ComboBox<String>(moveNames);
+			TextFields.bindAutoCompletion(movesComboBox[i].getEditor(), movesComboBox[i].getItems());
 			movesComboBox[i].setEditable(true);
 			movesComboBox[i].setPrefWidth(110);
 			basePower[i] = new TextField();
@@ -351,8 +363,8 @@ public class PokemonSide
 			}
 			catch (IllegalArgumentException ex)
 			{
-				spriteMain.setImage(new Image("/Sprites/Missingno..png"));
-				teamSprites[currentPokemon].setImage(new Image("/Sprites/Missingno..png"));
+				spriteMain.setImage(new Image("/resources/Sprites/Missingno..png"));
+				teamSprites[currentPokemon].setImage(new Image("resources/Sprites/Missingno..png"));
 			}
 			typeLeft.setValue(teamData[currentPokemon].getType(0));
 			try
@@ -412,8 +424,26 @@ public class PokemonSide
 			}
 		});
 
-		/* Currently stats (Level, IVs, EVs) do not update dynamically. The user must press Enter. */
-		level.setOnAction(e -> updateStats());
+		//Stat calculation done dynamically
+		level.textProperty().addListener((observable) -> {updateStats();});
+		level.setOnKeyPressed(e -> {
+			int currentLevel = Integer.parseInt(level.getText());
+			switch (e.getCode())
+			{
+				case UP:
+					if (!(currentLevel + 1 > 100))
+					{
+						level.setText(Integer.toString(currentLevel + 1));
+					}
+					break;
+				case DOWN:
+					if (!(currentLevel - 1 < 1))
+					{
+						level.setText(Integer.toString(currentLevel - 1));
+					}
+					break;
+			}
+		});
 
 		//Nature
 		nature.setOnAction(e ->
@@ -429,9 +459,27 @@ public class PokemonSide
 		for (int i = 0; i < 6; i++)
 		{
 			final int j = i;
-			baseField[j].setOnAction(e -> updateStats(j));
-			IVsField[j].setOnAction(e -> updateStats(j));
-			EVsField[j].setOnAction(e ->
+			baseField[j].textProperty().addListener((observable) -> {updateStats(j);});
+			IVsField[j].textProperty().addListener((observable) -> {updateStats(j);});
+			IVsField[j].setOnKeyPressed(e -> {
+				int currentIVs = Integer.parseInt(IVsField[j].getText());
+				switch (e.getCode())
+				{
+					case UP:
+						if (!(currentIVs + 1 > 31))
+						{
+							IVsField[j].setText(Integer.toString(currentIVs + 1));
+						}
+						break;
+					case DOWN:
+						if (!(currentIVs - 1 < 0))
+						{
+							IVsField[j].setText(Integer.toString(currentIVs - 1));
+						}
+						break;
+				}
+			});
+			EVsField[j].textProperty().addListener((observable) ->
 			{
 				updateStats(j);
 				int currentEVSum = 0;
@@ -452,6 +500,44 @@ public class PokemonSide
 					totalEVsRemainingLabel.setTextFill(Color.BLACK);
 				}
 			});
+			EVsField[j].setOnKeyPressed(e -> {
+				int currentEVs = Integer.parseInt(EVsField[j].getText());
+				switch (e.getCode())
+				{
+					case UP:
+						if (level.getText().equals("50") && currentEVs != 0) //Move around by increments of 8 EVs at level 50
+						{
+							if (!(currentEVs + 8 > 252))
+							{
+								EVsField[j].setText(Integer.toString(currentEVs + 8));
+							}
+						}
+						else
+						{
+							if (!(currentEVs + 4 > 252))
+							{
+								EVsField[j].setText(Integer.toString(currentEVs + 4));
+							}
+						}
+						break;
+					case DOWN:
+						if (level.getText().equals("50") && currentEVs != 4) //Move around by increments of 8 EVs at level 50
+						{
+							if (!(currentEVs - 8 < 0))
+							{
+								EVsField[j].setText(Integer.toString(currentEVs - 8));
+							}
+						}
+						else
+						{
+							if (!(currentEVs - 4 < 0))
+							{
+								EVsField[j].setText(Integer.toString(currentEVs - 4));
+							}
+						}
+						break;
+				}
+			});
 		}
 
 		//Moves
@@ -466,9 +552,7 @@ public class PokemonSide
 				category[j].setValue(categories.get(moveData[j].getCategory()));
 				type[j].setValue(moveData[j].getType());
 				zOption[j].setSelected(false);
-				//topMoveNames.set(j, (String) movesComboBox[j].getValue());
-				/*TODO: I would prefer for the damage calc to automatically update after choosing a move,
-				*but since it doesn't atm, hide the combobox update*/
+				topMoveNames.set(j, (String) movesComboBox[j].getValue());
 			});
 		}
 

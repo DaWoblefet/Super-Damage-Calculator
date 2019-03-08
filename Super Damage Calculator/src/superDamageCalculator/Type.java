@@ -1,9 +1,8 @@
-package superDamageCalculator;
-
 /* Represents a Pokemon's type as an integer. Uses
-Bulbapedia's type chart as a model for my own chart.
-https://bulbapedia.bulbagarden.net/wiki/Type#Type_chart */
+ * Bulbapedia's type chart as a model for my own chart.
+ * https://bulbapedia.bulbagarden.net/wiki/Type#Type_chart */
 
+package superDamageCalculator;
 import java.util.HashMap;
 
 public class Type
