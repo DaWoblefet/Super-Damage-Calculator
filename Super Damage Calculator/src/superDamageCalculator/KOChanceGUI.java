@@ -1,7 +1,6 @@
 /*Written by Leonard Craft III (DaWoblefet), with algorithm design by Ansel Blume (Stats).*/
 
 package superDamageCalculator;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;

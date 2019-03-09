@@ -1,8 +1,7 @@
-package superDamageCalculator;
-
 /* Associates a Nature with a particular number. Mostly for the
-Nature combobox, the application in the stat formula is done in Stats.java */
+Nature combobox; the application in the stat formula is done in Stats.java */
 
+package superDamageCalculator;
 import java.util.HashMap;
 
 public class Nature

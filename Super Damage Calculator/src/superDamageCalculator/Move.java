@@ -1,5 +1,4 @@
-/* Models a move. Mostly getters and setters for various properties.
-TODO: maybe refactor category in a similar way to typeConstants? */
+/* Models a move. Mostly getters and setters for various properties. */
 
 package superDamageCalculator;
 

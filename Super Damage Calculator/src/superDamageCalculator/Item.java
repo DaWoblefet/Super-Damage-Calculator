@@ -1,6 +1,6 @@
-package superDamageCalculator;
-
 /* Models an item. Mostly getters and setters for various properties. */
+
+package superDamageCalculator;
 
 public class Item
 {

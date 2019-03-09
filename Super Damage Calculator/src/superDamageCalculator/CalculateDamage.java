@@ -4,6 +4,7 @@
  * https://www.smogon.com/bw/articles/bw_complete_damage_formula (BW documentation)
  * https://docs.google.com/document/d/1uJtdnOTtM6b0uu7bNkRHhmvNvxgHrtQ4mSXgimJ1_P0/edit (DaWoblefet's old guide based on BW documentation)
  * https://pokemonshowdown.com/damagecalc/js/damage.js?97051234 (PS damage calc implementation) */
+
 package superDamageCalculator;
 import java.util.HashMap;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class CalculateDamage
 	private HashMap<String, Integer> types = new Type().types;
 	private HashMap<String, Integer> natures = new Nature().natures;
 	private double typechart[][] = new Type().typeChart;
-	private boolean debugMode = true;
+	private boolean debugMode = false;
 
 	private String attackerName;
 	private String attackerTypeLeft;

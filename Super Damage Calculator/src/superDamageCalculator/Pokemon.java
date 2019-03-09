@@ -1,12 +1,12 @@
-package superDamageCalculator;
-
 /* Models a Pokemon. Mostly getters and setters for various properties.
 Pokemon's toString function returns a Showdown export.
 TODO: Refactor abilities as fixed size? Pros: easier to get
 Ability in GUI, cons: basically makes second ability useless. */
 
+package superDamageCalculator;
 import java.util.ArrayList;
 import java.util.HashMap;
+import static superDamageCalculator.StatConstants.*;
 
 public class Pokemon
 {
@@ -182,32 +182,32 @@ public class Pokemon
     //Can be reduced to one method after refactoring Pokedex again
     public void setBaseHP(int baseHP)
     {
-		this.baseStats[StatConstants.HP] = baseHP;
+		this.baseStats[HP] = baseHP;
     }
 
     public void setBaseAtk(int baseAtk)
     {
-		this.baseStats[StatConstants.ATK] = baseAtk;
+		this.baseStats[ATK] = baseAtk;
     }
 
     public void setBaseDef(int baseDef)
     {
-		this.baseStats[StatConstants.DEF] = baseDef;
+		this.baseStats[DEF] = baseDef;
     }
 
     public void setBaseSAtk(int baseSAtk)
     {
-		this.baseStats[StatConstants.SATK] = baseSAtk;
+		this.baseStats[SATK] = baseSAtk;
     }
 
     public void setBaseSDef(int baseSDef)
     {
-		this.baseStats[StatConstants.SDEF] = baseSDef;
+		this.baseStats[SDEF] = baseSDef;
     }
 
     public void setBaseSpe(int baseSpe)
     {
-		this.baseStats[StatConstants.SPE] = baseSpe;
+		this.baseStats[SPE] = baseSpe;
     }
 
     @Override

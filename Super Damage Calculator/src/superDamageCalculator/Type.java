@@ -1,5 +1,4 @@
-/* Represents a Pokemon's type as an integer. Uses
- * Bulbapedia's type chart as a model for my own chart.
+/* Represents a Pokemon's type as an integer. Uses Bulbapedia's type chart as a model for my own chart.
  * https://bulbapedia.bulbagarden.net/wiki/Type#Type_chart */
 
 package superDamageCalculator;

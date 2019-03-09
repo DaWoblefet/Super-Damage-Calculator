@@ -1,6 +1,5 @@
 /* The main GUI. Imports two copies of PokemonSide to represent each Pokemon, a top menubar,
-labels at the top to display damage output, and center field options.
-*/
+ * labels at the top to display damage output, and center field options. */
 
 package superDamageCalculator;
 
@@ -25,6 +24,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.io.*;
 import java.util.Scanner;
+import static superDamageCalculator.StatConstants.*;
 
 public class SuperDamageCalculator extends Application
 {
@@ -628,28 +628,28 @@ public class SuperDamageCalculator extends Application
 			String category = (String) attacker.category[i].getValue();
 			if (category.equals("Physical"))
 			{
-				attackingStatToUse = StatConstants.ATK;
-				defendingStatToUse = StatConstants.DEF;
+				attackingStatToUse = ATK;
+				defendingStatToUse = DEF;
 			}
 			else if (category.equals("Special"))
 			{
-				attackingStatToUse = StatConstants.SATK;
-				defendingStatToUse = StatConstants.SDEF;
+				attackingStatToUse = SATK;
+				defendingStatToUse = SDEF;
 			}
 			else if (category.equals("Psyshock effect"))
 			{
-				attackingStatToUse = StatConstants.SATK;
-				defendingStatToUse = StatConstants.DEF;
+				attackingStatToUse = SATK;
+				defendingStatToUse = DEF;
 			}
 
 			//Parsing value from the +6 to -6 combobox
 			String offenseChange = (String) attacker.statChanges[attackingStatToUse].getValue();
 			int offenseChangeValue = parseChangeValue(offenseChange);
-			String speedAttackerChange = (String) attacker.statChanges[StatConstants.SPE].getValue();
+			String speedAttackerChange = (String) attacker.statChanges[SPE].getValue();
 			int speedAttackerChangeValue = parseChangeValue(speedAttackerChange);
 			String defenseChange = (String) defender.statChanges[defendingStatToUse].getValue();
 			int defenseChangeValue = parseChangeValue(defenseChange);
-			String speedDefenderChange = (String) attacker.statChanges[StatConstants.SPE].getValue();
+			String speedDefenderChange = (String) attacker.statChanges[SPE].getValue();
 			int speedDefenderChangeValue = parseChangeValue(speedDefenderChange);
 
 			Object[] damageVariablesLeft = new Object[20];
@@ -660,7 +660,7 @@ public class SuperDamageCalculator extends Application
 			damageVariablesLeft[4] = (String) attacker.forme.getValue();
 			damageVariablesLeft[5] = Integer.parseInt((String) attacker.calculatedStats[attackingStatToUse].getText());
 			damageVariablesLeft[6] = Integer.parseInt((String) attacker.EVsField[attackingStatToUse].getText());
-			damageVariablesLeft[7] = Integer.parseInt((String) attacker.calculatedStats[StatConstants.SPE].getText());
+			damageVariablesLeft[7] = Integer.parseInt((String) attacker.calculatedStats[SPE].getText());
 			damageVariablesLeft[8] = offenseChangeValue;
 			damageVariablesLeft[9] = speedAttackerChangeValue;
 			damageVariablesLeft[10] = (String) attacker.nature.getValue();
@@ -679,11 +679,11 @@ public class SuperDamageCalculator extends Application
 			damageVariablesRight[1] = (String) defender.typeLeft.getValue();
 			damageVariablesRight[2] = (String) defender.typeRight.getValue();
 			damageVariablesRight[3] = (String) defender.forme.getValue();
-			damageVariablesRight[4] = Integer.parseInt((String) defender.calculatedStats[StatConstants.HP].getText());
-			damageVariablesRight[5] = Integer.parseInt((String) defender.EVsField[StatConstants.HP].getText());
+			damageVariablesRight[4] = Integer.parseInt((String) defender.calculatedStats[HP].getText());
+			damageVariablesRight[5] = Integer.parseInt((String) defender.EVsField[HP].getText());
 			damageVariablesRight[6] = Integer.parseInt((String) defender.calculatedStats[defendingStatToUse].getText());
 			damageVariablesRight[7] = Integer.parseInt((String) defender.EVsField[defendingStatToUse].getText());
-			damageVariablesRight[8] = Integer.parseInt((String) defender.calculatedStats[StatConstants.SPE].getText());
+			damageVariablesRight[8] = Integer.parseInt((String) defender.calculatedStats[SPE].getText());
 			damageVariablesRight[9] = defenseChangeValue;
 			damageVariablesRight[10] = speedDefenderChangeValue;
 			damageVariablesRight[11] = (String) defender.nature.getValue();

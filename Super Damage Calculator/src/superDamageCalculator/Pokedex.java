@@ -2,7 +2,6 @@
  * Data from Pokemon Showdown's Pokedex file: https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/pokedex.js */
 
 package superDamageCalculator;
-
 import java.util.HashMap;
 
 public class Pokedex

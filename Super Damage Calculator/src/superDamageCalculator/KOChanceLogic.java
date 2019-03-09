@@ -1,5 +1,4 @@
 package superDamageCalculator;
-
 import java.util.ArrayList;
 
 public class KOChanceLogic

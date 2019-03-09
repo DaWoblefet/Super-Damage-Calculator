@@ -1,9 +1,9 @@
-package superDamageCalculator;
-
 /* Models a Pokemon's stats without modifiers. The Pokemon class contains 6 instances of these. */
 
+package superDamageCalculator;
 import java.util.Arrays;
 import java.util.HashMap;
+import static superDamageCalculator.StatConstants.*;
 
 public class Stat
 {
@@ -79,12 +79,12 @@ public class Stat
 	{
 		double total = 0;
 		//Shedinja
-		if (currentStat == StatConstants.HP && baseStat == 1)
+		if (currentStat == HP && baseStat == 1)
 		{
 			total = 1;
 		}
 		//Normal HP
-		else if (currentStat == StatConstants.HP)
+		else if (currentStat == HP)
 		{
 			total = Math.floor((2 * baseStat + IVs + Math.floor(EVs / 4)) * level / 100) + level + 10;
 		}
@@ -107,7 +107,7 @@ public class Stat
 
 		switch (this.currentStat)
 		{
-			case StatConstants.ATK:
+			case ATK:
 				if (Arrays.asList(natures.get("Adamant"), natures.get("Brave"), natures.get("Lonely"), natures.get("Naughty")).contains(nature))
 				{
 					mod = 1.1;
@@ -122,7 +122,7 @@ public class Stat
 				}
 				break;
 
-			case StatConstants.DEF:
+			case DEF:
 				if (Arrays.asList(natures.get("Bold"), natures.get("Impish"), natures.get("Lax"), natures.get("Relaxed")).contains(nature))
 				{
 					mod = 1.1;
@@ -137,7 +137,7 @@ public class Stat
 				}
 				break;
 
-			case StatConstants.SATK:
+			case SATK:
 				if (Arrays.asList(natures.get("Mild"), natures.get("Modest"), natures.get("Quiet"), natures.get("Rash")).contains(nature))
 				{
 					mod = 1.1;
@@ -152,7 +152,7 @@ public class Stat
 				}
 				break;
 
-			case StatConstants.SDEF:
+			case SDEF:
 				if (Arrays.asList(natures.get("Calm"), natures.get("Careful"), natures.get("Gentle"), natures.get("Sassy")).contains(nature))
 				{
 					mod = 1.1;
@@ -168,7 +168,7 @@ public class Stat
 				break;
 
 
-			case StatConstants.SPE:
+			case SPE:
 				if (Arrays.asList(natures.get("Hasty"), natures.get("Jolly"), natures.get("Naive"), natures.get("Timid")).contains(nature))
 				{
 					mod = 1.1;

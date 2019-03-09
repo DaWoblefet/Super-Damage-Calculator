@@ -1,9 +1,9 @@
 /* Associates an item with various properties. Note the Sinnoh trio orbs and Soul Dew
  * are considered to be type-boosting items with only one primary type; the logic
  * for all items is checked in CalculateDamage.
- */
-package superDamageCalculator;
+ * Data from Pokemon Showdown's items file: https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/items.js */
 
+package superDamageCalculator;
 import java.util.HashMap;
 
 public class Itemdex

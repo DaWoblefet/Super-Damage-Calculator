@@ -1,13 +1,16 @@
+/* Just here for better readability in code. 
+ * Idea from: https://en.wikipedia.org/wiki/Constant_interface*/
+
 package superDamageCalculator;
 
-/* Just here for better readability in code. */
-
-public interface StatConstants
+public final class StatConstants
 {
-	int HP = 0;
-	int ATK = 1;
-	int DEF = 2;
-	int SATK = 3;
-	int SDEF = 4;
-	int SPE = 5;
+	private StatConstants() {} //Don't instantiate class
+	
+	public static final int HP = 0;
+	public static final int ATK = 1;
+	public static final int DEF = 2;
+	public static final int SATK = 3;
+	public static final int SDEF = 4;
+	public static final int SPE = 5;
 }

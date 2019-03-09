@@ -1,9 +1,8 @@
-package superDamageCalculator;
-
 /* Takes the specified String and translates it into either a full team
 or a single Pokemon. Currently, this only works on PS formatting, which
 is technically all that's needed; TODO generalize import. */
 
+package superDamageCalculator;
 import java.util.HashMap;
 import java.util.ArrayList;
 
