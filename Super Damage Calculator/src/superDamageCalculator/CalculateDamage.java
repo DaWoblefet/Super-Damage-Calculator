@@ -19,6 +19,7 @@ public class CalculateDamage
 	private HashMap<String, Integer> types = new Type().types;
 	private HashMap<String, Integer> natures = new Nature().natures;
 	private double typechart[][] = new Type().typeChart;
+	private boolean debugMode = true;
 
 	private String attackerName;
 	private String attackerTypeLeft;
@@ -307,8 +308,11 @@ public class CalculateDamage
 
 	public int calculateFinalBasePower()
 	{
-		double startingBP = moveBP;
-		//System.out.println("BP prior to modifiers is: " + startingBP);
+		int startingBP = moveBP;
+		if (debugMode)
+		{
+			System.out.println("BP prior to modifiers is: " + startingBP);
+		}
 		
 		ArrayList<Integer> bpModifiers = new ArrayList<Integer>();
 		
@@ -538,14 +542,21 @@ public class CalculateDamage
 		//if (Water Sport active and move is Fire, Mud Sport active and move is Electric)
 		//bpModifiers.add(0x2000);
 		
+		if (debugMode)
+		{
+			System.out.println("Base Power after modifiers: " + (int) Math.max(1, pokeRound(startingBP * chainMods(bpModifiers) / 0x1000)));
+		}
 		//Base Power must be 1 at a minimum
 		return (int) Math.max(1, pokeRound(startingBP * chainMods(bpModifiers) / 0x1000));
 	}
 	
 	public int calculateFinalAttack()
 	{
-		double baseAttack = attackerOffenseStat;
-		//System.out.println("Attack prior to modifiers is: " + baseAttack);
+		int baseAttack = attackerOffenseStat;
+		if (debugMode)
+		{
+			System.out.println("Attack prior to modifiers is: " + baseAttack);
+		}
 
 		//Unaware checks happen prior to crit checks; +1 crit Leaf Blade into Unaware counts at +0 crit Leaf Blade
 		if (!defenderAbility.equals("Unaware"))
@@ -671,7 +682,10 @@ public class CalculateDamage
 			attackModifiers.add(0x1800);
 		}
 
-		//System.out.println("Attack after modifiers is: " + (int) Math.max(1, pokeRound(baseAttack * chainMods(attackModifiers) / 0x1000)));
+		if (debugMode)
+		{
+			System.out.println("Attack after modifiers is: " + (int) Math.max(1, pokeRound(baseAttack * chainMods(attackModifiers) / 0x1000)));
+		}
 		
 		//Chain modifiers; attack must be 1 at a minimum.
 		return (int) Math.max(1, pokeRound(baseAttack * chainMods(attackModifiers) / 0x1000));
@@ -679,8 +693,11 @@ public class CalculateDamage
 
 	public int calculateFinalDefense()
 	{
-		double baseDefense = defenderDefenseStat;
-		//System.out.println("Defense prior to modifiers is: " + baseDefense);
+		int baseDefense = defenderDefenseStat;
+		if (debugMode)
+		{
+			System.out.println("Defense prior to modifiers is: " + baseDefense);
+		}
 		
 		//Unaware checks happen prior to crit checks (a crit Sacred Sword at -1 Def is treated as +0 Def)
 		if (!(attackerAbility.equals("Unaware") || move.isIgnoresDefenseBoosts()))
@@ -751,7 +768,10 @@ public class CalculateDamage
 			defenseModifiers.add(0x2000);
 		}
 		
-		//System.out.println("Defense after modifiers: " + (int) Math.max(1, pokeRound(baseDefense * chainMods(defenseModifiers) / 0x1000)));
+		if (debugMode)
+		{
+			System.out.println("Defense after modifiers: " + (int) Math.max(1, pokeRound(baseDefense * chainMods(defenseModifiers) / 0x1000)));
+		}
 		
 		//Defense must be 1 at a minimum
 		return (int) Math.max(1, pokeRound(baseDefense * chainMods(defenseModifiers) / 0x1000));
@@ -759,11 +779,14 @@ public class CalculateDamage
 
 	public void mainCalculation()
 	{
-		double baseDamage = (int) Math.floor((2 * attackerLevel / 5)  + 2);
+		double baseDamage = (int) Math.floor((2 * attackerLevel / 5) + 2);
 		baseDamage = (int) Math.floor((baseDamage * finalBasePower * finalAttack) / finalDefense);
 		baseDamage = (int) (Math.floor(baseDamage / 50)) + 2;
 
-		//System.out.println("baseDamage: " + baseDamage);
+		if (debugMode)
+		{
+			System.out.println("Base Damage: " + baseDamage);
+		}
 
 		double damagePreRolls = baseDamage;
 
@@ -832,7 +855,12 @@ public class CalculateDamage
 		{
 			damageRolls[i] = (int) Math.floor((damagePreRolls * (85 + i)) / 100);
 		}
-		//System.out.println("After random factor: " + Arrays.toString(damageRolls));
+		
+		if (debugMode)
+		{
+			System.out.println("After random factor: " + Arrays.toString(damageRolls));
+			System.out.println(); //extra space for readability in console
+		}
 
 		//Automatically account for STAB if the ability is Protean
 		if (moveType.equals(attackerTypeLeft) || (moveType.equals(attackerTypeRight) || attackerAbility.equals("Protean")))
@@ -978,8 +1006,6 @@ public class CalculateDamage
 				damageRolls[i] = damageRolls[i] % 65536;
 			}
 		}
-
-		//System.out.println();
 	}
 	
 	/********* HELPER FUNCTIONS ************
