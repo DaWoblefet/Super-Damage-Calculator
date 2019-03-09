@@ -330,7 +330,7 @@ public class PokemonSide
 			movesComboBox[i].setValue("(none)");
 			moveData[i] = movedex.get((String) movesComboBox[i].getValue());
 			basePower[i].setText(Integer.toString(moveData[i].getBP()));
-			category[i].setValue(categories.get(moveData[i].getCategory()));
+			category[i].setValue(moveData[i].getCategory());
 			type[i].setValue(moveData[i].getType());
 		}
 
@@ -549,7 +549,7 @@ public class PokemonSide
 				moveData[j] = movedex.get((String) movesComboBox[j].getValue());
 				teamData[currentPokemon].setMove(moveData[j], j);
 				basePower[j].setText(Integer.toString(moveData[j].getBP()));
-				category[j].setValue(categories.get(moveData[j].getCategory()));
+				category[j].setValue(moveData[j].getCategory());
 				type[j].setValue(moveData[j].getType());
 				zOption[j].setSelected(false);
 				topMoveNames.set(j, (String) movesComboBox[j].getValue());

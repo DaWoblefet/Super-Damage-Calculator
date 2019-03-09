@@ -339,7 +339,10 @@ public class CalculateDamage
 					bpModifiers.add(0x1333);
 					break;
 				case "Liquid Voice":
-					moveType = "Water";
+					if (move.isSound())
+					{
+						moveType = "Water";
+					}
 					break;
 				default:
 					break;
@@ -353,7 +356,7 @@ public class CalculateDamage
 			bpModifiers.add(0x1333);
 		}
 		
-		if (attackerAbility.equals("Iron Fist") && move.getIsPunch())
+		if (attackerAbility.equals("Iron Fist") && move.isPunch())
 		{
 			bpModifiers.add(0x1333);
 		}
@@ -415,12 +418,12 @@ public class CalculateDamage
 			bpModifiers.add(0x1800);
 		}
 		
-		if (attackerAbility.equals("Strong Jaw") && move.getIsBite())
+		if (attackerAbility.equals("Strong Jaw") && move.isBite())
 		{
 			bpModifiers.add(0x1800);
 		}
 		
-		if (attackerAbility.equals("Mega Launcher") && move.getIsPulse())
+		if (attackerAbility.equals("Mega Launcher") && move.isPulse())
 		{
 			bpModifiers.add(0x1800);
 		}
@@ -668,10 +671,10 @@ public class CalculateDamage
 			attackModifiers.add(0x1800);
 		}
 
+		//System.out.println("Attack after modifiers is: " + (int) Math.max(1, pokeRound(baseAttack * chainMods(attackModifiers) / 0x1000)));
+		
 		//Chain modifiers; attack must be 1 at a minimum.
 		return (int) Math.max(1, pokeRound(baseAttack * chainMods(attackModifiers) / 0x1000));
-		
-		//System.out.println("Attack after modifiers is: " + finalAttack);
 	}
 
 	public int calculateFinalDefense()
@@ -680,7 +683,7 @@ public class CalculateDamage
 		//System.out.println("Defense prior to modifiers is: " + baseDefense);
 		
 		//Unaware checks happen prior to crit checks (a crit Sacred Sword at -1 Def is treated as +0 Def)
-		if (!(attackerAbility.equals("Unaware") || move.getIgnoresDefenseBoosts()))
+		if (!(attackerAbility.equals("Unaware") || move.isIgnoresDefenseBoosts()))
 		{
 			if (isCrit && defenderDefenseChange > 0)
 			{
@@ -748,6 +751,8 @@ public class CalculateDamage
 			defenseModifiers.add(0x2000);
 		}
 		
+		//System.out.println("Defense after modifiers: " + (int) Math.max(1, pokeRound(baseDefense * chainMods(defenseModifiers) / 0x1000)));
+		
 		//Defense must be 1 at a minimum
 		return (int) Math.max(1, pokeRound(baseDefense * chainMods(defenseModifiers) / 0x1000));
 	}
@@ -763,13 +768,13 @@ public class CalculateDamage
 		double damagePreRolls = baseDamage;
 
 		//If spread move, 0.75x
-		if (format.equals("Doubles") && move.getIsSpread() && !(isZ))
+		if (format.equals("Doubles") && move.isSpread() && !(isZ))
 		{
 			damagePreRolls = pokeRound((damagePreRolls * 0xC00) / 0x1000);
 		}
 		
 		//TODO Parental Bond checks here
-		if (attackerAbility.equals("Parental Bond") && !move.getIsSpread() && !isZ)
+		if (attackerAbility.equals("Parental Bond") && !move.isSpread() && !isZ)
 		{
 			//Parental Bond doesn't work on any of the following:
 			if (!Arrays.asList("Fling", "Self-Destruct", "Explosion", "Final Gambit", "Uproar", "Rollout", "Ice Ball", "Endeavor", 
@@ -1167,49 +1172,6 @@ public class CalculateDamage
 		}
 
 		return result;
-	}
-
-	public double getKOChance(int xhko)
-	{
-		ArrayList<Integer> combinedRolls = new ArrayList<Integer>();
-
-		for (int i = 0; i < damageRolls.length; i++)
-		{
-			combinedRolls.add(damageRolls[i]);
-		}
-
-		double result = getKOChance(combinedRolls, 1, xhko);
-		return result;
-	}
-
-	public double getKOChance(ArrayList<Integer> combinedRolls, int beginIndex, int xhko)
-	{
-		if (beginIndex == xhko)
-		{
-			double count = 0;
-			for (int i = 0; i < combinedRolls.size(); i++)
-			{
-				if (combinedRolls.get(i) >= defenderHPStat)
-				{
-					count++;
-				}
-			}
-			return (count / combinedRolls.size()) * 100.0;
-		}
-
-		ArrayList<Integer> newRolls = new ArrayList<Integer>();
-
-		for (int i = 0; i < combinedRolls.size(); i++)
-		{
-			for (int j = 0; j < damageRolls.length; j++)
-			{
-				newRolls.add(combinedRolls.get(i) + damageRolls[j]);
-			}
-		}
-
-		getKOChance(newRolls, beginIndex + 1, xhko);
-		//System.out.println("If I'm here, something went wrong.");
-		return 0;
 	}
 
 	public String attackerNature()

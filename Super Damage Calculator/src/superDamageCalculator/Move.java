@@ -8,7 +8,7 @@ public class Move
 	private String name;
 	private int bp;
 	private int zbp;
-	private int category; //0 = status; 1 = physical; 2 = special, 3 = Psyshock effect
+	private String category; //Status, Physical, Special, and Psyshock effect
 	private String type;
 
 	private boolean isSpread;
@@ -21,166 +21,250 @@ public class Move
 	private boolean isPunch;
 	private boolean isPulse;
 	private boolean isBite;
+	private boolean isSound;
+	private boolean isBullet;
+	private boolean hasSpecialModifier;
 	private boolean ignoresDefenseBoosts;
-
+	private boolean ignoresAbilities;
 
 	public Move(String name)
 	{
 		this.name = name;
 	}
+	
+	public String getName()
+	{
+		return name;
+	}
 
-	public void setBP(int bp)
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+
+	public int getBP() 
+	{
+		return bp;
+	}
+
+
+	public void setBP(int bp) 
 	{
 		this.bp = bp;
 	}
 
-	public void setZBP(int zbp)
+
+	public int getZBP() 
+	{
+		return zbp;
+	}
+
+
+	public void setZBP(int zbp) 
 	{
 		this.zbp = zbp;
 	}
 
-	public void setCategory(int category)
+
+	public String getCategory() 
+	{
+		return category;
+	}
+
+
+	public void setCategory(String category) 
 	{
 		this.category = category;
 	}
 
-	public void setType(String type)
+
+	public String getType() 
+	{
+		return type;
+	}
+
+
+	public void setType(String type) 
 	{
 		this.type = type;
 	}
 
-	public void setIsSpread(boolean isSpread)
+
+	public boolean isSpread() 
+	{
+		return isSpread;
+	}
+
+
+	public void setSpread(boolean isSpread) 
 	{
 		this.isSpread = isSpread;
 	}
 
-	public void setMakesContact(boolean makesContact)
+
+	public boolean getMakesContact() 
+	{
+		return makesContact;
+	}
+
+
+	public void setMakesContact(boolean makesContact) 
 	{
 		this.makesContact = makesContact;
 	}
 
-	public void setHasSecondaryEffect(boolean hasSecondaryEffect)
+
+	public boolean getHasSecondaryEffect() 
+	{
+		return hasSecondaryEffect;
+	}
+
+
+	public void setHasSecondaryEffect(boolean hasSecondaryEffect) 
 	{
 		this.hasSecondaryEffect = hasSecondaryEffect;
 	}
 
-	public void setIsSignatureZ(boolean isSignatureZ)
+
+	public boolean getIsSignatureZ() 
+	{
+		return isSignatureZ;
+	}
+
+
+	public void setSignatureZ(boolean isSignatureZ) 
 	{
 		this.isSignatureZ = isSignatureZ;
 	}
 
-	public void setHasRecoil(boolean hasRecoil)
+
+	public boolean getHasRecoil() 
+	{
+		return hasRecoil;
+	}
+
+
+	public void setHasRecoil(boolean hasRecoil) 
 	{
 		this.hasRecoil = hasRecoil;
 	}
 
-	public void setIsTwoHit(boolean isTwoHit)
+
+	public boolean isTwoHit() 
+	{
+		return isTwoHit;
+	}
+
+
+	public void setTwoHit(boolean isTwoHit) 
 	{
 		this.isTwoHit = isTwoHit;
 	}
 
-	public void setIsMultiHit(boolean isMultiHit)
+
+	public boolean isMultiHit() 
+	{
+		return isMultiHit;
+	}
+
+
+	public void setMultiHit(boolean isMultiHit) 
 	{
 		this.isMultiHit = isMultiHit;
 	}
 
-	public void setIsPunch(boolean isPunch)
+
+	public boolean isPunch() 
+	{
+		return isPunch;
+	}
+
+
+	public void setPunch(boolean isPunch) 
 	{
 		this.isPunch = isPunch;
 	}
 
-	public void setIsPulse(boolean isPulse)
+
+	public boolean isPulse() 
+	{
+		return isPulse;
+	}
+
+
+	public void setPulse(boolean isPulse) 
 	{
 		this.isPulse = isPulse;
 	}
 
-	public void setIsBite(boolean isBite)
+
+	public boolean isBite() 
+	{
+		return isBite;
+	}
+
+
+	public void setBite(boolean isBite) 
 	{
 		this.isBite = isBite;
 	}
 
-	public void setIgnoresDefenseBoosts(boolean ignoresDefenseBoosts)
+
+	public boolean isSound() 
+	{
+		return isSound;
+	}
+
+
+	public void setSound(boolean isSound) 
+	{
+		this.isSound = isSound;
+	}
+
+
+	public boolean isBullet() 
+	{
+		return isBullet;
+	}
+
+
+	public void setBullet(boolean isBullet) 
+	{
+		this.isBullet = isBullet;
+	}
+
+
+	public boolean hasSpecialModifier() 
+	{
+		return hasSpecialModifier;
+	}
+
+
+	public void setHasSpecialModifier(boolean hasSpecialModifier) 
+	{
+		this.hasSpecialModifier = hasSpecialModifier;
+	}
+
+
+	public boolean isIgnoresDefenseBoosts() 
+	{
+		return ignoresDefenseBoosts;
+	}
+
+	public void setIgnoresDefenseBoosts(boolean ignoresDefenseBoosts) 
 	{
 		this.ignoresDefenseBoosts = ignoresDefenseBoosts;
 	}
 
-	public String getName()
+	public boolean isIgnoresAbilities()
 	{
-		return this.name;
+		return ignoresAbilities;
 	}
 
-	public int getBP()
+	public void setIgnoresAbilities(boolean ignoresAbilities)
 	{
-		return this.bp;
-	}
-
-	public int getZBP()
-	{
-		return this.zbp;
-	}
-
-	public int getCategory()
-	{
-		return this.category;
-	}
-
-	public String getType()
-	{
-		return this.type;
-	}
-
-	public boolean getIsSpread()
-	{
-		return this.isSpread;
-	}
-
-	public boolean getMakesContact()
-	{
-		return this.makesContact;
-	}
-
-	public boolean getHasSecondaryEffect()
-	{
-		return this.hasSecondaryEffect;
-	}
-
-	public boolean getIsSignatureZ()
-	{
-		return this.isSignatureZ;
-	}
-
-	public boolean getHasRecoil()
-	{
-		return this.hasRecoil;
-	}
-
-	public boolean getIsTwoHit()
-	{
-		return this.isTwoHit;
-	}
-
-	public boolean getIsMultiHit()
-	{
-		return this.isMultiHit;
-	}
-
-	public boolean getIsPunch()
-	{
-		return this.isPunch;
-	}
-
-	public boolean getIsPulse()
-	{
-		return this.isPulse;
-	}
-
-	public boolean getIsBite()
-	{
-		return this.isBite;
-	}
-
-	public boolean getIgnoresDefenseBoosts()
-	{
-		return this.ignoresDefenseBoosts;
+		this.ignoresAbilities = ignoresAbilities;
 	}
 }
