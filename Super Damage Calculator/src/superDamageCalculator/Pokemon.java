@@ -12,18 +12,22 @@ public class Pokemon
 {
     private String name;
     private int dexNumber;
+    
+    private HashMap<String, Move> movedex = new Movedex().movedex;
+	private HashMap<String, Item> items = new Itemdex().items;
 
     private ArrayList<String> types = new ArrayList<String>();
     private ArrayList<String> abilities = new ArrayList<String>();
     private Move[] moves = new Move[4];
     private ArrayList<String> otherFormes = new ArrayList<String>();
     private Stat[] stats = new Stat[6];
-    private String item = "(none)";
+    private Item item;
     private String baseSpecies;
     private String forme;
     private String nature;
+    private String status;
 
-    private int[] baseStats = new int[6];
+	private int[] baseStats = new int[6];
     private HashMap<String, Integer> natures = new Nature().natures;
 
     private double weightInKg;
@@ -31,39 +35,28 @@ public class Pokemon
     public Pokemon(String name)
     {
 		this.name = name;
-		initStats();
+		for (int i = 0; i < moves.length; i++)
+		{
+			this.moves[i] = movedex.get("(none)");
+		}
+		
+		//0 EVs, 0 IVs, 100 base stat, level 50, Hardy Nature
+		for (int i = 0; i < stats.length; i++)
+		{
+			stats[i] = new Stat(0, 31, 100, 50, natures.get("Hardy"), "--", i);
+		}
+		this.nature = "Hardy";
+		this.item = items.get("(none)");
+		this.status = "Healthy";
     }
+ 
 
     public String getName()
 	{
 		return name;
     }
-
-    public void initStats()
-    {
-		for (int i = 0; i < 6; i++)
-		{
-			//0 EVs / IVs, 100 base, level 50, loops through the stats
-			stats[i] = new Stat(0, 31, 100, 50, natures.get("Hardy"), i);
-		}
-	}
-
-	public Stat getStat(int statType)
-	{
-		return stats[statType];
-	}
-
-	public void setStat(int EVs, int IVs, int baseStat, int level, int nature, int currentStat)
-	{
-		stats[currentStat] = new Stat(EVs, IVs, baseStat, level, nature, currentStat);
-	}
-
-	public void setStat(int EVs, int IVs, int level, int nature, int currentStat)
-	{
-		stats[currentStat] = new Stat(EVs, IVs, baseStats[currentStat], level, nature, currentStat);
-	}
-
-	/* These are only used for sprite parsing. */
+    
+    //getDexNumber and setDexNumber are only used for sprite parsing
 	public int getDexNumber()
 	{
 		return this.dexNumber;
@@ -108,7 +101,7 @@ public class Pokemon
 	{
 		return this.otherFormes;
 	}
-
+	
 	public double getWeight()
     {
 		return weightInKg;
@@ -118,63 +111,24 @@ public class Pokemon
     {
 		this.weightInKg = weightInKg;
     }
-
-    public String getType(int index)
-    {
-		return types.get(index);
-    }
-
-    public void addType(String type)
-    {
-		types.add(type);
-    }
-
-	public String getAbility()
+    
+    //Stats
+	public Stat getStat(int statType)
 	{
-		return abilities.get(abilities.size() - 1);
+		return stats[statType];
 	}
 
-    public String getAbility(int index)
-    {
-		return abilities.get(index);
-    }
-
-    public void addAbility(String ability)
-    {
-		abilities.add(ability);
-    }
-
-    public Move getMove(int moveslot)
+	public void setStat(int EVs, int IVs, int baseStat, int level, int nature, String boostLevel, int currentStat)
 	{
-		return moves[moveslot];
+		stats[currentStat] = new Stat(EVs, IVs, baseStat, level, nature, boostLevel, currentStat);
 	}
 
-    public void setMove(Move move, int moveslot)
-    {
-		moves[moveslot] = move;
-	}
-
-	public String getNature()
+	public void setStat(int EVs, int IVs, int level, int nature, String boostLevel, int currentStat)
 	{
-		return this.nature;
+		stats[currentStat] = new Stat(EVs, IVs, baseStats[currentStat], level, nature, boostLevel, currentStat);
 	}
-
-	public void setNature(String nature)
-	{
-		this.nature = nature;
-	}
-
- 	public String getItem()
-    {
-		return this.item;
-	}
-
-	public void setItem(String item)
-	{
-		this.item = item;
-	}
-
-    public int getBaseStat(int statIndex)
+	
+	public int getBaseStat(int statIndex)
     {
 		return this.baseStats[statIndex];
 	}
@@ -209,6 +163,81 @@ public class Pokemon
     {
 		this.baseStats[SPE] = baseSpe;
     }
+    
+	public String getNature()
+	{
+		return this.nature;
+	}
+
+	public void setNature(String nature)
+	{
+		this.nature = nature;
+	}
+
+    public String getType(int index)
+    {
+		return types.get(index);
+    }
+    
+    public void setType(String type, int index)
+    {
+    	types.set(index, type);
+    }
+
+    public void addType(String type)
+    {
+		types.add(type);
+    }
+
+	public String getAbility()
+	{
+		return abilities.get(abilities.size() - 1);
+	}
+
+    public String getAbility(int index)
+    {
+		return abilities.get(index);
+    }
+
+    public void addAbility(String ability)
+    {
+		abilities.add(ability);
+    }
+    
+    public void setAbility(String ability)
+    {
+    	abilities.set(0, ability);
+    }
+
+    public Move getMove(int moveslot)
+	{
+		return moves[moveslot];
+	}
+
+    public void setMove(Move move, int moveslot)
+    {
+		moves[moveslot] = move;
+	}
+
+ 	public Item getItem()
+    {
+		return this.item;
+	}
+
+	public void setItem(String item)
+	{
+		this.item = items.get(item);
+	}
+    
+    public String getStatus()
+    {
+		return status;
+	}
+
+	public void setStatus(String status)
+	{
+		this.status = status;
+	}
 
     @Override
     public String toString()

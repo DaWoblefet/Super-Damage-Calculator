@@ -72,6 +72,7 @@ public class SuperDamageCalculator extends Application
 	@Override
 	public void start(Stage primaryStage)
 	{
+		Thread.setDefaultUncaughtExceptionHandler(SuperDamageCalculator::showError);
 		BorderPane mainPane = new BorderPane();
 		BorderPane subPane = new BorderPane();
 		mainPane.setStyle("-fx-background-color: #f3f3f3;");
@@ -527,9 +528,9 @@ public class SuperDamageCalculator extends Application
 				for (int i = 0; i < 6; i++)
 				{
 					leftMon.teamData[i] = psImport.getPokemon(i);
-					leftMon.teamSprites[i].setImage(new Image(".\\Sprites\\" + leftMon.teamData[i].getName() + ".png"));
+					leftMon.teamSprites[i].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + leftMon.teamData[i].getName() + ".png")));
 				}
-				leftMon.spriteMain.setImage(new Image(".\\Sprites\\" + leftMon.teamData[0].getName() + ".png"));
+				leftMon.spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + leftMon.teamData[0].getName() + ".png")));
 				leftMon.currentPokemon = 0;
 				leftMon.isToggleMon = true;
 				leftMon.chooseMon.setValue(leftMon.teamData[leftMon.currentPokemon].getName());
@@ -540,9 +541,9 @@ public class SuperDamageCalculator extends Application
 				for (int i = 0; i < 6; i++)
 				{
 					rightMon.teamData[i] = psImport.getPokemon(i);
-					rightMon.teamSprites[i].setImage(new Image(".\\Sprites\\" + rightMon.teamData[i].getName() + ".png"));
+					rightMon.teamSprites[i].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + rightMon.teamData[i].getName() + ".png")));
 				}
-				rightMon.spriteMain.setImage(new Image(".\\Sprites\\" + rightMon.teamData[0].getName() + ".png"));
+				rightMon.spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + rightMon.teamData[0].getName() + ".png")));
 				rightMon.currentPokemon = 0;
 				rightMon.isToggleMon = true;
 				rightMon.chooseMon.setValue(rightMon.teamData[rightMon.currentPokemon].getName());
@@ -554,8 +555,8 @@ public class SuperDamageCalculator extends Application
 			if (side == 0) //left side
 			{
 				leftMon.teamData[leftMon.currentPokemon] = psImport.getPokemon(0);
-				leftMon.teamSprites[leftMon.currentPokemon].setImage(new Image(".\\Sprites\\" + leftMon.teamData[leftMon.currentPokemon].getName() + ".png"));
-				leftMon.spriteMain.setImage(new Image(".\\Sprites\\" + leftMon.teamData[leftMon.currentPokemon].getName() + ".png"));
+				leftMon.teamSprites[leftMon.currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + leftMon.teamData[leftMon.currentPokemon].getName() + ".png")));
+				leftMon.spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + leftMon.teamData[leftMon.currentPokemon].getName() + ".png")));
 				leftMon.isToggleMon = true;
 				leftMon.chooseMon.setValue(leftMon.teamData[leftMon.currentPokemon].getName());
 				leftMon.isToggleMon = false;
@@ -563,8 +564,8 @@ public class SuperDamageCalculator extends Application
 			else //right side
 			{
 				rightMon.teamData[rightMon.currentPokemon] = psImport.getPokemon(0);
-				rightMon.teamSprites[rightMon.currentPokemon].setImage(new Image(".\\Sprites\\" + rightMon.teamData[rightMon.currentPokemon].getName() + ".png"));
-				rightMon.spriteMain.setImage(new Image(".\\Sprites\\" + rightMon.teamData[rightMon.currentPokemon].getName() + ".png"));
+				rightMon.teamSprites[rightMon.currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + rightMon.teamData[rightMon.currentPokemon].getName() + ".png")));
+				rightMon.spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + rightMon.teamData[rightMon.currentPokemon].getName() + ".png")));
 				rightMon.isToggleMon = true;
 				rightMon.chooseMon.setValue(rightMon.teamData[rightMon.currentPokemon].getName());
 				rightMon.isToggleMon = false;
@@ -753,6 +754,30 @@ public class SuperDamageCalculator extends Application
 
 		return result;
 	}
+	
+	
+	//Displays a popup with some exception that gets called for beta testing.
+	private static void showError(Thread t, Throwable e)
+	{       
+        String exceptionTrace = e.getMessage();
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        
+        for (int i = 0; i < stackTrace.length; i++)
+        {
+        	exceptionTrace += stackTrace[i].toString() + "\n";
+        }
+        
+        Stage stage = new Stage();
+		TextArea exceptionText = new TextArea("An uncaught exception has occurred. Please copy/paste this log and report it to DaWoblefet. Things should /probably/ still work.\n\n" + exceptionTrace);
+		exceptionText.setEditable(false);
+		exceptionText.setWrapText(true);
+		exceptionText.setPrefRowCount(19);
+
+		Scene scene = new Scene(exceptionText, 405, 325);
+		stage.setScene(scene);
+		stage.setTitle("Uncaught Exception");
+		stage.show();
+    }
 
 	public static void main(String args[])
 	{

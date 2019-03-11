@@ -25,6 +25,9 @@ public class Move
 	private boolean hasSpecialModifier;
 	private boolean ignoresDefenseBoosts;
 	private boolean ignoresAbilities;
+	
+	private boolean critChecked;
+	private boolean zChecked;
 
 	public Move(String name)
 	{
@@ -265,5 +268,25 @@ public class Move
 	public void setIgnoresAbilities(boolean ignoresAbilities)
 	{
 		this.ignoresAbilities = ignoresAbilities;
+	}
+	
+	public boolean isCritChecked()
+	{
+		return critChecked;
+	}
+
+	public void setCritChecked(boolean critChecked)
+	{
+		this.critChecked = critChecked;
+	}
+
+	public boolean isZChecked()
+	{
+		return zChecked;
+	}
+
+	public void setZChecked(boolean zChecked)
+	{
+		this.zChecked = zChecked;
 	}
 }

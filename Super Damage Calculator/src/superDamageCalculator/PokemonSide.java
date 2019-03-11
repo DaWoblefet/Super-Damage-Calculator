@@ -41,6 +41,7 @@ public class PokemonSide
 	public ComboBox<String> chooseMon;
 	public int currentPokemon = 0;
 	public boolean isToggleMon = false;
+	public boolean currentlyZ = false;
 	public ComboBox<String> typeLeft;
 	public ComboBox<String> typeRight;
 	public int defaultLevel = 50;
@@ -320,7 +321,7 @@ public class PokemonSide
 
 		for (int i = 0; i < 6; i++)
 		{
-			teamData[currentPokemon].setStat(Integer.parseInt(EVsField[i].getText()), Integer.parseInt(IVsField[i].getText()), Integer.parseInt(level.getText()), natures.get(nature.getValue()), i);
+			teamData[currentPokemon].setStat(Integer.parseInt(EVsField[i].getText()), Integer.parseInt(IVsField[i].getText()), Integer.parseInt(level.getText()), natures.get(nature.getValue()), "--", i);
 			baseField[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).getBaseStat()));
 			calculatedStats[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).calculateStat()));
 		}
@@ -351,21 +352,24 @@ public class PokemonSide
 
 		chooseMon.setOnAction(e ->
 		{
-			if (!isToggleMon)
+			if (isToggleMon)
 			{
-				teamData[currentPokemon] = pokedex.get(chooseMon.getValue());
+				return;
 			}
+			
+			teamData[currentPokemon] = pokedex.get(chooseMon.getValue());
 
 			try
 			{
-				spriteMain.setImage(new Image("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png"));
-				teamSprites[currentPokemon].setImage(new Image("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png"));
+				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
 			}
 			catch (IllegalArgumentException ex)
 			{
-				spriteMain.setImage(new Image("/resources/Sprites/Missingno..png"));
-				teamSprites[currentPokemon].setImage(new Image("resources/Sprites/Missingno..png"));
+				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("resources/Sprites/Missingno..png")));
 			}
+			
 			typeLeft.setValue(teamData[currentPokemon].getType(0));
 			try
 			{
@@ -376,17 +380,10 @@ public class PokemonSide
 				typeRight.setValue("(none)");
 			}
 
-			if (isToggleMon)
-			{
-				ability.setValue(teamData[currentPokemon].getAbility(0));
-			}
-			else
-			{
-				teamData[currentPokemon].setNature("Hardy");
-				ability.setValue(teamData[currentPokemon].getAbility());
-			}
+			teamData[currentPokemon].setNature("Hardy");
+			ability.setValue(teamData[currentPokemon].getAbility());
 			nature.setValue(teamData[currentPokemon].getNature());
-			item.setValue(teamData[currentPokemon].getItem());
+			item.setValue(teamData[currentPokemon].getItem().getName());
 			status.setValue("Healthy");
 
 			for (int i = 0; i < 6; i++)
@@ -445,22 +442,67 @@ public class PokemonSide
 			}
 		});
 
-		//Nature
+		typeLeft.setOnAction(e -> 
+		{
+			teamData[currentPokemon].setType((String) typeLeft.getValue(), 0);
+		});
+		
+		typeRight.setOnAction(e -> 
+		{
+			teamData[currentPokemon].setType((String) typeRight.getValue(), 1);
+		});
+		
 		nature.setOnAction(e ->
 		{
 			teamData[currentPokemon].setNature(nature.getValue());
-			if (!isToggleMon)
-			{
-				updateStats();
-			}
+			updateStats();
+		});
+		
+		ability.setOnAction(e ->
+		{
+			teamData[currentPokemon].setAbility(ability.getValue());
+		});
+		
+		item.setOnAction(e ->
+		{
+			teamData[currentPokemon].setItem(item.getValue());
+		});
+		
+		status.setOnAction(e ->
+		{
+			teamData[currentPokemon].setStatus(status.getValue());
 		});
 
-		//Stats
+		//Stats and their properties
 		for (int i = 0; i < 6; i++)
 		{
 			final int j = i;
-			baseField[j].textProperty().addListener((observable) -> {updateStats(j);});
-			IVsField[j].textProperty().addListener((observable) -> {updateStats(j);});
+			baseField[j].textProperty().addListener((observable) -> {
+				if (isToggleMon) {return;}
+				
+				try //Make sure input is an integer.
+				{
+					int x = Integer.parseInt(baseField[j].getText());
+				}
+				catch (NumberFormatException ex)
+				{
+					baseField[j].setText("1");
+				}
+				updateStats(j);
+			});
+			IVsField[j].textProperty().addListener((observable) -> {
+				if (isToggleMon) {return;}
+				try //Make sure input is an integer.
+				{
+					int x = Integer.parseInt(IVsField[j].getText());
+				}
+				catch (NumberFormatException ex)
+				{
+					IVsField[j].setText("0");
+				}
+				updateStats(j);
+			});
+			//Increment or decrement by 1 on UP/DOWN arrows.
 			IVsField[j].setOnKeyPressed(e -> {
 				int currentIVs = Integer.parseInt(IVsField[j].getText());
 				switch (e.getCode())
@@ -481,6 +523,16 @@ public class PokemonSide
 			});
 			EVsField[j].textProperty().addListener((observable) ->
 			{
+				if (isToggleMon) {return;}
+				try //Make sure input is an integer.
+				{
+					int x = Integer.parseInt(EVsField[j].getText());
+				}
+				catch (NumberFormatException ex)
+				{
+					EVsField[j].setText("0");
+				}
+				
 				updateStats(j);
 				int currentEVSum = 0;
 				for (int k = 0; k < 6; k++)
@@ -500,6 +552,7 @@ public class PokemonSide
 					totalEVsRemainingLabel.setTextFill(Color.BLACK);
 				}
 			});
+			//Increment or decrement by 4/8 depending on levels on UP/DOWN arrows.
 			EVsField[j].setOnKeyPressed(e -> {
 				int currentEVs = Integer.parseInt(EVsField[j].getText());
 				switch (e.getCode())
@@ -538,14 +591,20 @@ public class PokemonSide
 						break;
 				}
 			});
+			statChanges[j].setOnAction(e ->
+			{
+				teamData[currentPokemon].getStat(j).setBoostLevel((String) statChanges[j].getValue());
+			});
+			
 		}
 
-		//Moves
+		//Moves and their properties
 		for (int i = 0; i < 4; i++)
 		{
 			final int j = i;
 			movesComboBox[i].setOnAction(e ->
 			{
+				if (isToggleMon) {return;}
 				moveData[j] = movedex.get((String) movesComboBox[j].getValue());
 				teamData[currentPokemon].setMove(moveData[j], j);
 				basePower[j].setText(Integer.toString(moveData[j].getBP()));
@@ -554,26 +613,49 @@ public class PokemonSide
 				zOption[j].setSelected(false);
 				topMoveNames.set(j, (String) movesComboBox[j].getValue());
 			});
-		}
-
-		//Z-move toggles Z-base power on and off.
-		for (int i = 0; i < 4; i++)
-		{
-			final int j = i;
+			
+			basePower[i].textProperty().addListener((observable) ->
+			{
+				if (currentlyZ) {return;} //Don't overwrite normal BP with Z-BP.
+				teamData[currentPokemon].getMove(j).setBP(Integer.parseInt(basePower[j].getText()));
+			});
+			
+			type[i].setOnAction(e ->
+			{
+				teamData[currentPokemon].getMove(j).setType((String) type[j].getValue());
+			});
+			
+			category[i].setOnAction(e ->
+			{
+				teamData[currentPokemon].getMove(j).setCategory((String) category[j].getValue());
+			});
+			
+			crit[i].armedProperty().addListener((observable) ->
+			{
+				teamData[currentPokemon].getMove(j).setCritChecked(crit[j].isSelected());
+			});
+			
+			//Z-move toggles Z-base power on and off.
 			zOption[i].setOnAction(e ->
 			{
 				if (zOption[j].isSelected())
 				{
+					currentlyZ = true;
 					basePower[j].setText(Integer.toString(moveData[j].getZBP()));
 				}
 				else
 				{
+					currentlyZ = false;
 					basePower[j].setText(Integer.toString(moveData[j].getBP()));
 				}
 			});
+			zOption[i].armedProperty().addListener((observable) ->
+			{
+				teamData[currentPokemon].getMove(j).setZChecked(zOption[j].isSelected());
+			});
 		}
 
-		//Handling switching multiple Pokemon around. Needs some big work.
+		//Handling switching multiple Pokemon around. Needs some big work. TODO
 		for (int i = 0; i < 6; i++)
 		{
 			final int j = i;
@@ -581,7 +663,54 @@ public class PokemonSide
 			{
 				currentPokemon = j;
 				isToggleMon = true;
-				chooseMon.setValue(teamData[currentPokemon].getName());
+				chooseMon.setValue(teamData[currentPokemon].getName());			
+				
+				try
+				{
+					spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
+					teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
+				}
+				catch (IllegalArgumentException ex)
+				{
+					spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
+					teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("resources/Sprites/Missingno..png")));
+				}
+				
+				typeLeft.setValue(teamData[currentPokemon].getType(0));
+				try
+				{
+					typeRight.setValue(teamData[currentPokemon].getType(1));
+				}
+				catch (IndexOutOfBoundsException ex)
+				{
+					typeRight.setValue("(none)");
+				}
+
+				ability.setValue(teamData[currentPokemon].getAbility(0));
+				item.setValue(teamData[currentPokemon].getItem().getName());
+				status.setValue(teamData[currentPokemon].getStatus());
+
+				for (int k = 0; k < 6; k++)
+				{
+					baseField[k].setText(Integer.toString(teamData[currentPokemon].getStat(k).getBaseStat()));
+					IVsField[k].setText(Integer.toString(teamData[currentPokemon].getStat(k).getIVs()));
+					EVsField[k].setText(Integer.toString(teamData[currentPokemon].getStat(k).getEVs()));
+					statChanges[k].setValue(teamData[currentPokemon].getStat(k).getBoostLevel());
+				}
+				nature.setValue(teamData[currentPokemon].getNature());
+				level.setText(Integer.toString(teamData[currentPokemon].getStat(1).getLevel()));
+				
+				for (int k = 0; k < 4; k++)
+				{
+					movesComboBox[k].setValue(teamData[currentPokemon].getMove(k).getName());
+					basePower[k].setText(Integer.toString(teamData[currentPokemon].getMove(k).getBP()));
+					type[k].setValue(teamData[currentPokemon].getMove(k).getType());
+					category[k].setValue(teamData[currentPokemon].getMove(k).getCategory());
+					crit[k].setSelected(teamData[currentPokemon].getMove(k).isCritChecked());
+					zOption[k].setSelected(teamData[currentPokemon].getMove(k).isZChecked());
+				}
+				
+				
 				isToggleMon = false;
 			});
 		}
@@ -631,14 +760,26 @@ public class PokemonSide
 	{
 		for (int i = 0; i < 6; i++)
 		{
-			teamData[currentPokemon].setStat(Integer.parseInt(EVsField[i].getText()), Integer.parseInt(IVsField[i].getText()), Integer.parseInt(baseField[i].getText()), Integer.parseInt(level.getText()), natures.get(nature.getValue()), i);
+			int currentEVs = Integer.parseInt(EVsField[i].getText());
+			int currentIVs = Integer.parseInt(IVsField[i].getText());
+			int currentBaseStat = Integer.parseInt(baseField[i].getText());
+			int currentLevel = Integer.parseInt(level.getText());
+			int currentNature = natures.get(nature.getValue());
+			String boostLevel = (String) statChanges[i].getValue();
+			teamData[currentPokemon].setStat(currentEVs, currentIVs, currentBaseStat, currentLevel, currentNature, boostLevel, i);
 			calculatedStats[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).calculateStat()));
 		}
 	}
 
 	public void updateStats(int i)
 	{
-		teamData[currentPokemon].setStat(Integer.parseInt(EVsField[i].getText()), Integer.parseInt(IVsField[i].getText()), Integer.parseInt(baseField[i].getText()), Integer.parseInt(level.getText()), natures.get(nature.getValue()), i);
+		int currentEVs = Integer.parseInt(EVsField[i].getText());
+		int currentIVs = Integer.parseInt(IVsField[i].getText());
+		int currentBaseStat = Integer.parseInt(baseField[i].getText());
+		int currentLevel = Integer.parseInt(level.getText());
+		int currentNature = natures.get(nature.getValue());
+		String boostLevel = (String) statChanges[i].getValue();
+		teamData[currentPokemon].setStat(currentEVs, currentIVs, currentBaseStat, currentLevel, currentNature, boostLevel, i);
 		calculatedStats[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).calculateStat()));
 	}
 }

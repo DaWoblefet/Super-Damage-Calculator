@@ -248,7 +248,7 @@ public class ShowdownImport
 		pokemon.addAbility(ability);
 		for (int i = 0; i < 6; i++)
 		{
-			pokemon.setStat(evs[i], ivs[i], level, nature, i);
+			pokemon.setStat(evs[i], ivs[i], level, nature, "--", i);
 		}
 
 		/* Tests if output was correct by printing the newly created Pokemon back. */

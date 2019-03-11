@@ -12,16 +12,18 @@ public class Stat
 	private int baseStat;
 	private int level;
 	private int nature;
-	private int currentStat;
+	private int currentStat; //that is, HP, Atk, Def, etc.
+	private String boostLevel;
 	private HashMap<String, Integer> natures = new Nature().natures;
 
-	public Stat(int EVs, int IVs, int baseStat, int level, int nature, int currentStat)
+	public Stat(int EVs, int IVs, int baseStat, int level, int nature, String boostLevel, int currentStat)
 	{
 		this.EVs = EVs;
 		this.IVs = IVs;
 		this.baseStat = baseStat;
 		this.level = level;
 		this.nature = nature;
+		this.boostLevel = boostLevel;
 		this.currentStat = currentStat;
 	}
 
@@ -49,6 +51,11 @@ public class Stat
 	{
 		return nature;
 	}
+	
+	public String getBoostLevel()
+	{
+		return boostLevel;
+	}
 
 	public void setEVs(int EVs)
 	{
@@ -73,6 +80,11 @@ public class Stat
 	public void setNature(int nature)
 	{
 		this.nature = nature;
+	}
+	
+	public void setBoostLevel(String boostLevel)
+	{
+		this.boostLevel = boostLevel;
 	}
 
 	public int calculateStat()
