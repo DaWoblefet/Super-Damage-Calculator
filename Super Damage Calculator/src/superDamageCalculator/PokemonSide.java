@@ -11,7 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.geometry.*;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.util.HashMap;
@@ -84,23 +86,12 @@ public class PokemonSide
 
 	public PokemonSide()
 	{
-		init();
-	}
-
-	public void init()
-	{
-		ArrayList<String> pnames = new ArrayList<>();
-		ArrayList<String> mnames = new ArrayList<>();
-		ArrayList<String> nnames = new ArrayList<>();
-		ArrayList<String> anames = new ArrayList<>();
-		ArrayList<String> inames = new ArrayList<>();
-		ArrayList<String> tnames = new ArrayList<>();
-		pnames = generateNames(pnames, pokedex, true);
-		mnames = generateNames(mnames, movedex, true);
-		nnames = generateNames(nnames, natures, true);
-		anames = generateNames(anames, abilities, true);
-		inames = generateNames(inames, items, true);
-		tnames = generateNames(tnames, types, true);
+		ArrayList<String> pnames = generateNames(pokedex, false);
+		ArrayList<String> mnames = generateNames(movedex, false);
+		ArrayList<String> nnames = generateNames(natures, false);
+		ArrayList<String> anames = generateNames(abilities, false);
+		ArrayList<String> inames = generateNames(items, false);
+		ArrayList<String> tnames = generateNames(types, false);
 
 		ObservableList<String> categories = FXCollections.observableArrayList("Status", "Physical", "Special", "Psyshock effect");
 		ObservableList<String> statChangesNames = FXCollections.observableArrayList("+6", "+5", "+4", "+3", "+2", "+1", "--", "-1", "-2", "-3", "-4", "-5", "-6");
@@ -165,12 +156,11 @@ public class PokemonSide
 		Label EVsLabel = new Label("EVs");
 
 		/*Scrapped a plus/minus system, but left them in there because they look pretty. */
-		ImageView plusImage = new ImageView(new Image("/resources/greenplus.png"));
-		ImageView minusImage = new ImageView(new Image("/resources/redminus.png"));
-		Button plus = new Button(null, plusImage);
-		Button minus = new Button(null, minusImage);
-		statsStructure.addRow(0, new Label(""), baseLabel, IVsLabel, EVsLabel, new Label(""), new Label(""), plus, minus);
-		GridPane.setMargin(plus, new Insets(0,5,0,40));
+		ImageView psIcon = new ImageView(new Image(getClass().getResourceAsStream("/resources/psIcon.png"), 20, 20, true, true));
+		Button importButton = new Button("Import", psIcon);
+		statsStructure.addRow(0, new Label(""), baseLabel, IVsLabel, EVsLabel, new Label(""), new Label(""), importButton);
+		GridPane.setColumnSpan(importButton, 2);
+		GridPane.setMargin(importButton, new Insets(0,5,0,40));
 
 		Label[] statLabel = new Label[6];
 		ToggleGroup teamTG = new ToggleGroup();
@@ -191,20 +181,20 @@ public class PokemonSide
 			statChanges[i].setValue("--");
 			if (i == 0)
 			{
-				statChanges[i].setVisible(false);
+				statChanges[i].setVisible(false); //There is no statChanges for HP.
 			}
 
 			teamSpriteLabels[i] = new Label("Mon " + (i+1));
 			try
 			{
-				teamSprites[i] = new ImageView(new Image("/resources/Sprites/" + teamData[i].getName() + ".png"));
+				teamSprites[i] = new ImageView(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[i].getName() + ".png")));
 				teamSprites[i].setFitWidth(20);
 				teamSprites[i].setFitHeight(15);
 				teamSpritesToggles[i] = new ToggleButton(null, teamSprites[i]);
 			}
 			catch (Exception ex) //If the sprite can't be found for whatever reason, load the ? sprite.
 			{
-				teamSprites[i] = new ImageView(new Image("/resources/Sprites/Missingno..png"));
+				teamSprites[i] = new ImageView(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
 				teamSpritesToggles[i] = new ToggleButton(null, teamSprites[i]);
 			}
 			teamSpritesToggles[i].setToggleGroup(teamTG);
@@ -357,6 +347,11 @@ public class PokemonSide
 				return;
 			}
 			
+			//Sometimes when a user types too quickly, they load in an illegal Pokemon.
+			if (pokedex.get(chooseMon.getValue()) == null)
+			{
+				return;
+			}
 			teamData[currentPokemon] = pokedex.get(chooseMon.getValue());
 
 			try
@@ -389,35 +384,13 @@ public class PokemonSide
 			for (int i = 0; i < 6; i++)
 			{
 				baseField[i].setText(Integer.toString(teamData[currentPokemon].getBaseStat(i)));
-				if (isToggleMon)
-				{
-					IVsField[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).getIVs()));
-					EVsField[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).getEVs()));
-				}
-				else
-				{
-					IVsField[i].setText("31");
-					EVsField[i].setText("0");
-				}
-				updateStats(i);
+				IVsField[i].setText("31");
+				EVsField[i].setText("0");
 			}
-
-			/* TODO: moves are still buggy in one area; if a blank set is loaded from the ComboBox,
-			then the user switches to another Pokemon and back without setting an initial move,
-			it tries to load an empty move.*/
-			if (isToggleMon)
+			
+			for (int i = 0; i < 4; i++)
 			{
-				for (int i = 0; i < 4; i++)
-				{
-					movesComboBox[i].setValue(teamData[currentPokemon].getMove(i).getName());
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 4; i++)
-				{
-					movesComboBox[i].setValue("(none)");
-				}
+				movesComboBox[i].setValue("(none)");
 			}
 		});
 
@@ -450,6 +423,7 @@ public class PokemonSide
 		typeRight.setOnAction(e -> 
 		{
 			teamData[currentPokemon].setType((String) typeRight.getValue(), 1);
+			//might have removed something important
 		});
 		
 		nature.setOnAction(e ->
@@ -655,7 +629,7 @@ public class PokemonSide
 			});
 		}
 
-		//Handling switching multiple Pokemon around. Needs some big work. TODO
+		//Handling switching multiple Pokemon around with the team togglebuttons.
 		for (int i = 0; i < 6; i++)
 		{
 			final int j = i;
@@ -710,8 +684,11 @@ public class PokemonSide
 					zOption[k].setSelected(teamData[currentPokemon].getMove(k).isZChecked());
 				}
 				
-				
 				isToggleMon = false;
+			});
+			importButton.setOnAction(e -> 
+			{
+				openPSImport();
 			});
 		}
 
@@ -724,36 +701,6 @@ public class PokemonSide
 		pokemonSide.setBottom(structure);
 		mon.setAlignment(Pos.CENTER);
 		pokemonSide.setCenter(mon);
-	}
-
-	/* Reads in a HashMap and outputs the name values as an arrayList for use in the ComboBoxes.
-	TODO: Actually fix the forced alphabetical searching. */
-	public <E> ArrayList<String> generateNames(ArrayList<String> names, HashMap<?, ?> dex, boolean alphabetize)
-	{
-		Set<?> set = dex.entrySet();
-      	Iterator<?> iterator = set.iterator();
-      	while (iterator.hasNext())
-      	{
-			Map.Entry tempentry = (Map.Entry) iterator.next();
-			names.add((String) tempentry.getKey());
-		}
-		if (alphabetize)
-		{
-			Collections.sort(names);
-		}
-		return names;
-	}
-
-	public static <T, E> T getKeyByValue(HashMap<T, E> map, E value)
-	{
-		for (Entry<T, E> entry : map.entrySet())
-		{
-			if (Objects.equals(value, entry.getValue()))
-			{
-				return entry.getKey();
-			}
-		}
-		return null;
 	}
 
 	public void updateStats()
@@ -781,5 +728,85 @@ public class PokemonSide
 		String boostLevel = (String) statChanges[i].getValue();
 		teamData[currentPokemon].setStat(currentEVs, currentIVs, currentBaseStat, currentLevel, currentNature, boostLevel, i);
 		calculatedStats[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).calculateStat()));
+	}
+	
+	public void openPSImport()
+	{
+		Stage stage = new Stage();
+		VBox vbox = new VBox();
+		BorderPane borderpane = new BorderPane();
+		TextArea PSText = new TextArea();
+		PSText.setPrefRowCount(36);
+		Button importButton = new Button("Import from Pokemon Showdown");
+		
+		importButton.setOnAction(e -> setImportedData(stage, PSText.getText()));
+
+		borderpane.setCenter(importButton);
+		vbox.getChildren().addAll(PSText, borderpane);
+
+		Scene scene = new Scene(vbox, 350, 500);
+		stage.setScene(scene);
+		stage.setTitle("Import from Pokemon Showdown");
+		stage.show();
+	}
+	
+	//The logic for importing the sets from GUI.
+	public void setImportedData(Stage stage, String text)
+	{
+		ShowdownImport psImport = new ShowdownImport(text);
+		if (psImport.getIsTeam())
+		{
+			for (int i = 0; i < 6; i++)
+			{
+				teamData[i] = psImport.getPokemon(i);
+				teamSprites[i].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[i].getName() + ".png")));
+			}
+			spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[0].getName() + ".png")));
+			currentPokemon = 0;
+			isToggleMon = true;
+			chooseMon.setValue(teamData[currentPokemon].getName());
+			isToggleMon = false;
+		}
+		else
+		{
+			teamData[currentPokemon] = psImport.getPokemon(0);
+			teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
+			spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
+			isToggleMon = true;
+			chooseMon.setValue(teamData[currentPokemon].getName());
+			isToggleMon = false;
+		}
+		stage.close();
+	}
+	
+	// Reads in a HashMap and outputs the name values as an arrayList for use in the ComboBoxes.
+
+	public <E> ArrayList<String> generateNames(HashMap<?, ?> dex, boolean alphabetize)
+	{
+		ArrayList<String> names = new ArrayList<String>();
+		Set<?> set = dex.entrySet();
+      	Iterator<?> iterator = set.iterator();
+      	while (iterator.hasNext())
+      	{
+			Map.Entry tempentry = (Map.Entry) iterator.next();
+			names.add((String) tempentry.getKey());
+		}
+		if (alphabetize)
+		{
+			Collections.sort(names);
+		}
+		return names;
+	}
+
+	public static <T, E> T getKeyByValue(HashMap<T, E> map, E value)
+	{
+		for (Entry<T, E> entry : map.entrySet())
+		{
+			if (Objects.equals(value, entry.getValue()))
+			{
+				return entry.getKey();
+			}
+		}
+		return null;
 	}
 }

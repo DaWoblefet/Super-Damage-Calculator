@@ -6,6 +6,7 @@ Ability in GUI, cons: basically makes second ability useless. */
 package superDamageCalculator;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import static superDamageCalculator.StatConstants.*;
 
 public class Pokemon
@@ -16,7 +17,10 @@ public class Pokemon
     private HashMap<String, Move> movedex = new Movedex().movedex;
 	private HashMap<String, Item> items = new Itemdex().items;
 
-    private ArrayList<String> types = new ArrayList<String>();
+    private String types[] = new String[2];
+    private boolean isTrickOrTreat;
+    private boolean isForestsCurse;
+    
     private ArrayList<String> abilities = new ArrayList<String>();
     private Move[] moves = new Move[4];
     private ArrayList<String> otherFormes = new ArrayList<String>();
@@ -96,6 +100,11 @@ public class Pokemon
 	{
 		return this.otherFormes.get(formeNumber);
 	}
+	
+	public ArrayList<String> getAllOtherFormes()
+	{
+		return otherFormes;
+	}
 
 	public ArrayList<String> getOtherFormes()
 	{
@@ -132,37 +141,26 @@ public class Pokemon
     {
 		return this.baseStats[statIndex];
 	}
-
-    //Can be reduced to one method after refactoring Pokedex again
-    public void setBaseHP(int baseHP)
-    {
-		this.baseStats[HP] = baseHP;
-    }
-
-    public void setBaseAtk(int baseAtk)
-    {
-		this.baseStats[ATK] = baseAtk;
-    }
-
-    public void setBaseDef(int baseDef)
-    {
-		this.baseStats[DEF] = baseDef;
-    }
-
-    public void setBaseSAtk(int baseSAtk)
-    {
-		this.baseStats[SATK] = baseSAtk;
-    }
-
-    public void setBaseSDef(int baseSDef)
-    {
-		this.baseStats[SDEF] = baseSDef;
-    }
-
-    public void setBaseSpe(int baseSpe)
-    {
-		this.baseStats[SPE] = baseSpe;
-    }
+	
+	public int[] getAllBaseStats()
+	{
+		return baseStats;
+	}
+	
+	public void setBaseStat(int baseStat, int statIndex)
+	{
+		this.baseStats[statIndex] = baseStat;
+	}
+	
+	public void setAllBaseStats(int hp, int atk, int def, int spa, int spd, int spe)
+	{
+		this.baseStats[HP] = hp;
+		this.baseStats[ATK] = atk;
+		this.baseStats[DEF] = def;
+		this.baseStats[SATK] = spa;
+		this.baseStats[SDEF] = spd;
+		this.baseStats[SPE] = spe;
+	}
     
 	public String getNature()
 	{
@@ -176,18 +174,33 @@ public class Pokemon
 
     public String getType(int index)
     {
-		return types.get(index);
+    	return types[index];
     }
     
     public void setType(String type, int index)
     {
-    	types.set(index, type);
+    	types[index] = type;
     }
-
-    public void addType(String type)
+    
+    public boolean isTrickOrTreat()
     {
-		types.add(type);
-    }
+		return isTrickOrTreat;
+	}
+
+	public void setTrickOrTreat(boolean isTrickOrTreat)
+	{
+		this.isTrickOrTreat = isTrickOrTreat;
+	}
+
+	public boolean isForestsCurse()
+	{
+		return isForestsCurse;
+	}
+
+	public void setForestsCurse(boolean isForestsCurse)
+	{
+		this.isForestsCurse = isForestsCurse;
+	}
 
 	public String getAbility()
 	{
@@ -197,6 +210,11 @@ public class Pokemon
     public String getAbility(int index)
     {
 		return abilities.get(index);
+    }
+    
+    public ArrayList<String> getAllAbilities()
+    {
+    	return abilities;
     }
 
     public void addAbility(String ability)
@@ -243,8 +261,14 @@ public class Pokemon
     public String toString()
     {
 		String showdownExport = "";
-
-		showdownExport += name + " @ " + item + "\n";
+		if (!item.getName().equals("(none)"))
+		{
+			showdownExport += name + " @ " + item + "\n";
+		}
+		else
+		{
+			showdownExport += name + "\n";
+		}
 		showdownExport += "Ability: " + abilities.get(abilities.size() - 1) + "\n";
 		showdownExport += "Level: " + stats[0].getLevel() + "\n";
 		showdownExport += "EVs: ";

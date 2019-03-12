@@ -134,7 +134,7 @@ public class ShowdownImport
 		}
 		else //no item
 		{
-			name = lines[0];
+			name.append(lines[0].substring(0, lines[0].length() - 2));
 		}
 
 		//No nickname, no gender
@@ -160,7 +160,14 @@ public class ShowdownImport
 				pokemon = pokedex.get(name.substring(firstParen + 1, endParen));
 			}
 		}
-		pokemon.setItem(item.toString());
+		if (item.toString().length() != 0)
+		{
+			pokemon.setItem(item.toString());
+		}
+		else
+		{
+			pokemon.setItem("(none)");
+		}
 
 		/* Find all lines with "- ", add those substrings as moves.*/
 		int moveslot = 0;
@@ -222,7 +229,7 @@ public class ShowdownImport
 				{
 					case "Ability":
 						ability = lines[i].substring(colon + 2, lines[i].length() - 2);
-						pokemon.addAbility(ability);
+						pokemon.setAbility(ability);
 						break;
 					case "Level":
 						level = Integer.parseInt(lines[i].substring(colon + 2, lines[i].length() - 2));

@@ -8,6 +8,9 @@
 package superDamageCalculator;
 import java.util.HashMap;
 import java.util.Arrays;
+
+import static superDamageCalculator.StatConstants.*;
+
 import java.util.ArrayList;
 import java.util.Map.*;
 import java.util.Objects;
@@ -16,7 +19,6 @@ public class CalculateDamage
 {
 	private HashMap<String, Pokemon> pokedex = new HashMap<String, Pokemon>();
 	private HashMap<String, Move> movedex = new Movedex().movedex;
-	private HashMap<String, Item> itemdex = new Itemdex().items;
 	private HashMap<String, Integer> types = new Type().types;
 	private HashMap<String, Integer> natures = new Nature().natures;
 	private double typechart[][] = new Type().typeChart;
@@ -26,7 +28,6 @@ public class CalculateDamage
 	private String attackerTypeLeft;
 	private String attackerTypeRight;
 	private int attackerLevel;
-	private String attackerForme;
 	private int attackerOffenseStat;
 	private int attackerOffenseStatEVs;
 	private int attackerSpeedStat;
@@ -47,7 +48,6 @@ public class CalculateDamage
 	private String defenderName;
 	private String defenderTypeLeft;
 	private String defenderTypeRight;
-	private String defenderForme;
 	private int defenderHPStat;
 	private int defenderHPStatEVs;
 	private int defenderDefenseStat;
@@ -63,6 +63,9 @@ public class CalculateDamage
 	private String format;
 	private String terrain;
 	private String weather;
+	private boolean isFairyAura;
+	private boolean isDarkAura;
+	private boolean isAuraBreak;
 	private boolean isHelpingHand;
 	private boolean isProtect;
 	private boolean isReflect;
@@ -78,55 +81,97 @@ public class CalculateDamage
 	private int finalBasePower;
 
 	/* Passes in the variables affecting damage calculation, sets them, then starts damage calculation. */
-	public CalculateDamage(Object[] damageVariablesLeft, Object[] damageVariablesRight, Object[] damageVariablesCenter)
+	public CalculateDamage(Move move, Pokemon attacker, Pokemon defender, FieldOptions fieldOptions, boolean isLeft)
 	{
-		attackerName = (String) damageVariablesLeft[0];
-		attackerTypeLeft = (String) damageVariablesLeft[1];
-		attackerTypeRight = (String) damageVariablesLeft[2];
-		attackerLevel = (int) damageVariablesLeft[3];
-		attackerForme = (String) damageVariablesLeft[4];
-		attackerOffenseStat = (int) damageVariablesLeft[5];
-		attackerOffenseStatEVs = (int) damageVariablesLeft[6];
-		attackerSpeedStat = (int) damageVariablesLeft[7];
-		attackerOffenseChange = (int) damageVariablesLeft[8];
-		attackerSpeedChange = (int) damageVariablesLeft[9];
-		attackerNature = (String) damageVariablesLeft[10];
-		attackerAbility = (String) damageVariablesLeft[11];
-		attackerItem = itemdex.get((String) damageVariablesLeft[12]);
-		attackerStatus = (String) damageVariablesLeft[13];
+		this.move = move;
+		moveBP = move.getBP();
+		moveType = move.getType();
+		moveCategory = move.getCategory();
+		isCrit = move.isCritChecked();
+		isZ = move.isZChecked();
+		
+		int whichAtk = 0;
+		int whichDef = 0;
+		if (moveCategory.equals("Physical"))
+		{
+			whichAtk = ATK;
+			whichDef = DEF;
+		}
+		else if (moveCategory.equals("Special"))
+		{
+			whichAtk = SATK;
+			whichDef = SDEF;
+		}
+		else if (moveCategory.equals("Psyshock effect"))
+		{
+			whichAtk = SATK;
+			whichDef = DEF;
+		}
+		
+		
+		attackerName = attacker.getName();
+		attackerTypeLeft = attacker.getType(0);
+		attackerTypeRight = attacker.getType(1);
+		attackerLevel = attacker.getStat(1).getLevel();
+		attackerOffenseStat = attacker.getStat(whichAtk).calculateStat();
+		attackerOffenseStatEVs = attacker.getStat(whichAtk).getEVs();
+		attackerSpeedStat = attacker.getStat(SPE).calculateStat();
+		attackerOffenseChange = parseChangeValue(attacker.getStat(whichAtk).getBoostLevel());
+		attackerSpeedChange = parseChangeValue(attacker.getStat(SPE).getBoostLevel());
+		attackerNature = attacker.getNature();
+		attackerAbility = attacker.getAbility(0);
+		attackerItem = attacker.getItem();
+		attackerStatus = attacker.getStatus();
 
-		move = movedex.get((String) damageVariablesLeft[14]);
-		moveBP = (int) damageVariablesLeft[15];
-		moveType = (String) damageVariablesLeft[16];
-		moveCategory = (String) damageVariablesLeft[17];
-		isCrit = (boolean) damageVariablesLeft[18];
-		isZ = (boolean) damageVariablesLeft[19];
 
-		defenderName = (String) damageVariablesRight[0];
-		defenderTypeLeft = (String) damageVariablesRight[1];
-		defenderTypeRight = (String) damageVariablesRight[2];
-		defenderForme = (String) damageVariablesRight[3];
-		defenderHPStat = (int) damageVariablesRight[4];
-		defenderHPStatEVs = (int) damageVariablesRight[5];
-		defenderDefenseStat = (int) damageVariablesRight[6];
-		defenderDefenseStatEVs = (int) damageVariablesRight[7];
-		defenderSpeedStat = (int) damageVariablesRight[8];
-		defenderDefenseChange = (int) damageVariablesRight[9];
-		defenderSpeedChange = (int) damageVariablesRight[10];
-		defenderNature = (String) damageVariablesRight[11];
-		defenderAbility = (String) damageVariablesRight[12];
-		defenderItem = itemdex.get((String) damageVariablesRight[13]);
-		defenderStatus = (String) damageVariablesRight[14];
+		defenderName = defender.getName();
+		defenderTypeLeft = defender.getType(0);
+		defenderTypeRight = defender.getType(1);
+		defenderHPStat = defender.getStat(HP).calculateStat();
+		defenderHPStatEVs = defender.getStat(HP).getEVs();
+		defenderDefenseStat = defender.getStat(whichDef).calculateStat();
+		defenderDefenseStatEVs = defender.getStat(whichDef).getEVs();
+		defenderSpeedStat = defender.getStat(SPE).calculateStat();
+		defenderDefenseChange = parseChangeValue(defender.getStat(whichDef).getBoostLevel());
+		defenderSpeedChange = parseChangeValue(defender.getStat(SPE).getBoostLevel());
+		defenderNature = defender.getNature();
+		defenderAbility = defender.getAbility(0);
+		defenderItem = defender.getItem();
+		defenderStatus = defender.getStatus();
 
-		format = (String) damageVariablesCenter[0];
-		terrain = (String) damageVariablesCenter[1];
-		weather = (String) damageVariablesCenter[2];
-		//skip Auras
-		isHelpingHand = (boolean) damageVariablesCenter[4];
-		isProtect = (boolean) damageVariablesCenter[5];
-		isReflect = (boolean) damageVariablesCenter[6];
-		isLightScreen = (boolean) damageVariablesCenter[7];
-		isFriendGuard = (boolean) damageVariablesCenter[8];
+		format = fieldOptions.getFormat();
+		terrain = fieldOptions.getTerrain();
+		weather = fieldOptions.getWeather();
+		isFairyAura = fieldOptions.isFairyAura();
+		isDarkAura = fieldOptions.isDarkAura();
+		isAuraBreak = fieldOptions.isAuraBreak();
+		
+		if (isLeft)
+		{
+			isHelpingHand = fieldOptions.getLeftSideOptions().isHelpingHand();
+			isProtect = fieldOptions.getLeftSideOptions().isProtect();
+			isReflect = fieldOptions.getLeftSideOptions().isReflect();
+			isLightScreen = fieldOptions.getLeftSideOptions().isLightScreen();
+			if (fieldOptions.getLeftSideOptions().isAuroraVeil())
+			{
+				isReflect = true;
+				isLightScreen = true;
+			}
+			isFriendGuard = fieldOptions.getLeftSideOptions().isFriendGuard();
+		}
+		else
+		{
+			isHelpingHand = fieldOptions.getRightSideOptions().isHelpingHand();
+			isProtect = fieldOptions.getRightSideOptions().isProtect();
+			isReflect = fieldOptions.getRightSideOptions().isReflect();
+			isLightScreen = fieldOptions.getRightSideOptions().isLightScreen();
+			if (fieldOptions.getRightSideOptions().isAuroraVeil())
+			{
+				isReflect = true;
+				isLightScreen = true;
+			}
+			isFriendGuard = fieldOptions.getRightSideOptions().isFriendGuard();
+		}
 
 		typeMod = typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];
 		if (moveCategory.equals("Status") || typeMod == 0)
@@ -150,6 +195,7 @@ public class CalculateDamage
 			writeDamageOutput();
 		}
 	}
+	
 	
 	public int checkForCustomBP()
 	{
@@ -317,8 +363,11 @@ public class CalculateDamage
 		
 		ArrayList<Integer> bpModifiers = new ArrayList<Integer>();
 		
-		//if (Aura Break)		
-		//bpModifiers.add(0xC00)
+		if (isAuraBreak && (isFairyAura && moveType.equals("Fairy")) || (isDarkAura && moveType.equals("Dark")))
+		{
+			bpModifiers.add(0xC00);
+		}
+		
 		//if (Rivalry and gender is not the same)
 		//bpModifiers.add(0xC00)
 		
@@ -399,9 +448,10 @@ public class CalculateDamage
 			bpModifiers.add(0x14CD);
 		}
 		
-		//if (Fairy Aura and Fairy move OR Dark Aura and Dark move)
-		//bpModifiers.add(0x1548);
-		
+		if ((isFairyAura && moveType.equals("Fairy")) || (isDarkAura && moveType.equals("Dark")))
+		{
+			bpModifiers.add(0x1548);
+		}
 		
 		//Technician considers any previous modifiers in its <= 60 BP check.
 		if (attackerAbility.equals("Technician"))
@@ -1269,6 +1319,26 @@ public class CalculateDamage
 			}
 		}
 		return null;
+	}
+	
+	public int parseChangeValue(String changeValue)
+	{
+		int result;
+		
+		if (changeValue.charAt(1) == '-') //Neutral boost
+		{
+			result = 0;
+		}
+		else if (changeValue.charAt(0) == '+') //Positive boost
+		{
+			result = Character.getNumericValue(changeValue.charAt(1));
+		}
+		else
+		{
+			result = 0 - Character.getNumericValue(changeValue.charAt(1));
+		}
+
+		return result;
 	}
 
 	public int[] getDamageRolls()

@@ -65,6 +65,8 @@ public class SuperDamageCalculator extends Application
 	private ToggleButton rightPlusOneAll;
 	private ToggleButton rightPlusTwoAll;
 	private ToggleButton rightSoak;
+	
+	private FieldOptions fieldOptionsLogic = new FieldOptions();
 
 	private final Clipboard clipboard = Clipboard.getSystemClipboard();
     private final ClipboardContent content = new ClipboardContent();
@@ -141,8 +143,8 @@ public class SuperDamageCalculator extends Application
 		damages.setRight(refreshCalcs);
 		refreshCalcs.setOnAction(e ->
 		{
-			updateDamageCalcs(leftMon, rightMon);
-			updateDamageCalcs(rightMon, leftMon);
+			updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
+			updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
 		});
 
 		copyCalc.setOnAction(e ->
@@ -161,7 +163,6 @@ public class SuperDamageCalculator extends Application
 		leftMon.topMoves.setOnMouseClicked(e ->
 		{
 			leftMon.currentMoveslot = leftMon.topMoves.getSelectionModel().getSelectedIndices().get(0);
-			System.out.println(leftMon.currentMoveslot);
 			mainDamageResultLabel.setText(leftMon.damageOutput[leftMon.currentMoveslot]);
 			mainDamageRollsLabel.setText(Arrays.toString(leftMon.damageRolls[leftMon.currentMoveslot]));
 		});
@@ -199,6 +200,11 @@ public class SuperDamageCalculator extends Application
 		format = new ListView<String>(formatTypes);
 		format.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		format.getSelectionModel().select(1);
+		fieldOptionsLogic.setFormat("Doubles");
+		format.setOnMouseClicked(e ->
+		{
+			fieldOptionsLogic.setFormat(format.getSelectionModel().getSelectedItem());
+		});
 		format.setOrientation(Orientation.HORIZONTAL);
  		format.setMaxWidth(111);
  		format.setMaxHeight(35);
@@ -210,6 +216,11 @@ public class SuperDamageCalculator extends Application
 		terrains = new ListView<String>(terrainNames);
 		terrains.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		terrains.getSelectionModel().select(0);
+		fieldOptionsLogic.setTerrain("None");
+		terrains.setOnMouseClicked(e ->
+		{
+			fieldOptionsLogic.setTerrain(terrains.getSelectionModel().getSelectedItem());
+		});
 		terrains.setOrientation(Orientation.HORIZONTAL);
 		terrains.setMaxWidth(242);
  		terrains.setMaxHeight(35);
@@ -221,6 +232,11 @@ public class SuperDamageCalculator extends Application
  		weathers = new ListView<String>(weatherNames);
  		weathers.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
  		weathers.getSelectionModel().select(0);
+ 		fieldOptionsLogic.setWeather("None");
+ 		weathers.setOnMouseClicked(e ->
+		{
+			fieldOptionsLogic.setWeather(weathers.getSelectionModel().getSelectedItem());
+		});
  		weathers.setOrientation(Orientation.HORIZONTAL);
  		weathers.setPrefWidth(277);
  		weathers.setMaxHeight(35);
@@ -231,6 +247,31 @@ public class SuperDamageCalculator extends Application
  		ObservableList<String> auraNames = FXCollections.observableArrayList("Fairy Aura", "Dark Aura", "Aura Break");
  		auras = new ListView<String>(auraNames);
  		auras.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+ 		auras.setOnMouseClicked(e ->
+		{
+			//Initialize options
+			fieldOptionsLogic.setFairyAura(false);
+			fieldOptionsLogic.setDarkAura(false);
+			fieldOptionsLogic.setAuraBreak(false);
+			
+			//Set auras as appropriate
+			ObservableList<String> selectedAuras = auras.getSelectionModel().getSelectedItems();
+			for (int i = 0; i < selectedAuras.size(); i++)
+			{
+				switch (selectedAuras.get(i))
+				{
+					case "Fairy Aura":
+						fieldOptionsLogic.setFairyAura(true);
+						break;
+					case "Dark Aura":
+						fieldOptionsLogic.setDarkAura(true);
+						break;
+					case "Aura Break":
+						fieldOptionsLogic.setAuraBreak(true);
+						break;
+				}
+			}
+		});
  		auras.setOrientation(Orientation.HORIZONTAL);
  		auras.setMaxWidth(208);
  		auras.setMaxHeight(35);
@@ -244,22 +285,45 @@ public class SuperDamageCalculator extends Application
  		GridPane leftSideOptions = new GridPane();
 
  		leftProtect = new ToggleButton("Protect");
+ 		leftProtect.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getLeftSideOptions().setProtect(leftProtect.isSelected());
+ 		});
  		leftSideOptions.addRow(0, leftProtect);
 
 		HBox leftScreens = new HBox();
  		leftReflect = new ToggleButton("Reflect");
+ 		leftReflect.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getLeftSideOptions().setReflect(leftReflect.isSelected());
+ 		});
  		leftLightScreen = new ToggleButton("Light Screen");
+ 		leftLightScreen.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getLeftSideOptions().setLightScreen(leftLightScreen.isSelected());
+ 		});
  		leftScreens.getChildren().addAll(leftReflect, leftLightScreen);
  		leftSideOptions.addRow(1, leftScreens);
 
  		leftAuroraVeil = new ToggleButton("Aurora Veil");
- 		leftAuroraVeil.setSelected(false);
+ 		leftAuroraVeil.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getLeftSideOptions().setAuroraVeil(leftAuroraVeil.isSelected());
+ 		});
  		leftSideOptions.addRow(2, leftAuroraVeil);
 
  		leftHelpingHand = new ToggleButton("Helping Hand");
+ 		leftHelpingHand.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getLeftSideOptions().setHelpingHand(leftHelpingHand.isSelected());
+ 		});
  		leftSideOptions.addRow(3, leftHelpingHand);
 
  		leftFriendGuard = new ToggleButton("Friend Guard");
+ 		leftFriendGuard.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getLeftSideOptions().setFriendGuard(leftFriendGuard.isSelected());
+ 		});
  		leftSideOptions.addRow(4, leftFriendGuard);
 
 		ToggleGroup leftBoosts = new ToggleGroup();
@@ -330,21 +394,45 @@ public class SuperDamageCalculator extends Application
  		GridPane rightSideOptions = new GridPane();
 
 		rightProtect = new ToggleButton("Protect");
+		rightProtect.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getRightSideOptions().setProtect(rightProtect.isSelected());
+ 		});
 		rightSideOptions.addRow(0, rightProtect);
 
 		HBox rightScreens = new HBox();
 		rightReflect = new ToggleButton("Reflect");
+		rightReflect.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getRightSideOptions().setReflect(rightReflect.isSelected());
+ 		});
 		rightLightScreen = new ToggleButton("Light Screen");
+		rightLightScreen.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getRightSideOptions().setLightScreen(rightLightScreen.isSelected());
+ 		});
 		rightScreens.getChildren().addAll(rightReflect, rightLightScreen);
 		rightSideOptions.addRow(1, rightScreens);
 
 		rightAuroraVeil = new ToggleButton("Aurora Veil");
+		rightAuroraVeil.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getRightSideOptions().setAuroraVeil(rightAuroraVeil.isSelected());
+ 		});
 		rightSideOptions.addRow(2, rightAuroraVeil);
 
 		rightHelpingHand = new ToggleButton("Helping Hand");
+		rightHelpingHand.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getRightSideOptions().setHelpingHand(rightHelpingHand.isSelected());
+ 		});
 		rightSideOptions.addRow(3, rightHelpingHand);
 
 		rightFriendGuard = new ToggleButton("Friend Guard");
+		rightFriendGuard.setOnAction(e -> 
+ 		{
+ 			fieldOptionsLogic.getRightSideOptions().setFriendGuard(rightFriendGuard.isSelected());
+ 		});
 		rightSideOptions.addRow(4, rightFriendGuard);
 
  		ToggleGroup rightBoosts = new ToggleGroup();
@@ -426,8 +514,8 @@ public class SuperDamageCalculator extends Application
 		bottomImage.setFitHeight(235);
 
 		/****** END CENTER *******/
-		updateDamageCalcs(leftMon, rightMon);
-		updateDamageCalcs(rightMon, rightMon);
+		updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
+		updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
 
 		fieldOptions.setAlignment(Pos.CENTER);
 		rightSideOptions.setAlignment(Pos.TOP_RIGHT);
@@ -489,7 +577,6 @@ public class SuperDamageCalculator extends Application
 		KOChanceGUI koChanceGUI = new KOChanceGUI();
 		koChanceGUI.start(stage);
 	}
-	
 
 	//The GUI for importing sets from Showdown.
 	public void openPSImport()
@@ -517,7 +604,6 @@ public class SuperDamageCalculator extends Application
 	}
 
 	//The logic for importing the sets from GUI.
-	//TODO: Sprites will crash with this right now.
 	public void setImportedData(Stage stage, String text, int side)
 	{
 		ShowdownImport psImport = new ShowdownImport(text);
@@ -571,8 +657,8 @@ public class SuperDamageCalculator extends Application
 				rightMon.isToggleMon = false;
 			}
 		}
-		updateDamageCalcs(leftMon, rightMon);
-		updateDamageCalcs(rightMon, leftMon);
+		updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
+		updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
 		stage.close();
 	}
 
@@ -611,154 +697,31 @@ public class SuperDamageCalculator extends Application
 	public void setDefaultLevels(int level)
 	{
 		leftMon.level.setText(Integer.toString(level));
-		leftMon.updateStats();
 		rightMon.level.setText(Integer.toString(level));
-		rightMon.updateStats();
 		leftMon.defaultLevel = level;
 		rightMon.defaultLevel = level;
 	}
-
-	public void updateDamageCalcs(PokemonSide attacker, PokemonSide defender)
+	
+	public void updateDamageCalcs(Pokemon attacker, Pokemon defender, PokemonSide attackerUI, boolean isLeft)
 	{
-		attacker.topMoveNames.clear();
-		//Left side vs. right side
+		attackerUI.topMoveNames.clear();
 		for (int i = 0; i < 4; i++)
 		{
-			int attackingStatToUse = 0;
-			int defendingStatToUse = 0;
-			String category = (String) attacker.category[i].getValue();
-			if (category.equals("Physical"))
-			{
-				attackingStatToUse = ATK;
-				defendingStatToUse = DEF;
-			}
-			else if (category.equals("Special"))
-			{
-				attackingStatToUse = SATK;
-				defendingStatToUse = SDEF;
-			}
-			else if (category.equals("Psyshock effect"))
-			{
-				attackingStatToUse = SATK;
-				defendingStatToUse = DEF;
-			}
-
-			//Parsing value from the +6 to -6 combobox
-			String offenseChange = (String) attacker.statChanges[attackingStatToUse].getValue();
-			int offenseChangeValue = parseChangeValue(offenseChange);
-			String speedAttackerChange = (String) attacker.statChanges[SPE].getValue();
-			int speedAttackerChangeValue = parseChangeValue(speedAttackerChange);
-			String defenseChange = (String) defender.statChanges[defendingStatToUse].getValue();
-			int defenseChangeValue = parseChangeValue(defenseChange);
-			String speedDefenderChange = (String) attacker.statChanges[SPE].getValue();
-			int speedDefenderChangeValue = parseChangeValue(speedDefenderChange);
-
-			Object[] damageVariablesLeft = new Object[20];
-			damageVariablesLeft[0] = (String) attacker.teamData[attacker.currentPokemon].getName();
-			damageVariablesLeft[1] = (String) attacker.typeLeft.getValue();
-			damageVariablesLeft[2] = (String) attacker.typeRight.getValue();
-			damageVariablesLeft[3] = Integer.parseInt((String) attacker.level.getText());
-			damageVariablesLeft[4] = (String) attacker.forme.getValue();
-			damageVariablesLeft[5] = Integer.parseInt((String) attacker.calculatedStats[attackingStatToUse].getText());
-			damageVariablesLeft[6] = Integer.parseInt((String) attacker.EVsField[attackingStatToUse].getText());
-			damageVariablesLeft[7] = Integer.parseInt((String) attacker.calculatedStats[SPE].getText());
-			damageVariablesLeft[8] = offenseChangeValue;
-			damageVariablesLeft[9] = speedAttackerChangeValue;
-			damageVariablesLeft[10] = (String) attacker.nature.getValue();
-			damageVariablesLeft[11] = (String) attacker.ability.getValue();
-			damageVariablesLeft[12] = (String) attacker.item.getValue();
-			damageVariablesLeft[13] = (String) attacker.status.getValue();
-			damageVariablesLeft[14] = (String) attacker.moveData[i].getName();
-			damageVariablesLeft[15] = Integer.parseInt((String) attacker.basePower[i].getText());
-			damageVariablesLeft[16] = (String) attacker.type[i].getValue();
-			damageVariablesLeft[17] = (String) attacker.category[i].getValue();
-			damageVariablesLeft[18] = (boolean) attacker.crit[i].isSelected();
-			damageVariablesLeft[19] = (boolean) attacker.zOption[i].isSelected();
-
-			Object[] damageVariablesRight = new Object[15];
-			damageVariablesRight[0] = (String) defender.teamData[defender.currentPokemon].getName();
-			damageVariablesRight[1] = (String) defender.typeLeft.getValue();
-			damageVariablesRight[2] = (String) defender.typeRight.getValue();
-			damageVariablesRight[3] = (String) defender.forme.getValue();
-			damageVariablesRight[4] = Integer.parseInt((String) defender.calculatedStats[HP].getText());
-			damageVariablesRight[5] = Integer.parseInt((String) defender.EVsField[HP].getText());
-			damageVariablesRight[6] = Integer.parseInt((String) defender.calculatedStats[defendingStatToUse].getText());
-			damageVariablesRight[7] = Integer.parseInt((String) defender.EVsField[defendingStatToUse].getText());
-			damageVariablesRight[8] = Integer.parseInt((String) defender.calculatedStats[SPE].getText());
-			damageVariablesRight[9] = defenseChangeValue;
-			damageVariablesRight[10] = speedDefenderChangeValue;
-			damageVariablesRight[11] = (String) defender.nature.getValue();
-			damageVariablesRight[12] = (String) defender.ability.getValue();
-			damageVariablesRight[13] = (String) defender.item.getValue();
-			damageVariablesRight[14] = (String) defender.status.getValue();
-
-			Object[] damageVariablesCenter = new Object[9];
-			damageVariablesCenter[0] = (String) format.getSelectionModel().getSelectedItem();
-			damageVariablesCenter[1] = (String) terrains.getSelectionModel().getSelectedItem();
-			damageVariablesCenter[2] = (String) weathers.getSelectionModel().getSelectedItem();
-			//damageVariablesCenter[3] = (String) auras.getSelectionModel().getSelectedItem(); Auras not implemented yet
-			if (attacker.equals(leftMon))
-			{
-				damageVariablesCenter[4] = (boolean) leftHelpingHand.isSelected();
-				damageVariablesCenter[5] = (boolean) rightProtect.isSelected();
-				damageVariablesCenter[6] = (boolean) rightReflect.isSelected();
-				damageVariablesCenter[7] = (boolean) rightLightScreen.isSelected();
-				if (rightAuroraVeil.isSelected()) //Set Reflect and Light Screen to be true
-				{
-					damageVariablesCenter[6] = true;
-					damageVariablesCenter[7] = true;
-				}
-				damageVariablesCenter[8] = (boolean) rightFriendGuard.isSelected();
-			}
-			else //the attacker is the right side
-			{
-				damageVariablesCenter[4] = (boolean) rightHelpingHand.isSelected();
-				damageVariablesCenter[5] = (boolean) leftProtect.isSelected();
-				damageVariablesCenter[6] = (boolean) leftReflect.isSelected();
-				damageVariablesCenter[7] = (boolean) leftLightScreen.isSelected();
-				if (leftAuroraVeil.isSelected()) //Set Reflect and Light Screen to be true
-				{
-					damageVariablesCenter[6] = true;
-					damageVariablesCenter[7] = true;
-				}
-				damageVariablesCenter[8] = (boolean) leftFriendGuard.isSelected();
-			}
-
-			CalculateDamage damagecalc = new CalculateDamage(damageVariablesLeft, damageVariablesRight, damageVariablesCenter);
-			attacker.damageOutput[i] = damagecalc.getDamageOutput();
-			attacker.damageOutputShort[i] = damagecalc.getDamageOutputShort();
-			attacker.damageRolls[i] = damagecalc.getDamageRolls();
-			attacker.topMoveNames.add((String) attacker.movesComboBox[i].getValue() + " " + attacker.damageOutputShort[i]);
+			CalculateDamage damagecalc = new CalculateDamage(attacker.getMove(i), attacker, defender, fieldOptionsLogic, isLeft);
+			attackerUI.damageOutput[i] = damagecalc.getDamageOutput();
+			attackerUI.damageOutputShort[i] = damagecalc.getDamageOutputShort();
+			attackerUI.damageRolls[i] = damagecalc.getDamageRolls();
+			attackerUI.topMoveNames.add((String) attackerUI.movesComboBox[i].getValue() + " " + attackerUI.damageOutputShort[i]);
 		}
-
+		
 		mainDamageResultLabel.setText(leftMon.damageOutput[leftMon.currentMoveslot]);
 		mainDamageRollsLabel.setText(Arrays.toString(leftMon.damageRolls[leftMon.currentMoveslot]));
 	}
-
-	public int parseChangeValue(String changeValue)
-	{
-		int result;
-		
-		if (changeValue.charAt(1) == '-') //Neutral boost
-		{
-			result = 0;
-		}
-		else if (changeValue.charAt(0) == '+') //Positive boost
-		{
-			result = Character.getNumericValue(changeValue.charAt(1));
-		}
-		else
-		{
-			result = 0 - Character.getNumericValue(changeValue.charAt(1));
-		}
-
-		return result;
-	}
-	
 	
 	//Displays a popup with some exception that gets called for beta testing.
 	private static void showError(Thread t, Throwable e)
-	{       
+	{
+		e.printStackTrace();
         String exceptionTrace = e.getMessage();
         StackTraceElement[] stackTrace = e.getStackTrace();
         
