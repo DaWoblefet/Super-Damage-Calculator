@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 public class Pokedex
 {
-    public HashMap<String, Pokemon> pokedex = new HashMap<String, Pokemon>();
-
+    public static HashMap<String, Pokemon> pokedex = new HashMap<String, Pokemon>();
+	
     public Pokedex()
     {
-		//Breaks it into halves because otherwise Java complains about the code size being too large.
+    	//Breaks it into halves because otherwise Java complains about the code size being too large.
     	initFirstHalf();
     	initSecondHalf();
     }
@@ -20,7 +20,7 @@ public class Pokedex
     	return pokedex.get(name);
     }
     
-    public HashMap<String, Pokemon> getPokedex()
+    public static HashMap<String, Pokemon> getPokedex()
     {
     	return pokedex;
     }

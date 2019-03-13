@@ -30,9 +30,9 @@ import java.util.Collections;
 
 public class PokemonSide
 {
-	private HashMap<String, Pokemon> pokedex = new Pokedex().pokedex;
-	private HashMap<String, Move> movedex = new Movedex().movedex;
-	private HashMap<String, Item> items = new Itemdex().items;
+	private HashMap<String, Pokemon> pokedex = Pokedex.getPokedex();
+	private HashMap<String, Move> movedex = new Movedex().getMovedex();
+	private HashMap<String, Item> items = new Itemdex().getItems();
 	private HashMap<String, Integer> natures = new Nature().natures;
 	private HashMap<String, Integer> abilities = new Abilitydex().abilities;
 	private HashMap<String, Integer> types = new Type().types;

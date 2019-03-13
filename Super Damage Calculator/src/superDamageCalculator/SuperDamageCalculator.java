@@ -28,6 +28,10 @@ import static superDamageCalculator.StatConstants.*;
 
 public class SuperDamageCalculator extends Application
 {
+	//Initializing the HashMaps for use
+	private Pokedex pokedex = new Pokedex();
+	private Movedex movedex = new Movedex();
+	
 	private PokemonSide leftMon = new PokemonSide();
 	private PokemonSide rightMon = new PokemonSide();
 
@@ -74,6 +78,7 @@ public class SuperDamageCalculator extends Application
 	@Override
 	public void start(Stage primaryStage)
 	{
+		long startTime = System.currentTimeMillis();
 		Thread.setDefaultUncaughtExceptionHandler(SuperDamageCalculator::showError);
 		BorderPane mainPane = new BorderPane();
 		BorderPane subPane = new BorderPane();
@@ -549,6 +554,8 @@ public class SuperDamageCalculator extends Application
 		primaryStage.setTitle("Super Damage Calculator");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		long endTime = System.currentTimeMillis();
+		System.out.println("Startup time: " + (endTime - startTime));
 	}
 
 	/* Launches the URL in the user's default web browser.*/

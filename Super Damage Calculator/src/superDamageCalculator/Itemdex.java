@@ -14,6 +14,16 @@ public class Itemdex
 	{
 		init();
 	}
+	
+	public Item get(String name)
+    {
+    	return items.get(name);
+    }
+    
+    public HashMap<String, Item> getItems()
+    {
+    	return items;
+    }
 
 	public void init()
 	{

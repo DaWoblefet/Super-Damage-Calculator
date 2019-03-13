@@ -17,8 +17,8 @@ import java.util.Objects;
 
 public class CalculateDamage
 {
-	private HashMap<String, Pokemon> pokedex = new Pokedex().pokedex;
-	private HashMap<String, Move> movedex = new Movedex().movedex;
+	private HashMap<String, Pokemon> pokedex = Pokedex.getPokedex();
+	private HashMap<String, Move> movedex = new Movedex().getMovedex();
 	private HashMap<String, Integer> types = new Type().types;
 	private HashMap<String, Integer> natures = new Nature().natures;
 	private double typechart[][] = new Type().typeChart;

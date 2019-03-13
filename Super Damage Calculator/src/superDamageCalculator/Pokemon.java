@@ -14,8 +14,8 @@ public class Pokemon
     private String name;
     private int dexNumber;
     
-    private HashMap<String, Move> movedex = new Movedex().movedex;
-	private HashMap<String, Item> items = new Itemdex().items;
+    private HashMap<String, Move> movedex = new Movedex().getMovedex();
+	private HashMap<String, Item> items = new Itemdex().getItems();
 
     private String types[] = new String[2];
     private boolean isTrickOrTreat;

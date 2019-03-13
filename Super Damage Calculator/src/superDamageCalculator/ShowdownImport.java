@@ -11,8 +11,8 @@ public class ShowdownImport
 	String[] importString = new String[6];
 	Pokemon[] team = new Pokemon[6];
 	boolean isTeam = false;
-	HashMap<String, Pokemon> pokedex = new Pokedex().pokedex;
-	HashMap<String, Move> movedex = new Movedex().movedex;
+	HashMap<String, Pokemon> pokedex = Pokedex.getPokedex();
+	HashMap<String, Move> movedex = new Movedex().getMovedex();
 	HashMap<String, Integer> natures = new Nature().natures;
 
 	public ShowdownImport(String importString)

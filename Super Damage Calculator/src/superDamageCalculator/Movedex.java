@@ -13,6 +13,16 @@ public class Movedex
 	{
 		init();
 	}
+	
+	public Move get(String name)
+    {
+    	return movedex.get(name);
+    }
+    
+    public HashMap<String, Move> getMovedex()
+    {
+    	return movedex;
+    }
 
 	public void init()
 	{
