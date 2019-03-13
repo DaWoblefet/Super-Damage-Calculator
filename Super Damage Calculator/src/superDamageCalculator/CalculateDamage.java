@@ -17,13 +17,14 @@ import java.util.Objects;
 
 public class CalculateDamage
 {
-	private HashMap<String, Pokemon> pokedex = new HashMap<String, Pokemon>();
+	private HashMap<String, Pokemon> pokedex = new Pokedex().pokedex;
 	private HashMap<String, Move> movedex = new Movedex().movedex;
 	private HashMap<String, Integer> types = new Type().types;
 	private HashMap<String, Integer> natures = new Nature().natures;
 	private double typechart[][] = new Type().typeChart;
 	private boolean debugMode = false;
 
+	private Pokemon attacker;
 	private String attackerName;
 	private String attackerTypeLeft;
 	private String attackerTypeRight;
@@ -45,6 +46,7 @@ public class CalculateDamage
 	private boolean isCrit;
 	private boolean isZ;
 
+	private Pokemon defender;
 	private String defenderName;
 	private String defenderTypeLeft;
 	private String defenderTypeRight;
@@ -83,6 +85,8 @@ public class CalculateDamage
 	/* Passes in the variables affecting damage calculation, sets them, then starts damage calculation. */
 	public CalculateDamage(Move move, Pokemon attacker, Pokemon defender, FieldOptions fieldOptions, boolean isLeft)
 	{
+		this.attacker = attacker;
+		this.defender = defender;
 		this.move = move;
 		moveBP = move.getBP();
 		moveType = move.getType();
@@ -227,7 +231,11 @@ public class CalculateDamage
 				{
 					initialBP = relativeSpeed >= 4 ? 150 : relativeSpeed == 3 ? 120 : relativeSpeed == 2 ? 80 : relativeSpeed == 1 ? 60 : 40;
 				}
-				break;	
+				break;
+			case "Water Spout":
+			case "Eruption":
+				initialBP = Math.max(1, (int) Math.floor((150.0 * attacker.getCurrentHP() / attacker.getStat(HP).calculateStat())));
+				break;
 			case "Heavy Slam":
 			case "Heat Crash":
 				targetWeight = calculateWeight(defenderName, defenderAbility, defenderItem);
@@ -311,12 +319,25 @@ public class CalculateDamage
 					initialBP = 140;
 				}
 				break;
-			
-			//High priority to support
-			case "Water Spout":
-			case "Eruption":
-				initialBP = 150; //TODO once HP percentage implemented
+			case "Wring Out":
+			case "Crush Grip":
+				//Taken from https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js
+				int fancyCalculation = (int) Math.floor(Math.floor((120 * (100 * Math.floor((defender.getCurrentHP() * 4096.0 / defender.getStat(HP).calculateStat())) + 2048 - 1) / 4096) / 100));	
+				initialBP = Math.max(1, fancyCalculation);
 				break;
+			case "Flail":
+			case "Reversal":
+				int p = ((int) Math.floor(48.0 * attacker.getCurrentHP() / attacker.getStat(HP).calculateStat()));
+				initialBP = p <= 1 ? 200 : p <= 4 ? 150 : p <= 9 ? 100 : p <= 16 ? 80 : p <= 32 ? 40 : 20;
+				break;
+			case "Water Shuriken":
+				if (attackerName.equals("Greninja-Ash") && attackerAbility.equals("Battle Bond"))
+				{
+					initialBP = 20;
+				}
+				break;
+			
+			//Higher priority to support
 			case "Stored Power":
 			case "Power Trip":
 				break;
@@ -324,12 +345,6 @@ public class CalculateDamage
 				break;
 			
 			//Lower priority to support
-			case "Wring Out":
-			case "Crush Grip":
-				break;
-			case "Flail":
-			case "Reversal":
-				break;
 			case "Beat Up":
 				break;
 				
@@ -368,7 +383,7 @@ public class CalculateDamage
 			bpModifiers.add(0xC00);
 		}
 		
-		//if (Rivalry and gender is not the same)
+		//if (Rivalry and gender is not the same) TODO
 		//bpModifiers.add(0xC00)
 		
 		//Check for -ate abilities changing move typing.
@@ -421,7 +436,7 @@ public class CalculateDamage
 			bpModifiers.add(0x1333);
 		}
 		
-		//if (Rivalry and gender is the same)
+		//if (Rivalry and gender is the same) TODO
 		//bpModifiers.add(0x1400);
 		
 		//if (Battery field effect active) TODO
@@ -522,7 +537,7 @@ public class CalculateDamage
 			bpModifiers.add(0x800);
 		}
 		
-		//if (meFirst variable)
+		//if (meFirst variable) TODO
 		//bpModifiers.add(0x1800);
 		
 		//Knock Off doesn't boost on Z-crystals, Mega Stones, Giratina-O, Arceus + Plate, Genesect + Drive, Silvally + Memory, or Primal Reversion
@@ -543,7 +558,7 @@ public class CalculateDamage
 			bpModifiers.add(0x1800);
 		}
 				
-		//if (has Charge)
+		//if (has Charge) TODO
 		//bpModifiers.add(0x2000);
 		
 		//Facade doesn't double on sleep or freeze
@@ -552,18 +567,20 @@ public class CalculateDamage
 			bpModifiers.add(0x2000);
 		}
 		
-		//if (brineCondition) TODO once HP Percentage implemented
-		//bpModifiers.add(0x2000);
+		if (move.getName().equals("Brine") && defender.getCurrentHP() <= defenderHPStat / 2.0)
+		{
+			bpModifiers.add(0x2000);
+		}
 		
 		if (move.getName().equals("Venoshock") && (defenderStatus.equals("Poisoned") || defenderStatus.equals("Badly Poisoned")))
 		{
 			bpModifiers.add(0x2000);
 		}
 		
-		//if (Retaliate condition)
+		//if (Retaliate condition) TODO
 		//bpModifiers.add(0x2000);
 		
-		//if (Fusion Bolt/Flare condition)
+		//if (Fusion Bolt/Flare condition) TODO
 		//bpModifiers.add(0x2000);
 		
 		//Grassy/Misty Terrain (negative). Check for grounded-state first.
@@ -590,7 +607,7 @@ public class CalculateDamage
 			}
 		}
 		
-		//if (Water Sport active and move is Fire, Mud Sport active and move is Electric)
+		//if (Water Sport active and move is Fire, Mud Sport active and move is Electric) TODO
 		//bpModifiers.add(0x2000);
 		
 		if (debugMode)
@@ -640,13 +657,12 @@ public class CalculateDamage
 			attackModifiers.add(0x800);
 		}
 		
-		//Defeatist //TODO once HP percentage support added
-		if (attackerAbility.equals("Defeatist"))
+		if (attackerAbility.equals("Defeatist") && attacker.getCurrentHP() <= attacker.getStat(HP).calculateStat() / 2.0)
 		{
-			//attackModifiers.add(0x800);
+			attackModifiers.add(0x800);
 		}
 		
-		//Technically Flower Gift should be an ally's ability
+		//Technically Flower Gift can also be an ally's ability
 		if (attackerAbility.equals("Flower Gift") && moveCategory.equals("Physical") && weather.equals("Sun"))
 		{
 			attackModifiers.add(0x1800);
@@ -657,10 +673,10 @@ public class CalculateDamage
 			attackModifiers.add(0x1800);
 		}
 		
-		//Torrent/Swarm/Overgrow/Blaze TODO once HP percentage support added
-		if ((attackerAbility.equals("Blaze") && moveType.equals("Fire")) || (attackerAbility.equals("Torrent") && moveType.equals("Water")) || (attackerAbility.equals("Overgrow") && moveType.equals("Grass")) || (attackerAbility.equals("Swarm") && moveType.equals("Bug")))
+		//Torrent/Swarm/Overgrow/Blaze
+		if (attacker.getCurrentHP() <= attacker.getStat(HP).calculateStat() / 3.0 && (attackerAbility.equals("Blaze") && moveType.equals("Fire")) || (attackerAbility.equals("Torrent") && moveType.equals("Water")) || (attackerAbility.equals("Overgrow") && moveType.equals("Grass")) || (attackerAbility.equals("Swarm") && moveType.equals("Bug")))
 		{
-			//attackModifiers.add(0x1800);
+			attackModifiers.add(0x1800);
 		}
 		
 		//TODO Flash Fire needs a trigger to activate
@@ -776,7 +792,7 @@ public class CalculateDamage
 		
 		ArrayList<Integer> defenseModifiers = new ArrayList<Integer>();
 		
-		//Technically Flower Gift should be an ally's ability
+		//Technically Flower Gift can be an ally's ability
 		if (defenderAbility.equals("Flower Gift") && weather.equals("Sun") && (moveCategory.equals("Physical") || moveCategory.equals("Psyshock effect")))
 		{
 			defenseModifiers.add(0x1800);
@@ -808,7 +824,7 @@ public class CalculateDamage
 			defenseModifiers.add(0x1800);
 		}
 		
-		//BW documentation says 0x1800 but everywhere else says 0x2000 TODO test in-game
+		//BW documentation says 0x1800 but everywhere else says 0x2000
 		if (defenderItem.getName().equals("Deep Sea Scale") && defenderName.equals("Clamperl") && moveCategory.equals("Special"))
 		{
 			defenseModifiers.add(0x2000);
@@ -975,7 +991,7 @@ public class CalculateDamage
 		}
 
 		//Multiscale / Shadow Shield assumes the target is at full HP.
-		if (defenderAbility.equals("Multiscale") || defenderAbility.equals("Shadow Shield"))
+		if ((defenderAbility.equals("Multiscale") || defenderAbility.equals("Shadow Shield")) && defender.getCurrentHP() == defenderHPStat)
 		{
 			finalModifiers.add(0x800);
 		}

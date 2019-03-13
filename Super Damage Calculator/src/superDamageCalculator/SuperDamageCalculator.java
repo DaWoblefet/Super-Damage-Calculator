@@ -132,8 +132,9 @@ public class SuperDamageCalculator extends Application
 		mainDamageRollsLabel = new Label(Arrays.toString(leftMon.damageRolls[0]));
 		mainDamageRollsLabel.setFont(new Font("Times New Roman", 14));
 		Button copyCalc = new Button("Copy Calc");
+		Button copyRolls = new Button("Copy Rolls");
 		Button copyCalcAndRolls = new Button("Copy Calc + Damage Rolls");
-		rollsAndCopy.getChildren().addAll(mainDamageRollsLabel, copyCalc, copyCalcAndRolls);
+		rollsAndCopy.getChildren().addAll(mainDamageRollsLabel, copyCalc, copyRolls, copyCalcAndRolls);
 		rollsAndCopy.setSpacing(5);
 		rollsAndCopy.setAlignment(Pos.CENTER_LEFT);
 		damageCalcs.addRow(1, rollsAndCopy);
@@ -152,10 +153,16 @@ public class SuperDamageCalculator extends Application
 			content.putString(mainDamageResultLabel.getText());
 			clipboard.setContent(content);
 		});
+		
+		copyRolls.setOnAction(e ->
+		{
+			content.putString(mainDamageRollsLabel.getText());
+			clipboard.setContent(content);
+		});
 
 		copyCalcAndRolls.setOnAction(e ->
 		{
-			content.putString(mainDamageResultLabel.getText() + "\n" + Arrays.toString(leftMon.damageRolls[0]));
+			content.putString(mainDamageResultLabel.getText() + "\n" + mainDamageRollsLabel.getText());
 			clipboard.setContent(content);
 		});
 
@@ -526,7 +533,7 @@ public class SuperDamageCalculator extends Application
 		center.setCenter(sideOptions);
 		center.setBottom(bottomImage);
 		BorderPane.setAlignment(bottomImage, Pos.CENTER);
-		BorderPane.setMargin(bottomImage, new Insets(0,0,5,0));
+		BorderPane.setMargin(bottomImage, new Insets(0,0,20,0));
 
 		subPane.setTop(damages);
 		subPane.setLeft(pokemonLeft);
@@ -536,7 +543,7 @@ public class SuperDamageCalculator extends Application
 		mainPane.setTop(menubar);
 		mainPane.setCenter(subPane);
 
-		Scene scene = new Scene(mainPane, 1200, 675);
+		Scene scene = new Scene(mainPane, 1200, 680);
 		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
 		primaryStage.getIcons().add(icon);
 		primaryStage.setTitle("Super Damage Calculator");
@@ -567,6 +574,8 @@ public class SuperDamageCalculator extends Application
 
 		Scene scene = new Scene(pane, 400, 400);
 		stage.setScene(scene);
+		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
+		stage.getIcons().add(icon);
 		stage.setTitle("Additional Options");
 		stage.show();
 	}
@@ -591,75 +600,18 @@ public class SuperDamageCalculator extends Application
 		BorderPane importButtons = new BorderPane();
 		importButtons.setLeft(leftImportButton);
 		importButtons.setRight(rightImportButton);
-		leftImportButton.setOnAction(e -> setImportedData(stage, PSText.getText(), 0));
-		rightImportButton.setOnAction(e -> setImportedData(stage, PSText.getText(), 1));
+		leftImportButton.setOnAction(e -> leftMon.setImportedData(stage, PSText.getText()));
+		rightImportButton.setOnAction(e -> rightMon.setImportedData(stage, PSText.getText()));
 
 		borderpane.setCenter(importButtons);
 		vbox.getChildren().addAll(PSText, borderpane);
 
 		Scene scene = new Scene(vbox, 350, 500);
+		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
+		stage.getIcons().add(icon);
 		stage.setScene(scene);
 		stage.setTitle("Import from Pokemon Showdown");
 		stage.show();
-	}
-
-	//The logic for importing the sets from GUI.
-	public void setImportedData(Stage stage, String text, int side)
-	{
-		ShowdownImport psImport = new ShowdownImport(text);
-		if (psImport.getIsTeam())
-		{
-			if (side == 0) //left side
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					leftMon.teamData[i] = psImport.getPokemon(i);
-					leftMon.teamSprites[i].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + leftMon.teamData[i].getName() + ".png")));
-				}
-				leftMon.spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + leftMon.teamData[0].getName() + ".png")));
-				leftMon.currentPokemon = 0;
-				leftMon.isToggleMon = true;
-				leftMon.chooseMon.setValue(leftMon.teamData[leftMon.currentPokemon].getName());
-				leftMon.isToggleMon = false;
-			}
-			else //right side
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					rightMon.teamData[i] = psImport.getPokemon(i);
-					rightMon.teamSprites[i].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + rightMon.teamData[i].getName() + ".png")));
-				}
-				rightMon.spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + rightMon.teamData[0].getName() + ".png")));
-				rightMon.currentPokemon = 0;
-				rightMon.isToggleMon = true;
-				rightMon.chooseMon.setValue(rightMon.teamData[rightMon.currentPokemon].getName());
-				rightMon.isToggleMon = false;
-			}
-		}
-		else
-		{
-			if (side == 0) //left side
-			{
-				leftMon.teamData[leftMon.currentPokemon] = psImport.getPokemon(0);
-				leftMon.teamSprites[leftMon.currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + leftMon.teamData[leftMon.currentPokemon].getName() + ".png")));
-				leftMon.spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + leftMon.teamData[leftMon.currentPokemon].getName() + ".png")));
-				leftMon.isToggleMon = true;
-				leftMon.chooseMon.setValue(leftMon.teamData[leftMon.currentPokemon].getName());
-				leftMon.isToggleMon = false;
-			}
-			else //right side
-			{
-				rightMon.teamData[rightMon.currentPokemon] = psImport.getPokemon(0);
-				rightMon.teamSprites[rightMon.currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + rightMon.teamData[rightMon.currentPokemon].getName() + ".png")));
-				rightMon.spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + rightMon.teamData[rightMon.currentPokemon].getName() + ".png")));
-				rightMon.isToggleMon = true;
-				rightMon.chooseMon.setValue(rightMon.teamData[rightMon.currentPokemon].getName());
-				rightMon.isToggleMon = false;
-			}
-		}
-		updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
-		updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
-		stage.close();
 	}
 
 	//Opens a text file with credits.
@@ -688,6 +640,8 @@ public class SuperDamageCalculator extends Application
 		creditsText.setPrefRowCount(19);
 
 		Scene scene = new Scene(creditsText, 405, 325);
+		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
+		stage.getIcons().add(icon);
 		stage.setScene(scene);
 		stage.setTitle("Credits");
 		stage.show();
@@ -702,27 +656,40 @@ public class SuperDamageCalculator extends Application
 		rightMon.defaultLevel = level;
 	}
 	
+	//Passes in the Pokemon for damage calculation, then updates the GUI.
 	public void updateDamageCalcs(Pokemon attacker, Pokemon defender, PokemonSide attackerUI, boolean isLeft)
 	{
-		attackerUI.topMoveNames.clear();
 		for (int i = 0; i < 4; i++)
 		{
 			CalculateDamage damagecalc = new CalculateDamage(attacker.getMove(i), attacker, defender, fieldOptionsLogic, isLeft);
 			attackerUI.damageOutput[i] = damagecalc.getDamageOutput();
 			attackerUI.damageOutputShort[i] = damagecalc.getDamageOutputShort();
 			attackerUI.damageRolls[i] = damagecalc.getDamageRolls();
-			attackerUI.topMoveNames.add((String) attackerUI.movesComboBox[i].getValue() + " " + attackerUI.damageOutputShort[i]);
+			attackerUI.topMoveNames.set(i, (String) attackerUI.movesComboBox[i].getValue() + " " + attackerUI.damageOutputShort[i]);
 		}
 		
 		mainDamageResultLabel.setText(leftMon.damageOutput[leftMon.currentMoveslot]);
-		mainDamageRollsLabel.setText(Arrays.toString(leftMon.damageRolls[leftMon.currentMoveslot]));
+		String rollsText = getRollsText(leftMon.damageRolls[leftMon.currentMoveslot]);
+		mainDamageRollsLabel.setText(rollsText);
+	}
+	
+	public String getRollsText(int[] rolls)
+	{
+		String rollsText = "(";
+		for (int i = 0; i < 15; i++)
+		{
+			rollsText += rolls[i] + ", ";
+		}
+		rollsText += rolls[15] + ")";
+		return rollsText;
 	}
 	
 	//Displays a popup with some exception that gets called for beta testing.
 	private static void showError(Thread t, Throwable e)
 	{
-		e.printStackTrace();
-        String exceptionTrace = e.getMessage();
+		Exception ex = new Exception(e);
+		ex.printStackTrace();
+        String exceptionTrace = ex.getMessage() + "\n";
         StackTraceElement[] stackTrace = e.getStackTrace();
         
         for (int i = 0; i < stackTrace.length; i++)

@@ -14,6 +14,16 @@ public class Pokedex
     	initFirstHalf();
     	initSecondHalf();
     }
+    
+    public Pokemon get(String name)
+    {
+    	return pokedex.get(name);
+    }
+    
+    public HashMap<String, Pokemon> getPokedex()
+    {
+    	return pokedex;
+    }
 
     public void initFirstHalf()
     {

@@ -25,7 +25,8 @@ public class Pokemon
     private Move[] moves = new Move[4];
     private ArrayList<String> otherFormes = new ArrayList<String>();
     private Stat[] stats = new Stat[6];
-    private Item item;
+    private int currentHP; //The actual HP a Pokemon has; e.g. for 175/176 HP, 175 is currentHP
+	private Item item;
     private String baseSpecies;
     private String forme;
     private String nature;
@@ -160,6 +161,16 @@ public class Pokemon
 		this.baseStats[SATK] = spa;
 		this.baseStats[SDEF] = spd;
 		this.baseStats[SPE] = spe;
+	}
+	
+    public int getCurrentHP()
+    {
+		return currentHP;
+	}
+
+	public void setCurrentHP(int currentHP)
+	{
+		this.currentHP = currentHP;
 	}
     
 	public String getNature()
