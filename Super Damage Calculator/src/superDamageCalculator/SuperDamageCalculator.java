@@ -30,7 +30,6 @@ public class SuperDamageCalculator extends Application
 {
 	//Initializing the HashMaps for use
 	private Pokedex pokedex = new Pokedex();
-	private Movedex movedex = new Movedex();
 	
 	private PokemonSide leftMon = new PokemonSide();
 	private PokemonSide rightMon = new PokemonSide();

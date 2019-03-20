@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class Pokedex
 {
-    public static HashMap<String, Pokemon> pokedex = new HashMap<String, Pokemon>();
+    public static final HashMap<String, Pokemon> pokedex = new HashMap<String, Pokemon>();
 	
     public Pokedex()
     {

@@ -607,6 +607,13 @@ public class PokemonSide
 			
 		}
 		
+		calculatedStats[0].textProperty().addListener((observable) ->
+		{
+			totalHPLabel.setText("/" + calculatedStats[0].getText() + " (");
+			currentHP.setText(calculatedStats[0].getText());
+			currentHPPercent.setText("100");
+		});
+		
 		currentHP.textProperty().addListener((observable) ->
 		{
 			if (modifyingHPPercent) {return;}

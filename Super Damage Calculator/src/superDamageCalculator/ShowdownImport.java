@@ -4,37 +4,41 @@ is technically all that's needed; TODO generalize import. */
 
 package superDamageCalculator;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 public class ShowdownImport
 {
-	String[] importString = new String[6];
-	Pokemon[] team = new Pokemon[6];
-	boolean isTeam = false;
-	HashMap<String, Pokemon> pokedex = Pokedex.getPokedex();
-	HashMap<String, Move> movedex = new Movedex().getMovedex();
-	HashMap<String, Integer> natures = new Nature().natures;
+	private String importString;
+	private String[] individualPokemon; //typically 6 Pokemon
+	private Pokemon[] team = new Pokemon[6];
+	private boolean isTeam = false;
+	private HashMap<String, Pokemon> pokedex = Pokedex.getPokedex();
+	private HashMap<String, Move> movedex = new Movedex().getMovedex();
+	private HashMap<String, Integer> natures = new Nature().natures;
 
 	public ShowdownImport(String importString)
 	{
-		this.importString[0] = importString;
+		this.importString = importString;
 
-		if (this.importString[0] != null)
+		this.isTeam = checkIsTeam(this.importString);
+
+		if (this.isTeam)
 		{
-			checkIsTeam();
-
-			if (this.isTeam)
+			individualPokemon = this.importString.split("\\n\\n"); //Split on two newLine characters
+			for (int i = 0; i < individualPokemon.length; i++)
 			{
-				splitTeam();
-				for (int i = 0; i < 6; i++)
+				team[i] = makePokemon(i);
+			}
+			if (individualPokemon.length < 6) //if not a full team, add filler Abomasnow
+			{
+				for (int i = individualPokemon.length; i < 6; i++)
 				{
-					team[i] = makePokemon(i);
+					team[i] = pokedex.get("Abomasnow");
 				}
 			}
-			else
-			{
-				team[0] = makePokemon(0);
-			}
+		}
+		else
+		{
+			team[0] = makePokemon(0);
 		}
 	}
 
@@ -48,171 +52,116 @@ public class ShowdownImport
 		return this.isTeam;
 	}
 
-	/* Checks for team data based on if there are two newLines in a row somewhere. */
-	public void checkIsTeam()
+	//Determines if the import string is a team by checking for two newLines.
+	public boolean checkIsTeam(String monsData)
 	{
-		StringBuilder monsData = new StringBuilder(this.importString[0]);
-		if (monsData.indexOf("\n\n") == -1)
-		{
-			this.isTeam = false;
-		}
-		else
-		{
-			this.isTeam = true;
-		}
+		return !(monsData.indexOf("\n\n") == -1);
 	}
 
-	/* Assumes there are 6 Pokemon on a team. */
-	public void splitTeam()
-	{
-		StringBuilder team = new StringBuilder(importString[0]);
-		int newlineIndex;
-
-		for (int i = 0; i < 6; i++)
-		{
-			newlineIndex = team.indexOf("  \n\n");
-			importString[i] = team.substring(0, newlineIndex);
-			team = new StringBuilder(team.substring(newlineIndex + 4, team.length()));
-		}
-	}
-
-	/* Prepares a Pokemon object based on the Pokemon Showdown import. */
+	//Prepares a Pokemon object based on the Pokemon Showdown import.
 	public Pokemon makePokemon(int partyNumber)
 	{
-		Pokemon pokemon = new Pokemon("Bulbasaur");
-		StringBuilder importText = new StringBuilder(this.importString[partyNumber]);
-		int notFound = -1;
-
-		/* Break up import string into lines */
-		int numLines = 1;
-		for (int i = 0; i < importText.length(); i++)
+		Pokemon pokemon;
+		String[] lines = individualPokemon[partyNumber].split("\\n");
+		for (int i = 0; i < lines.length; i++)
 		{
-			if ((importText.charAt(i)) == ('\n'))
-			{
-				numLines++;
-			}
+			lines[i] = lines[i].trim();
 		}
 
 		//Something went wrong if it's on less than 2 lines
-		if (numLines < 2)
+		if (lines.length < 2)
 		{
-			return pokemon;
+			return pokedex.get("Abomasnow");
 		}
 
-		StringBuilder[] lines = new StringBuilder[numLines];
-		int startingIndex = 0;
-
-		for (int i = 0; i < numLines; i++)
-		{
-			lines[i] = new StringBuilder("");
-			int endOfLine = importText.indexOf("\n", startingIndex);
-			//If final line of import
-			if (endOfLine == notFound)
-			{
-				endOfLine = importText.length();
-			}
-			lines[i].append(importText.substring(startingIndex, endOfLine));
-			startingIndex = endOfLine + 1;
-		}
-
-		/* Get the Pokemon's name and item. Ignores gender / nickname. */
-		StringBuilder name = new StringBuilder("");
-		StringBuilder item = new StringBuilder("");
+		String name = "Abomasnow";
+		String item = "(none)";
+		String gender = "Genderless";
 		int firstParen = lines[0].indexOf("(");
-		int atSymbol = lines[0].indexOf(" @ ");
-		int secondParen = notFound;
-		if (firstParen != notFound)
+		int secondParen = -1;
+		if (firstParen != -1)
 		{
 			secondParen = lines[0].indexOf("(", firstParen + 1);
 		}
+		int atSymbol = lines[0].indexOf(" @ ");
 
 		//If there's an item
-		if (atSymbol != notFound)
+		if (atSymbol != -1)
 		{
-			name.append(lines[0].substring(0, atSymbol));
-			item.append(lines[0].substring(atSymbol + 3, lines[0].length() - 2));
-		}
-		else //no item
-		{
-			name.append(lines[0].substring(0, lines[0].length() - 2));
+			item = lines[0].substring(atSymbol + 3, lines[0].length());
 		}
 
-		//No nickname, no gender
-		if (firstParen == notFound && secondParen == notFound)
+		if (firstParen == -1) //No nickname, no gender
 		{
-			pokemon = pokedex.get(name.toString());
+			if ("(none)".equals(item)) //No item, it's just the name
+			{
+				name = lines[0];
+			}
+			else //Grab the name that's before the @
+			{
+				name = lines[0].substring(0, atSymbol);
+			}
 		}
-		else if (secondParen != notFound) //has both gender and nickname
+		else if (secondParen != -1) //has both gender and nickname
+		{
+			int firstEndParen = lines[0].indexOf(")");
+			int secondEndParen = lines[0].indexOf(")", firstEndParen);
+			
+			name = lines[0].substring(firstParen + 1, firstEndParen);
+			gender = lines[0].substring(secondParen + 1, secondEndParen);
+		}
+		else if (secondParen == -1) //could have gender or nickname, but not both
 		{
 			int endParen = lines[0].indexOf(")");
-			pokemon = pokedex.get(name.substring(firstParen + 1, endParen));
-		}
-		else if (secondParen == notFound) //could have gender or nickname, but not both
-		{
-			int endParen = lines[0].indexOf(")");
-			if (name.substring(firstParen, endParen).length() == 2) //it's gender
+			if (lines[0].substring(firstParen, endParen).length() == 2) //it's gender
 			{
 				//Wouldn't account for gendered Pokemon with spaces in their names. As of Gen 7, none exist.
-				pokemon = pokedex.get(name.substring(0, name.indexOf(" ")));
+				name = lines[0].substring(0, lines[0].indexOf(" "));
+				gender = lines[0].substring(firstParen + 1, endParen);
 			}
 			else //it's nickname
 			{
-				pokemon = pokedex.get(name.substring(firstParen + 1, endParen));
+				name = lines[0].substring(firstParen + 1, endParen);
 			}
 		}
-		if (item.toString().length() != 0)
-		{
-			pokemon.setItem(item.toString());
-		}
-		else
-		{
-			pokemon.setItem("(none)");
-		}
+		pokemon = pokedex.get(name);
+		pokemon.setGender(gender);
+		pokemon.setItem(item);
 
-		/* Find all lines with "- ", add those substrings as moves.*/
+		//Find all lines with "- ", add those substrings as moves.
 		int moveslot = 0;
-		for (int i = 0; i < lines.length; i++)
+		for (int i = 1; i < lines.length; i++)
 		{
-			if (lines[i].indexOf("- ") != -1)
+			if (lines[i].indexOf("- ") != -1) //If the line is a move
 			{
-				if (i != lines.length - 1)
-				{
-					String moveWithoutBrackets = lines[i].substring(2, lines[i].length() - 2);
-					//Sanitizes the brackets around Hidden Power
-					moveWithoutBrackets = moveWithoutBrackets.replaceAll("[\\[\\](){}]", "");
-
-					pokemon.setMove(movedex.get(moveWithoutBrackets), moveslot);
-				}
-				else
-				{
-					String moveWithoutBrackets = lines[i].substring(2, lines[i].length());
-					//Sanitizes the brackets around Hidden Power
-					moveWithoutBrackets = moveWithoutBrackets.replaceAll("[\\[\\](){}]", "");
-					pokemon.setMove(movedex.get(moveWithoutBrackets), moveslot);
-				}
+				String moveWithoutBrackets = lines[i].substring(2, lines[i].length());
+				//Sanitizes the brackets around Hidden Power
+				moveWithoutBrackets = moveWithoutBrackets.replaceAll("[\\[\\](){}]", "");
+				pokemon.setMove(movedex.get(moveWithoutBrackets), moveslot);
 				moveslot++;
 			}
 		}
 
-		/* Nature */
+		//Nature
 		int nature = 0;
 		String natureText = "";
 		for (int i = 1; i < lines.length; i++)
 		{
-			if(lines[i].indexOf(" Nature ") != -1)
+			if (lines[i].indexOf(" Nature") != -1) //If the line is Nature
 			{
-				natureText = lines[i].substring(0, lines[i].indexOf(" Nature "));
+				natureText = lines[i].substring(0, lines[i].indexOf(' '));
 				nature = natures.get(natureText);
 				pokemon.setNature(natureText);
+				break;
 			}
 		}
 
-		/* Level, Ability, IVs, EVs */
+		//Level, Ability, IVs, EVs
 		int level = 100;
 		String ability = "";
 		int[] ivs = new int[6];
 		int[] evs = new int[6];
-		StringBuilder statString;
+		String statString;
 
 		for (int i = 0; i < 6; i++)
 		{
@@ -228,19 +177,19 @@ public class ShowdownImport
 				switch (front)
 				{
 					case "Ability":
-						ability = lines[i].substring(colon + 2, lines[i].length() - 2);
+						ability = lines[i].substring(colon + 2, lines[i].length());
 						pokemon.setAbility(ability);
 						break;
 					case "Level":
-						level = Integer.parseInt(lines[i].substring(colon + 2, lines[i].length() - 2));
+						level = Integer.parseInt(lines[i].substring(colon + 2, lines[i].length()));
 						break;
 					case "EVs":
-						statString = new StringBuilder(lines[i].substring(colon + 2, lines[i].length() - 2));
-						evs = parseStats(statString, "EVs");
+						statString = lines[i].substring(colon + 2, lines[i].length());
+						evs = parseStats(statString, true);
 						break;
 					case "IVs":
-						statString = new StringBuilder(lines[i].substring(colon + 2, lines[i].length() - 2));
-						ivs = parseStats(statString, "IVs");
+						statString = lines[i].substring(colon + 2, lines[i].length());
+						ivs = parseStats(statString, false);
 						break;
 					case "Shiny":
 					case "Happiness":
@@ -258,28 +207,26 @@ public class ShowdownImport
 			pokemon.setStat(evs[i], ivs[i], level, nature, "--", i);
 		}
 
-		/* Tests if output was correct by printing the newly created Pokemon back. */
+		// Tests if output was correct by printing the newly created Pokemon back.
 		//System.out.println(pokemon);
 
 		return pokemon;
 	}
 
-	public int[] parseStats(StringBuilder statString, String statType)
+	public int[] parseStats(String statString, boolean isEVs)
 	{
-		int slashCount = 0;
-		ArrayList<Integer> slashIndexes = new ArrayList<Integer>();
-		ArrayList<StringBuilder> tokens = new ArrayList<StringBuilder>();
-
-		/* Initializes stats. */
+		String[] tokens = statString.split(" / ");
 		int[] stats = new int[6];
-		if (statType.equals("EVs"))
+		
+		//Initializes stats
+		if (isEVs)
 		{
 			for (int i = 0; i < 6; i++)
 			{
 				stats[i] = 0;
 			}
 		}
-		else // IVs
+		else //IVs
 		{
 			for (int i = 0; i < 6; i++)
 			{
@@ -287,64 +234,36 @@ public class ShowdownImport
 			}
 		}
 
-		/* If multiple IV/EV values are set*/
-		if (statString.indexOf("/") != -1)
+		//Gets the actual EV investment for a stat and stores it in the appropriate stat.
+		for (int i = 0; i < tokens.length; i++)
 		{
-			/* Finds the number of slashes and indexes of those slashes. */
-			for (int i = 0; i < statString.length(); i++)
+			String[] statTokens = tokens[i].split(" ");
+			int statValue = Integer.parseInt(statTokens[0]);
+			String statType = statTokens[1];
+			
+			switch (statType)
 			{
-				if (statString.charAt(i) == '/')
-				{
-					slashCount++;
-					slashIndexes.add(i);
-				}
-			}
-
-			/* Breaks up the stat line into tokens, e.g. 252 HP, 140 Atk, 60 Def */
-			StringBuilder numberAndStat = new StringBuilder(statString.substring(0, slashIndexes.get(0) - 1));
-			tokens.add(numberAndStat);
-			for (int i = 0; i < slashCount - 1; i++)
-			{
-				numberAndStat = new StringBuilder(statString.substring(slashIndexes.get(i) + 2, slashIndexes.get(i+1) - 1));
-				tokens.add(numberAndStat);
-			}
-
-			numberAndStat = new StringBuilder(statString.substring(statString.lastIndexOf("/") + 2, statString.length()));
-			tokens.add(numberAndStat);
-		}
-		else //Only 1 IV/EV value is set
-		{
-			StringBuilder numberAndStat = new StringBuilder(statString.substring(0, statString.length()));
-			tokens.add(numberAndStat);
-		}
-
-		/* Gets the actual value and stores it in the appropriate stat. */
-		for (int i = 0; i < tokens.size(); i++)
-		{
-			int statValue = Integer.parseInt(tokens.get(i).substring(0, tokens.get(i).indexOf(" ")));
-			if (tokens.get(i).indexOf("HP") != -1)
-			{
-				stats[0] = statValue;
-			}
-			else if (tokens.get(i).indexOf("Atk") != -1)
-			{
-				stats[1] = statValue;
-			}
-			else if (tokens.get(i).indexOf("Def") != -1)
-			{
-				stats[2] = statValue;
-			}
-			else if (tokens.get(i).indexOf("SpA") != -1)
-			{
-				stats[3] = statValue;
-			}
-			else if (tokens.get(i).indexOf("SpD") != -1)
-			{
-				stats[4] = statValue;
-			}
-			else
-			{
-				stats[5] = statValue;
+				case "HP":
+					stats[0] = statValue;
+					break;
+				case "Atk":
+					stats[1] = statValue;
+					break;
+				case "Def":
+					stats[2] = statValue;
+					break;
+				case "SpA":
+					stats[3] = statValue;
+					break;
+				case "SpD":
+					stats[4] = statValue;
+					break;
+				case "Spe":
+					stats[5] = statValue;
+					break;
+				default:
+					System.out.println("something went wrong with stat parsing");
+					break;
 			}
 		}
 		return stats;

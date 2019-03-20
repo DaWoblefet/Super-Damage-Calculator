@@ -31,6 +31,7 @@ public class Pokemon
     private String forme;
     private String nature;
     private String status;
+    private String gender;
 
 	private int[] baseStats = new int[6];
     private HashMap<String, Integer> natures = new Nature().natures;
@@ -53,8 +54,8 @@ public class Pokemon
 		this.nature = "Hardy";
 		this.item = items.get("(none)");
 		this.status = "Healthy";
+		this.gender = "Genderless";
     }
- 
 
     public String getName()
 	{
@@ -267,8 +268,18 @@ public class Pokemon
 	{
 		this.status = status;
 	}
+	
+    public String getGender()
+    {
+		return gender;
+	}
 
-    @Override
+	public void setGender(String gender)
+	{
+		this.gender = gender;
+	}
+
+	@Override
     public String toString()
     {
 		String showdownExport = "";
