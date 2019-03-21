@@ -478,7 +478,7 @@ public class CalculateDamage
 			}
 		}
 		
-		if (attackerAbility.equals("Flare Boost") && attackerStatus.equals("Burned") && (moveType.equals("Special") || moveType.contentEquals("Psyshock effect")))
+		if (attackerAbility.equals("Flare Boost") && attackerStatus.equals("Burned") && (moveType.equals("Special") || moveType.equals("Psyshock effect")))
 		{
 			bpModifiers.add(0x1800);
 		}
@@ -608,7 +608,7 @@ public class CalculateDamage
 		}
 		
 		//if (Water Sport active and move is Fire, Mud Sport active and move is Electric) TODO
-		//bpModifiers.add(0x2000);
+		//bpModifiers.add(0x548);
 		
 		if (debugMode)
 		{
@@ -685,13 +685,13 @@ public class CalculateDamage
 			//attackModifiers.add(0x1800);
 		}
 		
-		if (attackerAbility.equals("Solar Power") && moveCategory.equals("Special") && weather.equals("Sun"))
+		if (attackerAbility.equals("Solar Power") && weather.equals("Sun") && (moveCategory.equals("Special") || moveCategory.equals("Psyshock effect")))
 		{
 			attackModifiers.add(0x1800);
 		}
 		
 		//Plus/Minus default to being on if the ability is selected
-		if (attackerAbility.equals("Plus") || attackerAbility.equals("Minus"))
+		if ((attackerAbility.equals("Plus") || attackerAbility.equals("Minus")) && (moveCategory.equals("Special") || moveCategory.equals("Psyshock effect")))
 		{
 			attackModifiers.add(0x1800);
 		}
@@ -727,14 +727,19 @@ public class CalculateDamage
 		if (defenderAbility.equals("Water Bubble") && moveType.equals("Fire"))
 		{
 			attackModifiers.add(0x800);
-		}	
+		}
+		
+		if ((attackerItem.getName().equals("Choice Band") && moveCategory.equals("Physical")) || (attackerItem.getName().equals("Choice Specs") && (moveCategory.equals("Special") || moveCategory.equals("Psyshock effect"))))
+		{
+			attackModifiers.add(0x1800);
+		}
 		
 		if (attackerItem.getName().equals("Thick Club") && Arrays.asList("Marowak", "Marowak-Alola", "Marowak-Alola-Totem", "Cubone").contains(attackerName) && moveCategory.equals("Physical"))
 		{
 			attackModifiers.add(0x2000);
 		}
 		
-		if (attackerItem.getName().equals("Deep Sea Tooth") && attackerName.equals("Clamperl") && moveCategory.equals("Special"))
+		if (attackerItem.getName().equals("Deep Sea Tooth") && attackerName.equals("Clamperl") && (moveCategory.equals("Special") || moveCategory.equals("Psyshock effect")))
 		{
 			attackModifiers.add(0x2000);
 		}
@@ -742,11 +747,6 @@ public class CalculateDamage
 		if (attackerItem.getName().equals("Light Ball") && attackerName.equals("Pikachu"))
 		{
 			attackModifiers.add(0x2000);
-		}
-		
-		if ((attackerItem.getName().equals("Choice Band") && moveCategory.equals("Physical")) || (attackerItem.getName().equals("Choice Specs") && moveCategory.equals("Special")))
-		{
-			attackModifiers.add(0x1800);
 		}
 
 		if (debugMode)
@@ -793,7 +793,7 @@ public class CalculateDamage
 		ArrayList<Integer> defenseModifiers = new ArrayList<Integer>();
 		
 		//Technically Flower Gift can be an ally's ability
-		if (defenderAbility.equals("Flower Gift") && weather.equals("Sun") && (moveCategory.equals("Physical") || moveCategory.equals("Psyshock effect")))
+		if (defenderAbility.equals("Flower Gift") && weather.equals("Sun") && moveCategory.equals("Special"))
 		{
 			defenseModifiers.add(0x1800);
 		}		
@@ -990,7 +990,7 @@ public class CalculateDamage
 			finalModifiers.add(0x2000);
 		}
 
-		//Multiscale / Shadow Shield assumes the target is at full HP.
+		//Multiscale / Shadow Shield requires the target is at full HP.
 		if ((defenderAbility.equals("Multiscale") || defenderAbility.equals("Shadow Shield")) && defender.getCurrentHP() == defenderHPStat)
 		{
 			finalModifiers.add(0x800);
