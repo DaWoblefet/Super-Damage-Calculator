@@ -53,7 +53,6 @@ public class CalculateDamage
 	private String defenderTypeRight;
 	private int defenderHPStat;
 	private int defenderCurrentHP;
-	private int defenderHPStatEVs;
 	private int defenderDefenseStat;
 	private int defenderDefenseStatEVs;
 	private int defenderSpeedStat;
@@ -148,8 +147,7 @@ public class CalculateDamage
 		defenderTypeLeft = defender.getType(0);
 		defenderTypeRight = defender.getType(1);
 		defenderHPStat = defender.getStat(HP).calculateStat();
-		defenderCurrentHP = defender.getCurrentHP() != 0 ? defender.getCurrentHP() : defenderHPStat; //If currentHP is 0, ignore it 
-		defenderHPStatEVs = defender.getStat(HP).getEVs();
+		defenderCurrentHP = defender.getCurrentHP() != 0 ? defender.getCurrentHP() : defenderHPStat; //If currentHP is 0, ignore it
 		defenderDefenseStat = defender.getStat(whichDef).calculateStat();
 		defenderDefenseStatEVs = defender.getStat(whichDef).getEVs();
 		defenderSpeedStat = defender.getStat(SPE).calculateStat();
@@ -1264,7 +1262,7 @@ public class CalculateDamage
 
 		damageOutput += attackerOffenseStatEVs + attackerNature() + " " + offense + " ";
 		damageOutput += attackerName + " " + move.getName() + " vs. ";
-		damageOutput += defenderHPStatEVs + " HP / " + defenderDefenseStatEVs + defenderNature() + " " + defense + " ";
+		damageOutput += defender.getStat(HP).getEVs() + " HP / " + defenderDefenseStatEVs + defenderNature() + " " + defense + " ";
 		damageOutput += defenderName + ": " + damageRolls[0] + "-" + damageRolls[15] + " ";
 		damageOutput += damageOutputShort + " -- " + getXHKO();
 	}
