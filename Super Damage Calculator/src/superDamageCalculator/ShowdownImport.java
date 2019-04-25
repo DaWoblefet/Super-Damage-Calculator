@@ -1,6 +1,5 @@
 /* Takes the specified String and translates it into either a full team
-or a single Pokemon. Currently, this only works on PS formatting, which
-is technically all that's needed; TODO generalize import. */
+or a single Pokemon. Works on all sorts of Showdown strings. */
 
 package superDamageCalculator;
 import java.util.HashMap;
@@ -201,7 +200,6 @@ public class ShowdownImport
 			}
 		}
 
-		pokemon.addAbility(ability);
 		for (int i = 0; i < 6; i++)
 		{
 			pokemon.setStat(evs[i], ivs[i], level, nature, "--", i);

@@ -194,6 +194,12 @@ public class Pokemon
     	types[index] = type;
     }
     
+    public void setTypes(String typeZero, String typeOne)
+    {
+    	types[0] = typeZero;
+    	types[1] = typeOne;
+    }
+    
     public boolean isTrickOrTreat()
     {
 		return isTrickOrTreat;
@@ -228,15 +234,18 @@ public class Pokemon
     {
     	return abilities;
     }
-
-    public void addAbility(String ability)
-    {
-		abilities.add(ability);
-    }
     
     public void setAbility(String ability)
     {
     	abilities.set(0, ability);
+    }
+    
+    public void addAbilities(String...abilities)
+    {
+    	for (int i = 0; i < abilities.length; i++)
+    	{
+    		this.abilities.add(abilities[i]);
+    	}
     }
 
     public Move getMove(int moveslot)
