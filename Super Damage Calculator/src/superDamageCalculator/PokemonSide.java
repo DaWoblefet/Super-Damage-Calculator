@@ -67,6 +67,9 @@ public class PokemonSide
 	private Label totalHPLabel;
 	private boolean modifyingHP = false;
 	private boolean modifyingHPPercent = false;
+	
+	private Label totalEVsLabel;
+	private Label totalEVsRemainingLabel;
 
 	private Move[] moveData = new Move[4];
 	public int currentMoveslot;
@@ -204,8 +207,8 @@ public class PokemonSide
 			GridPane.setMargin(teamSpriteLabels[i], new Insets(0,5,0,40));
 		}
 
-		Label totalEVsLabel = new Label("0");
-		Label totalEVsRemainingLabel = new Label("508");
+		totalEVsLabel = new Label("0");
+		totalEVsRemainingLabel = new Label("508");
 		statsStructure.addRow(7, new Label(""), new Label(""), new Label(""), totalEVsLabel, totalEVsRemainingLabel);
 		GridPane.setMargin(totalEVsLabel, new Insets(0,5,0,0));
 		GridPane.setMargin(totalEVsRemainingLabel, new Insets(0,5,0,0));
@@ -388,6 +391,7 @@ public class PokemonSide
 				baseField[i].setText(Integer.toString(teamData[currentPokemon].getBaseStat(i)));
 				IVsField[i].setText("31");
 				EVsField[i].setText("0");
+				statChanges[i].setValue("--");
 			}
 			
 			currentHP.setText(Integer.toString(teamData[currentPokemon].getStat(0).calculateStat()));
@@ -804,6 +808,24 @@ public class PokemonSide
 			currentHP.setText(Integer.toString(teamData[currentPokemon].getStat(0).calculateStat()));
 		}
 		totalHPLabel.setText("/" + Integer.toString(teamData[currentPokemon].getStat(0).calculateStat()) + " (");
+		
+		int currentEVSum = 0;
+		for (int k = 0; k < 6; k++)
+		{
+			currentEVSum += Integer.parseInt(EVsField[k].getText());
+		}
+		totalEVsLabel.setText(Integer.toString(currentEVSum));
+		totalEVsRemainingLabel.setText(Integer.toString(508 - currentEVSum));
+		if (currentEVSum > 508)
+		{
+			totalEVsLabel.setTextFill(Color.RED);
+			totalEVsRemainingLabel.setTextFill(Color.RED);
+		}
+		else
+		{
+			totalEVsLabel.setTextFill(Color.BLACK);
+			totalEVsRemainingLabel.setTextFill(Color.BLACK);
+		}
 		
 		for (int k = 0; k < 4; k++)
 		{
