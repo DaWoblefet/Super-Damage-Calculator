@@ -389,11 +389,7 @@ public class SuperDamageCalculator extends Application
 			else
 			{
 				leftMon.typeLeft.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(0));
-				try
-				{
-					leftMon.typeRight.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(1));
-				}
-				catch (Exception ex) {} //Do nothing because Soak already set the value to (none).
+				leftMon.typeRight.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(1));
 			}
 		});
 		leftSideOptions.addRow(7, leftSoak);
@@ -496,12 +492,8 @@ public class SuperDamageCalculator extends Application
 			}
 			else
 			{
-				rightMon.typeLeft.setValue(rightMon.teamData[rightMon.currentPokemon].getType(0));
-				try
-				{
-					rightMon.typeRight.setValue(rightMon.teamData[rightMon.currentPokemon].getType(1));
-				}
-				catch (Exception ex) {} //Do nothing because Soak already set the value to (none).
+				rightMon.typeLeft.setValue(pokedex.get(rightMon.teamData[rightMon.currentPokemon].getName()).getType(0));
+				rightMon.typeRight.setValue(pokedex.get(rightMon.teamData[rightMon.currentPokemon].getName()).getType(1));
 			}
 		});
 		rightSideOptions.addRow(7, rightSoak);

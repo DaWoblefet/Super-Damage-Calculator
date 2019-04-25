@@ -31,7 +31,7 @@ public class ShowdownImport
 			{
 				for (int i = individualPokemon.length; i < 6; i++)
 				{
-					team[i] = pokedex.get("Abomasnow");
+					team[i] = pokedex.get("Abomasnow").clonePokemon();
 				}
 			}
 		}
@@ -70,7 +70,7 @@ public class ShowdownImport
 		//Something went wrong if it's on less than 2 lines
 		if (lines.length < 2)
 		{
-			return pokedex.get("Abomasnow");
+			return pokedex.get("Abomasnow").clonePokemon();
 		}
 
 		String name = "Abomasnow";
@@ -123,7 +123,7 @@ public class ShowdownImport
 				name = lines[0].substring(firstParen + 1, endParen);
 			}
 		}
-		pokemon = pokedex.get(name);
+		pokemon = pokedex.get(name).clonePokemon();
 		pokemon.setGender(gender);
 		pokemon.setItem(item);
 

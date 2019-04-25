@@ -62,6 +62,11 @@ public class Pokemon
 		return name;
     }
     
+    public void setName(String name)
+    {
+    	this.name = name;
+    }
+    
     //getDexNumber and setDexNumber are only used for sprite parsing
 	public int getDexNumber()
 	{
@@ -155,13 +160,19 @@ public class Pokemon
 	}
 	
 	public void setAllBaseStats(int hp, int atk, int def, int spa, int spd, int spe)
-	{
+	{	
 		this.baseStats[HP] = hp;
 		this.baseStats[ATK] = atk;
 		this.baseStats[DEF] = def;
 		this.baseStats[SATK] = spa;
 		this.baseStats[SDEF] = spd;
 		this.baseStats[SPE] = spe;
+		
+		//0 EVs, 0 IVs, level 50, Hardy Nature
+		for (int i = 0; i < stats.length; i++)
+		{
+			stats[i] = new Stat(0, 31, this.baseStats[i], 50, natures.get("Hardy"), "--", i);
+		}
 	}
 	
     public int getCurrentHP()
@@ -240,6 +251,11 @@ public class Pokemon
     	abilities.set(0, ability);
     }
     
+    public void addAbility(String ability)
+    {
+    	abilities.add(ability);
+    }
+    
     public void addAbilities(String...abilities)
     {
     	for (int i = 0; i < abilities.length; i++)
@@ -286,6 +302,30 @@ public class Pokemon
 	public void setGender(String gender)
 	{
 		this.gender = gender;
+	}
+	
+	//Used to "clone" a Pokemon off the hashmap so one doesn't interfere with another.
+	public Pokemon clonePokemon()
+	{
+		Pokemon pokemon = new Pokemon(this.name);
+		pokemon.setName(this.name);
+		pokemon.setDexNumber(this.dexNumber);
+		pokemon.setTypes(this.types[0], this.types[1]);
+		for (int i = 0; i < this.abilities.size(); i++)
+		{
+			pokemon.addAbility(this.abilities.get(i));
+		}
+		for (int i = 0; i < this.baseStats.length; i++)
+		{
+			pokemon.setBaseStat(this.baseStats[i], i);
+		}
+		pokemon.setWeight(this.weightInKg);
+		for (int i = 0; i < this.otherFormes.size(); i++)
+		{
+			pokemon.addOtherForme(this.otherFormes.get(i));
+		}
+		
+		return pokemon;
 	}
 
 	@Override

@@ -40,6 +40,7 @@ public class PokemonSide
 	public BorderPane pokemonSide;
 
 	public Pokemon[] teamData = new Pokemon[6];
+	private String defaultPokemon = "Abra";
 	private ComboBox<String> chooseMon;
 	public int currentPokemon = 0;
 	private boolean isToggleMon = false;
@@ -107,19 +108,16 @@ public class PokemonSide
 
 		for (int i = 0; i < teamData.length; i++)
 		{
-			teamData[i] = pokedex.get("Abomasnow");
-			for (int j = 0; j < moveData.length; j++)
-			{
-				teamData[i].setMove(movedex.get("(none)"), j);
-			}
+			teamData[i] = pokedex.get(defaultPokemon).clonePokemon();
+			//System.out.println("Pokemon " + i + ": " + teamData[i].getAllBaseStats().toString());
 		}
-
+		
 		pokemonSide = new BorderPane();
 		VBox structure = new VBox();
 
 		GridPane mon = new GridPane();
 
-		spriteMain = new ImageView(new Image("/resources/Sprites/Abomasnow.png"));
+		spriteMain = new ImageView(new Image("/resources/Sprites/" + defaultPokemon + ".png"));
 		chooseMon = new ComboBox<String>(pokemonNames);
 		TextFields.bindAutoCompletion(chooseMon.getEditor(), chooseMon.getItems());
 		chooseMon.setEditable(true);
@@ -303,16 +301,10 @@ public class PokemonSide
 		structure.getChildren().add(moveStructure);
 
 		/****** SETTING DEFAULT VALUES ************/
+		
 		chooseMon.setValue(teamData[currentPokemon].getName());
 		typeLeft.setValue(teamData[currentPokemon].getType(0));
-		try
-		{
-			typeRight.setValue(teamData[currentPokemon].getType(1));
-		}
-		catch (IndexOutOfBoundsException ex)
-		{
-			typeRight.setValue("(none)");
-		}
+		typeRight.setValue(teamData[currentPokemon].getType(1));
 		teamSpritesToggles[0].setSelected(true);
 		level.setText(Integer.toString(defaultLevel));
 		teamData[currentPokemon].setNature("Hardy");;
@@ -324,7 +316,7 @@ public class PokemonSide
 		for (int i = 0; i < 6; i++)
 		{
 			teamData[currentPokemon].setStat(Integer.parseInt(EVsField[i].getText()), Integer.parseInt(IVsField[i].getText()), Integer.parseInt(level.getText()), natures.get(nature.getValue()), "--", i);
-			baseField[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).getBaseStat()));
+			baseField[i].setText(Integer.toString(teamData[currentPokemon].getBaseStat(i)));
 			calculatedStats[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).calculateStat()));
 		}
 		
@@ -368,28 +360,22 @@ public class PokemonSide
 			{
 				return;
 			}
-			teamData[currentPokemon] = pokedex.get(chooseMon.getValue());
+			
+			teamData[currentPokemon] = pokedex.get(chooseMon.getValue()).clonePokemon();
 
 			try
 			{
 				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
 				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
 			}
-			catch (IllegalArgumentException ex)
+			catch (NullPointerException ex)
 			{
 				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
-				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("resources/Sprites/Missingno..png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
 			}
 			
 			typeLeft.setValue(teamData[currentPokemon].getType(0));
-			try
-			{
-				typeRight.setValue(teamData[currentPokemon].getType(1));
-			}
-			catch (IndexOutOfBoundsException ex)
-			{
-				typeRight.setValue("(none)");
-			}
+			typeRight.setValue(teamData[currentPokemon].getType(1));
 
 			teamData[currentPokemon].setNature("Hardy");
 			ability.setValue(teamData[currentPokemon].getAbility());
@@ -786,21 +772,14 @@ public class PokemonSide
 			spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
 			teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
 		}
-		catch (IllegalArgumentException ex)
+		catch (NullPointerException ex)
 		{
 			spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
 			teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("resources/Sprites/Missingno..png")));
 		}
 		
 		typeLeft.setValue(teamData[currentPokemon].getType(0));
-		try
-		{
-			typeRight.setValue(teamData[currentPokemon].getType(1));
-		}
-		catch (IndexOutOfBoundsException ex)
-		{
-			typeRight.setValue("(none)");
-		}
+		typeRight.setValue(teamData[currentPokemon].getType(1));
 
 		ability.setValue(teamData[currentPokemon].getAbility(0));
 		item.setValue(teamData[currentPokemon].getItem().getName());
@@ -808,7 +787,7 @@ public class PokemonSide
 
 		for (int k = 0; k < 6; k++)
 		{
-			baseField[k].setText(Integer.toString(teamData[currentPokemon].getStat(k).getBaseStat()));
+			baseField[k].setText(Integer.toString(teamData[currentPokemon].getBaseStat(k)));
 			IVsField[k].setText(Integer.toString(teamData[currentPokemon].getStat(k).getIVs()));
 			EVsField[k].setText(Integer.toString(teamData[currentPokemon].getStat(k).getEVs()));
 			statChanges[k].setValue(teamData[currentPokemon].getStat(k).getBoostLevel());
