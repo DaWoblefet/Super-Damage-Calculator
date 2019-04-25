@@ -22,9 +22,7 @@ import javafx.scene.input.ClipboardContent;
 import java.awt.Desktop;
 import java.net.URI;
 import java.util.Arrays;
-import java.io.*;
 import java.util.Scanner;
-import static superDamageCalculator.StatConstants.*;
 
 public class SuperDamageCalculator extends Application
 {
@@ -175,14 +173,14 @@ public class SuperDamageCalculator extends Application
 		{
 			leftMon.currentMoveslot = leftMon.topMoves.getSelectionModel().getSelectedIndices().get(0);
 			mainDamageResultLabel.setText(leftMon.damageOutput[leftMon.currentMoveslot]);
-			mainDamageRollsLabel.setText(Arrays.toString(leftMon.damageRolls[leftMon.currentMoveslot]));
+			mainDamageRollsLabel.setText(getRollsText(leftMon.damageRolls[leftMon.currentMoveslot]));
 		});
 
 		rightMon.topMoves.setOnMouseClicked(e ->
 		{
 			rightMon.currentMoveslot = rightMon.topMoves.getSelectionModel().getSelectedIndices().get(0);
 			mainDamageResultLabel.setText(rightMon.damageOutput[rightMon.currentMoveslot ]);
-			mainDamageRollsLabel.setText(Arrays.toString(rightMon.damageRolls[rightMon.currentMoveslot ]));
+			mainDamageRollsLabel.setText(getRollsText(rightMon.damageRolls[rightMon.currentMoveslot]));
 		});
 		/****** END TOP *******/
 
@@ -390,10 +388,10 @@ public class SuperDamageCalculator extends Application
 			}
 			else
 			{
-				leftMon.typeLeft.setValue(leftMon.teamData[leftMon.currentPokemon].getType(0));
+				leftMon.typeLeft.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(0));
 				try
 				{
-					leftMon.typeRight.setValue(leftMon.teamData[leftMon.currentPokemon].getType(1));
+					leftMon.typeRight.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(1));
 				}
 				catch (Exception ex) {} //Do nothing because Soak already set the value to (none).
 			}
