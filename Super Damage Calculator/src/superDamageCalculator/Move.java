@@ -289,4 +289,14 @@ public class Move
 	{
 		this.zChecked = zChecked;
 	}
+	
+	public Move cloneMove()
+	{
+		Move move = new Move(this.name);
+		move.setBP(this.bp);
+		move.setZBP(this.zbp);
+		move.setCategory(this.category);
+		move.setType(this.type);
+		return move;
+	}
 }

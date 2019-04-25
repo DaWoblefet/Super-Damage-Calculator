@@ -136,7 +136,7 @@ public class ShowdownImport
 				String moveWithoutBrackets = lines[i].substring(2, lines[i].length());
 				//Sanitizes the brackets around Hidden Power
 				moveWithoutBrackets = moveWithoutBrackets.replaceAll("[\\[\\](){}]", "");
-				pokemon.setMove(movedex.get(moveWithoutBrackets), moveslot);
+				pokemon.setMove(movedex.get(moveWithoutBrackets).cloneMove(), moveslot);
 				moveslot++;
 			}
 		}

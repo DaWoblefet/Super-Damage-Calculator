@@ -43,7 +43,7 @@ public class Pokemon
 		this.name = name;
 		for (int i = 0; i < moves.length; i++)
 		{
-			this.moves[i] = movedex.get("(none)");
+			this.moves[i] = movedex.get("(none)").cloneMove();
 		}
 		
 		//0 EVs, 0 IVs, 100 base stat, level 50, Hardy Nature

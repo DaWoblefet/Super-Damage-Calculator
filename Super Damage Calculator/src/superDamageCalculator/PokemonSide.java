@@ -327,7 +327,7 @@ public class PokemonSide
 		for (int i = 0; i < 4; i++)
 		{
 			movesComboBox[i].setValue("(none)");
-			moveData[i] = movedex.get((String) movesComboBox[i].getValue());
+			moveData[i] = movedex.get((String) movesComboBox[i].getValue()).cloneMove();
 			basePower[i].setText(Integer.toString(moveData[i].getBP()));
 			category[i].setValue(moveData[i].getCategory());
 			type[i].setValue(moveData[i].getType());
@@ -659,7 +659,7 @@ public class PokemonSide
 			movesComboBox[i].setOnAction(e ->
 			{
 				if (isToggleMon) {return;}
-				moveData[j] = movedex.get((String) movesComboBox[j].getValue());
+				moveData[j] = movedex.get((String) movesComboBox[j].getValue()).cloneMove();
 				teamData[currentPokemon].setMove(moveData[j], j);
 				basePower[j].setText(Integer.toString(moveData[j].getBP()));
 				category[j].setValue(moveData[j].getCategory());
