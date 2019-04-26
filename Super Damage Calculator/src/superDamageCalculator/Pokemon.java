@@ -1,7 +1,5 @@
 /* Models a Pokemon. Mostly getters and setters for various properties.
-Pokemon's toString function returns a Showdown export.
-TODO: Refactor abilities as fixed size? Pros: easier to get
-Ability in GUI, cons: basically makes second ability useless. */
+ * Pokemon's toString function returns a Showdown export. */
 
 package superDamageCalculator;
 import java.util.ArrayList;
@@ -21,14 +19,15 @@ public class Pokemon
     private boolean isTrickOrTreat;
     private boolean isForestsCurse;
     
+    private ArrayList<String> formes = new ArrayList<String>();
+    private String currentForme;
+    
     private ArrayList<String> abilities = new ArrayList<String>();
     private Move[] moves = new Move[4];
-    private ArrayList<String> otherFormes = new ArrayList<String>();
+    
     private Stat[] stats = new Stat[6];
     private int currentHP; //The actual HP a Pokemon has; e.g. for 175/176 HP, 175 is currentHP
 	private Item item;
-    private String baseSpecies;
-    private String forme;
     private String nature;
     private String status;
     private String gender;
@@ -78,49 +77,53 @@ public class Pokemon
 		this.dexNumber = dexNumber;
 	}
 
-	public String getForme()
+	public ArrayList<String> getFormes()
 	{
-		return this.forme;
-	}
-
-	public void setForme(String forme)
-	{
-		this.forme = forme;
-	}
-
-	public String getBaseSpecies()
-	{
-		return this.baseSpecies;
-	}
-
-	public void setBaseSpecies(String baseSpecies)
-	{
-		this.baseSpecies = baseSpecies;
-	}
-
-	public void addOtherForme(String otherForme)
-	{
-		otherFormes.add(otherForme);
-	}
-
-	public String getOtherForme(int formeNumber)
-	{
-		return this.otherFormes.get(formeNumber);
+		return this.formes;
 	}
 	
-	public ArrayList<String> getAllOtherFormes()
+	public void setFormes(String...formes)
 	{
-		return otherFormes;
+		for (int i = 0; i < formes.length; i++)
+		{
+			this.formes.add(formes[i]);
+		}
 	}
-
-	public ArrayList<String> getOtherFormes()
+	
+	public void addForme(String forme)
 	{
-		return this.otherFormes;
+		this.formes.add(forme);
+	}
+	
+	public void setCurrentForme(String currentForme)
+	{
+		this.currentForme = currentForme;
+	}
+	
+	public String getCurrentForme()
+	{
+		return this.currentForme;
+	}
+	
+	public void switchForme(Pokemon newForme)
+	{
+		this.setTypes(newForme.getType(0), newForme.getType(1));
+		abilities.clear();
+		for (int i = 0; i < newForme.abilities.size(); i++)
+		{
+			this.addAbility(newForme.abilities.get(i));
+		}
+		for (int i = 0; i < newForme.baseStats.length; i++)
+		{
+			this.setBaseStat(newForme.baseStats[i], i);
+		}
+		this.setWeight(newForme.weightInKg);
+		this.setCurrentForme(newForme.getName());
 	}
 	
 	public double getWeight()
     {
-		return weightInKg;
+		return this.weightInKg;
     }
 
     public void setWeight(double weightInKg)
@@ -320,9 +323,9 @@ public class Pokemon
 			pokemon.setBaseStat(this.baseStats[i], i);
 		}
 		pokemon.setWeight(this.weightInKg);
-		for (int i = 0; i < this.otherFormes.size(); i++)
+		for (int i = 0; i < this.formes.size(); i++)
 		{
-			pokemon.addOtherForme(this.otherFormes.get(i));
+			pokemon.addForme(formes.get(i));
 		}
 		
 		return pokemon;

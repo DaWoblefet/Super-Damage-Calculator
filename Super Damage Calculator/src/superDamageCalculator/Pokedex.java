@@ -33,7 +33,7 @@ public class Pokedex
     	abomasnow.addAbilities("Snow Warning", "Soundproof");
     	abomasnow.setAllBaseStats(90, 92, 75, 92, 85, 60);
     	abomasnow.setWeight(135.5);
-    	abomasnow.addOtherForme("abomasnowmega");
+    	abomasnow.setFormes("Abomasnow", "Abomasnow-Mega");
     	pokedex.put("Abomasnow", abomasnow);
 
     	Pokemon abomasnowmega = new Pokemon("Abomasnow-Mega");
@@ -42,8 +42,6 @@ public class Pokedex
     	abomasnowmega.addAbilities("Snow Warning");
     	abomasnowmega.setAllBaseStats(90, 132, 105, 132, 105, 30);
     	abomasnowmega.setWeight(185.0);
-    	abomasnowmega.setBaseSpecies("Abomasnow");
-    	abomasnowmega.setForme("Mega");
     	pokedex.put("Abomasnow-Mega", abomasnowmega);
 
     	Pokemon abra = new Pokemon("Abra");
@@ -60,7 +58,7 @@ public class Pokedex
     	absol.addAbilities("Pressure", "Super Luck", "Justified");
     	absol.setAllBaseStats(65, 130, 60, 75, 60, 75);
     	absol.setWeight(47.0);
-    	absol.addOtherForme("absolmega");
+    	absol.setFormes("Absol", "Absol-Mega");
     	pokedex.put("Absol", absol);
 
     	Pokemon absolmega = new Pokemon("Absol-Mega");
@@ -69,8 +67,6 @@ public class Pokedex
     	absolmega.addAbilities("Magic Bounce");
     	absolmega.setAllBaseStats(65, 150, 60, 115, 60, 115);
     	absolmega.setWeight(49.0);
-    	absolmega.setBaseSpecies("Absol");
-    	absolmega.setForme("Mega");
     	pokedex.put("Absol-Mega", absolmega);
 
     	Pokemon accelgor = new Pokemon("Accelgor");
@@ -87,7 +83,7 @@ public class Pokedex
     	aegislash.addAbilities("Stance Change");
     	aegislash.setAllBaseStats(60, 50, 150, 50, 150, 60);
     	aegislash.setWeight(53.0);
-    	aegislash.addOtherForme("aegislashblade");
+    	aegislash.setFormes("Aegislash", "Aegislash-Blade");
     	pokedex.put("Aegislash", aegislash);
 
     	Pokemon aegislashblade = new Pokemon("Aegislash-Blade");
@@ -96,8 +92,6 @@ public class Pokedex
     	aegislashblade.addAbilities("Stance Change");
     	aegislashblade.setAllBaseStats(60, 150, 50, 150, 50, 60);
     	aegislashblade.setWeight(53.0);
-    	aegislashblade.setBaseSpecies("Aegislash");
-    	aegislashblade.setForme("Blade");
     	pokedex.put("Aegislash-Blade", aegislashblade);
 
     	Pokemon aerodactyl = new Pokemon("Aerodactyl");
@@ -106,7 +100,7 @@ public class Pokedex
     	aerodactyl.addAbilities("Rock Head", "Pressure", "Unnerve");
     	aerodactyl.setAllBaseStats(80, 105, 65, 60, 75, 130);
     	aerodactyl.setWeight(59.0);
-    	aerodactyl.addOtherForme("aerodactylmega");
+    	aerodactyl.setFormes("Aerodactyl", "Aerodactyl-Mega");
     	pokedex.put("Aerodactyl", aerodactyl);
 
     	Pokemon aerodactylmega = new Pokemon("Aerodactyl-Mega");
@@ -115,8 +109,6 @@ public class Pokedex
     	aerodactylmega.addAbilities("Tough Claws");
     	aerodactylmega.setAllBaseStats(80, 135, 85, 70, 95, 150);
     	aerodactylmega.setWeight(79.0);
-    	aerodactylmega.setBaseSpecies("Aerodactyl");
-    	aerodactylmega.setForme("Mega");
     	pokedex.put("Aerodactyl-Mega", aerodactylmega);
 
     	Pokemon aggron = new Pokemon("Aggron");
@@ -125,7 +117,7 @@ public class Pokedex
     	aggron.addAbilities("Sturdy", "Rock Head", "Heavy Metal");
     	aggron.setAllBaseStats(70, 110, 180, 60, 60, 50);
     	aggron.setWeight(360.0);
-    	aggron.addOtherForme("aggronmega");
+    	aggron.setFormes("Aggron", "Aggron-Mega");
     	pokedex.put("Aggron", aggron);
 
     	Pokemon aggronmega = new Pokemon("Aggron-Mega");
@@ -134,8 +126,6 @@ public class Pokedex
     	aggronmega.addAbilities("Filter");
     	aggronmega.setAllBaseStats(70, 140, 230, 60, 80, 50);
     	aggronmega.setWeight(395.0);
-    	aggronmega.setBaseSpecies("Aggron");
-    	aggronmega.setForme("Mega");
     	pokedex.put("Aggron-Mega", aggronmega);
 
     	Pokemon aipom = new Pokemon("Aipom");
@@ -152,7 +142,7 @@ public class Pokedex
     	alakazam.addAbilities("Synchronize", "Inner Focus", "Magic Guard");
     	alakazam.setAllBaseStats(55, 50, 45, 135, 95, 120);
     	alakazam.setWeight(48.0);
-    	alakazam.addOtherForme("alakazammega");
+    	alakazam.setFormes("Alakazam", "Alakazam-Mega");
     	pokedex.put("Alakazam", alakazam);
 
     	Pokemon alakazammega = new Pokemon("Alakazam-Mega");
@@ -161,8 +151,6 @@ public class Pokedex
     	alakazammega.addAbilities("Trace");
     	alakazammega.setAllBaseStats(55, 50, 65, 175, 105, 150);
     	alakazammega.setWeight(48.0);
-    	alakazammega.setBaseSpecies("Alakazam");
-    	alakazammega.setForme("Mega");
     	pokedex.put("Alakazam-Mega", alakazammega);
 
     	Pokemon alomomola = new Pokemon("Alomomola");
@@ -179,7 +167,7 @@ public class Pokedex
     	altaria.addAbilities("Natural Cure", "Cloud Nine");
     	altaria.setAllBaseStats(75, 70, 90, 70, 105, 80);
     	altaria.setWeight(20.6);
-    	altaria.addOtherForme("altariamega");
+    	altaria.setFormes("Altaria", "Altaria-Mega");
     	pokedex.put("Altaria", altaria);
 
     	Pokemon altariamega = new Pokemon("Altaria-Mega");
@@ -188,8 +176,6 @@ public class Pokedex
     	altariamega.addAbilities("Pixilate");
     	altariamega.setAllBaseStats(75, 110, 110, 110, 105, 80);
     	altariamega.setWeight(20.6);
-    	altariamega.setBaseSpecies("Altaria");
-    	altariamega.setForme("Mega");
     	pokedex.put("Altaria-Mega", altariamega);
 
     	Pokemon amaura = new Pokemon("Amaura");
@@ -222,7 +208,7 @@ public class Pokedex
     	ampharos.addAbilities("Static", "Plus");
     	ampharos.setAllBaseStats(90, 75, 85, 115, 90, 55);
     	ampharos.setWeight(61.5);
-    	ampharos.addOtherForme("ampharosmega");
+    	ampharos.setFormes("Ampharos", "Ampharos-Mega");
     	pokedex.put("Ampharos", ampharos);
 
     	Pokemon ampharosmega = new Pokemon("Ampharos-Mega");
@@ -231,8 +217,6 @@ public class Pokedex
     	ampharosmega.addAbilities("Mold Breaker");
     	ampharosmega.setAllBaseStats(90, 95, 105, 165, 110, 45);
     	ampharosmega.setWeight(61.5);
-    	ampharosmega.setBaseSpecies("Ampharos");
-    	ampharosmega.setForme("Mega");
     	pokedex.put("Ampharos-Mega", ampharosmega);
 
     	Pokemon anorith = new Pokemon("Anorith");
@@ -249,7 +233,6 @@ public class Pokedex
     	araquanid.addAbilities("Water Bubble", "Water Absorb");
     	araquanid.setAllBaseStats(68, 70, 92, 50, 132, 42);
     	araquanid.setWeight(82.0);
-    	araquanid.addOtherForme("araquanidtotem");
     	pokedex.put("Araquanid", araquanid);
 
     	Pokemon araquanidtotem = new Pokemon("Araquanid-Totem");
@@ -258,8 +241,6 @@ public class Pokedex
     	araquanidtotem.addAbilities("Water Bubble");
     	araquanidtotem.setAllBaseStats(68, 70, 92, 50, 132, 42);
     	araquanidtotem.setWeight(217.5);
-    	araquanidtotem.setBaseSpecies("Araquanid");
-    	araquanidtotem.setForme("Totem");
     	pokedex.put("Araquanid-Totem", araquanidtotem);
 
     	Pokemon arbok = new Pokemon("Arbok");
@@ -284,23 +265,6 @@ public class Pokedex
     	arceus.addAbilities("Multitype");
     	arceus.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceus.setWeight(320.0);
-    	arceus.addOtherForme("arceusbug");
-    	arceus.addOtherForme("arceusdark");
-    	arceus.addOtherForme("arceusdragon");
-    	arceus.addOtherForme("arceuselectric");
-    	arceus.addOtherForme("arceusfairy");
-    	arceus.addOtherForme("arceusfighting");
-    	arceus.addOtherForme("arceusfire");
-    	arceus.addOtherForme("arceusflying");
-    	arceus.addOtherForme("arceusghost");
-    	arceus.addOtherForme("arceusgrass");
-    	arceus.addOtherForme("arceusground");
-    	arceus.addOtherForme("arceusice");
-    	arceus.addOtherForme("arceuspoison");
-    	arceus.addOtherForme("arceuspsychic");
-    	arceus.addOtherForme("arceusrock");
-    	arceus.addOtherForme("arceussteel");
-    	arceus.addOtherForme("arceuswater");
     	pokedex.put("Arceus", arceus);
 
     	Pokemon arceusbug = new Pokemon("Arceus-Bug");
@@ -309,8 +273,6 @@ public class Pokedex
     	arceusbug.addAbilities("Multitype");
     	arceusbug.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusbug.setWeight(320.0);
-    	arceusbug.setBaseSpecies("Arceus");
-    	arceusbug.setForme("Bug");
     	pokedex.put("Arceus-Bug", arceusbug);
 
     	Pokemon arceusdark = new Pokemon("Arceus-Dark");
@@ -319,8 +281,6 @@ public class Pokedex
     	arceusdark.addAbilities("Multitype");
     	arceusdark.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusdark.setWeight(320.0);
-    	arceusdark.setBaseSpecies("Arceus");
-    	arceusdark.setForme("Dark");
     	pokedex.put("Arceus-Dark", arceusdark);
 
     	Pokemon arceusdragon = new Pokemon("Arceus-Dragon");
@@ -329,8 +289,6 @@ public class Pokedex
     	arceusdragon.addAbilities("Multitype");
     	arceusdragon.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusdragon.setWeight(320.0);
-    	arceusdragon.setBaseSpecies("Arceus");
-    	arceusdragon.setForme("Dragon");
     	pokedex.put("Arceus-Dragon", arceusdragon);
 
     	Pokemon arceuselectric = new Pokemon("Arceus-Electric");
@@ -339,8 +297,6 @@ public class Pokedex
     	arceuselectric.addAbilities("Multitype");
     	arceuselectric.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceuselectric.setWeight(320.0);
-    	arceuselectric.setBaseSpecies("Arceus");
-    	arceuselectric.setForme("Electric");
     	pokedex.put("Arceus-Electric", arceuselectric);
 
     	Pokemon arceusfairy = new Pokemon("Arceus-Fairy");
@@ -349,8 +305,6 @@ public class Pokedex
     	arceusfairy.addAbilities("Multitype");
     	arceusfairy.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusfairy.setWeight(320.0);
-    	arceusfairy.setBaseSpecies("Arceus");
-    	arceusfairy.setForme("Fairy");
     	pokedex.put("Arceus-Fairy", arceusfairy);
 
     	Pokemon arceusfighting = new Pokemon("Arceus-Fighting");
@@ -359,8 +313,6 @@ public class Pokedex
     	arceusfighting.addAbilities("Multitype");
     	arceusfighting.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusfighting.setWeight(320.0);
-    	arceusfighting.setBaseSpecies("Arceus");
-    	arceusfighting.setForme("Fighting");
     	pokedex.put("Arceus-Fighting", arceusfighting);
 
     	Pokemon arceusfire = new Pokemon("Arceus-Fire");
@@ -369,8 +321,6 @@ public class Pokedex
     	arceusfire.addAbilities("Multitype");
     	arceusfire.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusfire.setWeight(320.0);
-    	arceusfire.setBaseSpecies("Arceus");
-    	arceusfire.setForme("Fire");
     	pokedex.put("Arceus-Fire", arceusfire);
 
     	Pokemon arceusflying = new Pokemon("Arceus-Flying");
@@ -379,8 +329,6 @@ public class Pokedex
     	arceusflying.addAbilities("Multitype");
     	arceusflying.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusflying.setWeight(320.0);
-    	arceusflying.setBaseSpecies("Arceus");
-    	arceusflying.setForme("Flying");
     	pokedex.put("Arceus-Flying", arceusflying);
 
     	Pokemon arceusghost = new Pokemon("Arceus-Ghost");
@@ -389,8 +337,6 @@ public class Pokedex
     	arceusghost.addAbilities("Multitype");
     	arceusghost.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusghost.setWeight(320.0);
-    	arceusghost.setBaseSpecies("Arceus");
-    	arceusghost.setForme("Ghost");
     	pokedex.put("Arceus-Ghost", arceusghost);
 
     	Pokemon arceusgrass = new Pokemon("Arceus-Grass");
@@ -399,8 +345,6 @@ public class Pokedex
     	arceusgrass.addAbilities("Multitype");
     	arceusgrass.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusgrass.setWeight(320.0);
-    	arceusgrass.setBaseSpecies("Arceus");
-    	arceusgrass.setForme("Grass");
     	pokedex.put("Arceus-Grass", arceusgrass);
 
     	Pokemon arceusground = new Pokemon("Arceus-Ground");
@@ -409,8 +353,6 @@ public class Pokedex
     	arceusground.addAbilities("Multitype");
     	arceusground.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusground.setWeight(320.0);
-    	arceusground.setBaseSpecies("Arceus");
-    	arceusground.setForme("Ground");
     	pokedex.put("Arceus-Ground", arceusground);
 
     	Pokemon arceusice = new Pokemon("Arceus-Ice");
@@ -419,8 +361,6 @@ public class Pokedex
     	arceusice.addAbilities("Multitype");
     	arceusice.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusice.setWeight(320.0);
-    	arceusice.setBaseSpecies("Arceus");
-    	arceusice.setForme("Ice");
     	pokedex.put("Arceus-Ice", arceusice);
 
     	Pokemon arceuspoison = new Pokemon("Arceus-Poison");
@@ -429,8 +369,6 @@ public class Pokedex
     	arceuspoison.addAbilities("Multitype");
     	arceuspoison.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceuspoison.setWeight(320.0);
-    	arceuspoison.setBaseSpecies("Arceus");
-    	arceuspoison.setForme("Poison");
     	pokedex.put("Arceus-Poison", arceuspoison);
 
     	Pokemon arceuspsychic = new Pokemon("Arceus-Psychic");
@@ -439,8 +377,6 @@ public class Pokedex
     	arceuspsychic.addAbilities("Multitype");
     	arceuspsychic.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceuspsychic.setWeight(320.0);
-    	arceuspsychic.setBaseSpecies("Arceus");
-    	arceuspsychic.setForme("Psychic");
     	pokedex.put("Arceus-Psychic", arceuspsychic);
 
     	Pokemon arceusrock = new Pokemon("Arceus-Rock");
@@ -449,8 +385,6 @@ public class Pokedex
     	arceusrock.addAbilities("Multitype");
     	arceusrock.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceusrock.setWeight(320.0);
-    	arceusrock.setBaseSpecies("Arceus");
-    	arceusrock.setForme("Rock");
     	pokedex.put("Arceus-Rock", arceusrock);
 
     	Pokemon arceussteel = new Pokemon("Arceus-Steel");
@@ -459,8 +393,6 @@ public class Pokedex
     	arceussteel.addAbilities("Multitype");
     	arceussteel.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceussteel.setWeight(320.0);
-    	arceussteel.setBaseSpecies("Arceus");
-    	arceussteel.setForme("Steel");
     	pokedex.put("Arceus-Steel", arceussteel);
 
     	Pokemon arceuswater = new Pokemon("Arceus-Water");
@@ -469,8 +401,6 @@ public class Pokedex
     	arceuswater.addAbilities("Multitype");
     	arceuswater.setAllBaseStats(120, 120, 120, 120, 120, 120);
     	arceuswater.setWeight(320.0);
-    	arceuswater.setBaseSpecies("Arceus");
-    	arceuswater.setForme("Water");
     	pokedex.put("Arceus-Water", arceuswater);
 
     	Pokemon archen = new Pokemon("Archen");
@@ -551,7 +481,7 @@ public class Pokedex
     	audino.addAbilities("Healer", "Regenerator", "Klutz");
     	audino.setAllBaseStats(103, 60, 86, 60, 86, 50);
     	audino.setWeight(31.0);
-    	audino.addOtherForme("audinomega");
+    	audino.setFormes("Audino", "Audino-Mega");
     	pokedex.put("Audino", audino);
 
     	Pokemon audinomega = new Pokemon("Audino-Mega");
@@ -560,8 +490,6 @@ public class Pokedex
     	audinomega.addAbilities("Healer");
     	audinomega.setAllBaseStats(103, 60, 126, 80, 126, 50);
     	audinomega.setWeight(32.0);
-    	audinomega.setBaseSpecies("Audino");
-    	audinomega.setForme("Mega");
     	pokedex.put("Audino-Mega", audinomega);
 
     	Pokemon aurorus = new Pokemon("Aurorus");
@@ -642,7 +570,7 @@ public class Pokedex
     	banette.addAbilities("Insomnia", "Frisk", "Cursed Body");
     	banette.setAllBaseStats(64, 115, 65, 83, 63, 65);
     	banette.setWeight(12.5);
-    	banette.addOtherForme("banettemega");
+    	banette.setFormes("Banette", "Banette-Mega");
     	pokedex.put("Banette", banette);
 
     	Pokemon banettemega = new Pokemon("Banette-Mega");
@@ -651,8 +579,6 @@ public class Pokedex
     	banettemega.addAbilities("Prankster");
     	banettemega.setAllBaseStats(64, 165, 75, 93, 83, 75);
     	banettemega.setWeight(13.0);
-    	banettemega.setBaseSpecies("Banette");
-    	banettemega.setForme("Mega");
     	pokedex.put("Banette-Mega", banettemega);
 
     	Pokemon barbaracle = new Pokemon("Barbaracle");
@@ -677,7 +603,6 @@ public class Pokedex
     	basculin.addAbilities("Reckless", "Adaptability", "Mold Breaker");
     	basculin.setAllBaseStats(70, 92, 65, 80, 55, 98);
     	basculin.setWeight(18.0);
-    	basculin.addOtherForme("basculinbluestriped");
     	pokedex.put("Basculin", basculin);
 
     	Pokemon basculinbluestriped = new Pokemon("Basculin-Blue-Striped");
@@ -686,8 +611,6 @@ public class Pokedex
     	basculinbluestriped.addAbilities("Rock Head", "Adaptability", "Mold Breaker");
     	basculinbluestriped.setAllBaseStats(70, 92, 65, 80, 55, 98);
     	basculinbluestriped.setWeight(18.0);
-    	basculinbluestriped.setBaseSpecies("Basculin");
-    	basculinbluestriped.setForme("Blue-Striped");
     	pokedex.put("Basculin-Blue-Striped", basculinbluestriped);
 
     	Pokemon bastiodon = new Pokemon("Bastiodon");
@@ -728,7 +651,7 @@ public class Pokedex
     	beedrill.addAbilities("Swarm", "Sniper");
     	beedrill.setAllBaseStats(65, 90, 40, 45, 80, 75);
     	beedrill.setWeight(29.5);
-    	beedrill.addOtherForme("beedrillmega");
+    	beedrill.setFormes("Beedrill", "Beedrill-Mega");
     	pokedex.put("Beedrill", beedrill);
 
     	Pokemon beedrillmega = new Pokemon("Beedrill-Mega");
@@ -737,8 +660,6 @@ public class Pokedex
     	beedrillmega.addAbilities("Adaptability");
     	beedrillmega.setAllBaseStats(65, 150, 40, 15, 80, 145);
     	beedrillmega.setWeight(40.5);
-    	beedrillmega.setBaseSpecies("Beedrill");
-    	beedrillmega.setForme("Mega");
     	pokedex.put("Beedrill-Mega", beedrillmega);
 
     	Pokemon beheeyem = new Pokemon("Beheeyem");
@@ -835,7 +756,7 @@ public class Pokedex
     	blastoise.addAbilities("Torrent", "Rain Dish");
     	blastoise.setAllBaseStats(79, 83, 100, 85, 105, 78);
     	blastoise.setWeight(85.5);
-    	blastoise.addOtherForme("blastoisemega");
+    	blastoise.setFormes("Blastoise", "Blastoise-Mega");
     	pokedex.put("Blastoise", blastoise);
 
     	Pokemon blastoisemega = new Pokemon("Blastoise-Mega");
@@ -844,8 +765,6 @@ public class Pokedex
     	blastoisemega.addAbilities("Mega Launcher");
     	blastoisemega.setAllBaseStats(79, 103, 120, 135, 115, 78);
     	blastoisemega.setWeight(101.1);
-    	blastoisemega.setBaseSpecies("Blastoise");
-    	blastoisemega.setForme("Mega");
     	pokedex.put("Blastoise-Mega", blastoisemega);
 
     	Pokemon blaziken = new Pokemon("Blaziken");
@@ -854,7 +773,7 @@ public class Pokedex
     	blaziken.addAbilities("Blaze", "Speed Boost");
     	blaziken.setAllBaseStats(80, 120, 70, 110, 70, 80);
     	blaziken.setWeight(52.0);
-    	blaziken.addOtherForme("blazikenmega");
+    	blaziken.setFormes("Blaziken", "Blaziken-Mega");
     	pokedex.put("Blaziken", blaziken);
 
     	Pokemon blazikenmega = new Pokemon("Blaziken-Mega");
@@ -863,8 +782,6 @@ public class Pokedex
     	blazikenmega.addAbilities("Speed Boost");
     	blazikenmega.setAllBaseStats(80, 160, 80, 130, 80, 100);
     	blazikenmega.setWeight(52.0);
-    	blazikenmega.setBaseSpecies("Blaziken");
-    	blazikenmega.setForme("Mega");
     	pokedex.put("Blaziken-Mega", blazikenmega);
 
     	Pokemon blissey = new Pokemon("Blissey");
@@ -1081,7 +998,7 @@ public class Pokedex
     	camerupt.addAbilities("Magma Armor", "Solid Rock", "Anger Point");
     	camerupt.setAllBaseStats(70, 100, 70, 105, 75, 40);
     	camerupt.setWeight(220.0);
-    	camerupt.addOtherForme("cameruptmega");
+    	camerupt.setFormes("Camerupt", "Camerupt-Mega");
     	pokedex.put("Camerupt", camerupt);
 
     	Pokemon cameruptmega = new Pokemon("Camerupt-Mega");
@@ -1090,8 +1007,6 @@ public class Pokedex
     	cameruptmega.addAbilities("Sheer Force");
     	cameruptmega.setAllBaseStats(70, 120, 100, 145, 105, 20);
     	cameruptmega.setWeight(320.5);
-    	cameruptmega.setBaseSpecies("Camerupt");
-    	cameruptmega.setForme("Mega");
     	pokedex.put("Camerupt-Mega", cameruptmega);
 
     	Pokemon carbink = new Pokemon("Carbink");
@@ -1140,9 +1055,6 @@ public class Pokedex
     	castform.addAbilities("Forecast");
     	castform.setAllBaseStats(70, 70, 70, 70, 70, 70);
     	castform.setWeight(0.8);
-    	castform.addOtherForme("castformsunny");
-    	castform.addOtherForme("castformrainy");
-    	castform.addOtherForme("castformsnowy");
     	pokedex.put("Castform", castform);
 
     	Pokemon castformrainy = new Pokemon("Castform-Rainy");
@@ -1151,8 +1063,6 @@ public class Pokedex
     	castformrainy.addAbilities("Forecast");
     	castformrainy.setAllBaseStats(70, 70, 70, 70, 70, 70);
     	castformrainy.setWeight(0.8);
-    	castformrainy.setBaseSpecies("Castform");
-    	castformrainy.setForme("Rainy");
     	pokedex.put("Castform-Rainy", castformrainy);
 
     	Pokemon castformsnowy = new Pokemon("Castform-Snowy");
@@ -1161,8 +1071,6 @@ public class Pokedex
     	castformsnowy.addAbilities("Forecast");
     	castformsnowy.setAllBaseStats(70, 70, 70, 70, 70, 70);
     	castformsnowy.setWeight(0.8);
-    	castformsnowy.setBaseSpecies("Castform");
-    	castformsnowy.setForme("Snowy");
     	pokedex.put("Castform-Snowy", castformsnowy);
 
     	Pokemon castformsunny = new Pokemon("Castform-Sunny");
@@ -1171,8 +1079,6 @@ public class Pokedex
     	castformsunny.addAbilities("Forecast");
     	castformsunny.setAllBaseStats(70, 70, 70, 70, 70, 70);
     	castformsunny.setWeight(0.8);
-    	castformsunny.setBaseSpecies("Castform");
-    	castformsunny.setForme("Sunny");
     	pokedex.put("Castform-Sunny", castformsunny);
 
     	Pokemon caterpie = new Pokemon("Caterpie");
@@ -1237,8 +1143,7 @@ public class Pokedex
     	charizard.addAbilities("Blaze", "Solar Power");
     	charizard.setAllBaseStats(78, 84, 78, 109, 85, 100);
     	charizard.setWeight(90.5);
-    	charizard.addOtherForme("charizardmegax");
-    	charizard.addOtherForme("charizardmegay");
+    	charizard.setFormes("Charizard", "Charizard-Mega-X", "Charizard-Mega-Y");
     	pokedex.put("Charizard", charizard);
 
     	Pokemon charizardmegax = new Pokemon("Charizard-Mega-X");
@@ -1247,8 +1152,6 @@ public class Pokedex
     	charizardmegax.addAbilities("Tough Claws");
     	charizardmegax.setAllBaseStats(78, 130, 111, 130, 85, 100);
     	charizardmegax.setWeight(110.5);
-    	charizardmegax.setBaseSpecies("Charizard");
-    	charizardmegax.setForme("Mega-X");
     	pokedex.put("Charizard-Mega-X", charizardmegax);
 
     	Pokemon charizardmegay = new Pokemon("Charizard-Mega-Y");
@@ -1257,8 +1160,6 @@ public class Pokedex
     	charizardmegay.addAbilities("Drought");
     	charizardmegay.setAllBaseStats(78, 104, 78, 159, 115, 100);
     	charizardmegay.setWeight(100.5);
-    	charizardmegay.setBaseSpecies("Charizard");
-    	charizardmegay.setForme("Mega-Y");
     	pokedex.put("Charizard-Mega-Y", charizardmegay);
 
     	Pokemon charjabug = new Pokemon("Charjabug");
@@ -1299,7 +1200,6 @@ public class Pokedex
     	cherrim.addAbilities("Flower Gift");
     	cherrim.setAllBaseStats(70, 60, 70, 87, 78, 85);
     	cherrim.setWeight(9.3);
-    	cherrim.addOtherForme("cherrimsunshine");
     	pokedex.put("Cherrim", cherrim);
 
     	Pokemon cherrimsunshine = new Pokemon("Cherrim-Sunshine");
@@ -1308,8 +1208,6 @@ public class Pokedex
     	cherrimsunshine.addAbilities("Flower Gift");
     	cherrimsunshine.setAllBaseStats(70, 60, 70, 87, 78, 85);
     	cherrimsunshine.setWeight(9.3);
-    	cherrimsunshine.setBaseSpecies("Cherrim");
-    	cherrimsunshine.setForme("Sunshine");
     	pokedex.put("Cherrim-Sunshine", cherrimsunshine);
 
     	Pokemon cherubi = new Pokemon("Cherubi");
@@ -1622,7 +1520,6 @@ public class Pokedex
     	crucibelle.addAbilities("Regenerator", "Mold Breaker", "Liquid Ooze");
     	crucibelle.setAllBaseStats(106, 105, 65, 75, 85, 104);
     	crucibelle.setWeight(23.6);
-    	crucibelle.addOtherForme("crucibellemega");
     	pokedex.put("Crucibelle", crucibelle);
 
     	Pokemon crucibellemega = new Pokemon("Crucibelle-Mega");
@@ -1631,8 +1528,6 @@ public class Pokedex
     	crucibellemega.addAbilities("Magic Guard");
     	crucibellemega.setAllBaseStats(106, 135, 75, 85, 125, 114);
     	crucibellemega.setWeight(22.5);
-    	crucibellemega.setBaseSpecies("Crucibelle");
-    	crucibellemega.setForme("Mega");
     	pokedex.put("Crucibelle-Mega", crucibellemega);
 
     	Pokemon crustle = new Pokemon("Crustle");
@@ -1713,7 +1608,7 @@ public class Pokedex
     	darmanitan.addAbilities("Sheer Force", "Zen Mode");
     	darmanitan.setAllBaseStats(105, 140, 55, 30, 55, 95);
     	darmanitan.setWeight(92.9);
-    	darmanitan.addOtherForme("darmanitanzen");
+    	darmanitan.setFormes("Darmanitan", "Darmanitan-Zen");
     	pokedex.put("Darmanitan", darmanitan);
 
     	Pokemon darmanitanzen = new Pokemon("Darmanitan-Zen");
@@ -1722,8 +1617,6 @@ public class Pokedex
     	darmanitanzen.addAbilities("Zen Mode");
     	darmanitanzen.setAllBaseStats(105, 30, 105, 140, 105, 55);
     	darmanitanzen.setWeight(92.9);
-    	darmanitanzen.setBaseSpecies("Darmanitan");
-    	darmanitanzen.setForme("Zen");
     	pokedex.put("Darmanitan-Zen", darmanitanzen);
 
     	Pokemon dartrix = new Pokemon("Dartrix");
@@ -1804,9 +1697,6 @@ public class Pokedex
     	deoxys.addAbilities("Pressure");
     	deoxys.setAllBaseStats(50, 150, 50, 150, 50, 150);
     	deoxys.setWeight(60.8);
-    	deoxys.addOtherForme("deoxysattack");
-    	deoxys.addOtherForme("deoxysdefense");
-    	deoxys.addOtherForme("deoxysspeed");
     	pokedex.put("Deoxys", deoxys);
 
     	Pokemon deoxysattack = new Pokemon("Deoxys-Attack");
@@ -1815,8 +1705,6 @@ public class Pokedex
     	deoxysattack.addAbilities("Pressure");
     	deoxysattack.setAllBaseStats(50, 180, 20, 180, 20, 150);
     	deoxysattack.setWeight(60.8);
-    	deoxysattack.setBaseSpecies("Deoxys");
-    	deoxysattack.setForme("Attack");
     	pokedex.put("Deoxys-Attack", deoxysattack);
 
     	Pokemon deoxysdefense = new Pokemon("Deoxys-Defense");
@@ -1825,8 +1713,6 @@ public class Pokedex
     	deoxysdefense.addAbilities("Pressure");
     	deoxysdefense.setAllBaseStats(50, 70, 160, 70, 160, 90);
     	deoxysdefense.setWeight(60.8);
-    	deoxysdefense.setBaseSpecies("Deoxys");
-    	deoxysdefense.setForme("Defense");
     	pokedex.put("Deoxys-Defense", deoxysdefense);
 
     	Pokemon deoxysspeed = new Pokemon("Deoxys-Speed");
@@ -1835,8 +1721,6 @@ public class Pokedex
     	deoxysspeed.addAbilities("Pressure");
     	deoxysspeed.setAllBaseStats(50, 95, 90, 95, 90, 180);
     	deoxysspeed.setWeight(60.8);
-    	deoxysspeed.setBaseSpecies("Deoxys");
-    	deoxysspeed.setForme("Speed");
     	pokedex.put("Deoxys-Speed", deoxysspeed);
 
     	Pokemon dewgong = new Pokemon("Dewgong");
@@ -1885,7 +1769,7 @@ public class Pokedex
     	diancie.addAbilities("Clear Body");
     	diancie.setAllBaseStats(50, 100, 150, 100, 150, 50);
     	diancie.setWeight(8.8);
-    	diancie.addOtherForme("dianciemega");
+    	diancie.setFormes("Diancie", "Diancie-Mega");
     	pokedex.put("Diancie", diancie);
 
     	Pokemon dianciemega = new Pokemon("Diancie-Mega");
@@ -1894,8 +1778,6 @@ public class Pokedex
     	dianciemega.addAbilities("Magic Bounce");
     	dianciemega.setAllBaseStats(50, 160, 110, 160, 110, 110);
     	dianciemega.setWeight(27.8);
-    	dianciemega.setBaseSpecies("Diancie");
-    	dianciemega.setForme("Mega");
     	pokedex.put("Diancie-Mega", dianciemega);
 
     	Pokemon diggersby = new Pokemon("Diggersby");
@@ -1912,7 +1794,6 @@ public class Pokedex
     	diglett.addAbilities("Sand Veil", "Arena Trap", "Sand Force");
     	diglett.setAllBaseStats(10, 55, 25, 35, 45, 95);
     	diglett.setWeight(0.8);
-    	diglett.addOtherForme("diglettalola");
     	pokedex.put("Diglett", diglett);
 
     	Pokemon diglettalola = new Pokemon("Diglett-Alola");
@@ -1921,8 +1802,6 @@ public class Pokedex
     	diglettalola.addAbilities("Sand Veil", "Tangling Hair", "Sand Force");
     	diglettalola.setAllBaseStats(10, 55, 30, 35, 45, 90);
     	diglettalola.setWeight(1.0);
-    	diglettalola.setBaseSpecies("Diglett");
-    	diglettalola.setForme("Alola");
     	pokedex.put("Diglett-Alola", diglettalola);
 
     	Pokemon ditto = new Pokemon("Ditto");
@@ -2067,7 +1946,6 @@ public class Pokedex
     	dugtrio.addAbilities("Sand Veil", "Arena Trap", "Sand Force");
     	dugtrio.setAllBaseStats(35, 100, 50, 50, 70, 120);
     	dugtrio.setWeight(33.3);
-    	dugtrio.addOtherForme("dugtrioalola");
     	pokedex.put("Dugtrio", dugtrio);
 
     	Pokemon dugtrioalola = new Pokemon("Dugtrio-Alola");
@@ -2076,8 +1954,6 @@ public class Pokedex
     	dugtrioalola.addAbilities("Sand Veil", "Tangling Hair", "Sand Force");
     	dugtrioalola.setAllBaseStats(35, 100, 60, 50, 70, 110);
     	dugtrioalola.setWeight(66.6);
-    	dugtrioalola.setBaseSpecies("Dugtrio");
-    	dugtrioalola.setForme("Alola");
     	pokedex.put("Dugtrio-Alola", dugtrioalola);
 
     	Pokemon dunsparce = new Pokemon("Dunsparce");
@@ -2310,7 +2186,6 @@ public class Pokedex
     	exeggutor.addAbilities("Chlorophyll", "Harvest");
     	exeggutor.setAllBaseStats(95, 95, 85, 125, 75, 55);
     	exeggutor.setWeight(120.0);
-    	exeggutor.addOtherForme("exeggutoralola");
     	pokedex.put("Exeggutor", exeggutor);
 
     	Pokemon exeggutoralola = new Pokemon("Exeggutor-Alola");
@@ -2319,8 +2194,6 @@ public class Pokedex
     	exeggutoralola.addAbilities("Frisk", "Harvest");
     	exeggutoralola.setAllBaseStats(95, 105, 85, 125, 75, 45);
     	exeggutoralola.setWeight(415.6);
-    	exeggutoralola.setBaseSpecies("Exeggutor");
-    	exeggutoralola.setForme("Alola");
     	pokedex.put("Exeggutor-Alola", exeggutoralola);
 
     	Pokemon exploud = new Pokemon("Exploud");
@@ -2473,7 +2346,6 @@ public class Pokedex
     	floette.addAbilities("Flower Veil", "Symbiosis");
     	floette.setAllBaseStats(54, 45, 47, 75, 98, 52);
     	floette.setWeight(0.9);
-    	floette.addOtherForme("floetteeternal");
     	pokedex.put("Floette", floette);
 
     	Pokemon floetteeternal = new Pokemon("Floette-Eternal");
@@ -2482,8 +2354,6 @@ public class Pokedex
     	floetteeternal.addAbilities("Flower Veil");
     	floetteeternal.setAllBaseStats(74, 65, 67, 125, 128, 92);
     	floetteeternal.setWeight(0.9);
-    	floetteeternal.setBaseSpecies("Floette");
-    	floetteeternal.setForme("Eternal");
     	pokedex.put("Floette-Eternal", floetteeternal);
 
     	Pokemon florges = new Pokemon("Florges");
@@ -2596,7 +2466,7 @@ public class Pokedex
     	gallade.addAbilities("Steadfast", "Justified");
     	gallade.setAllBaseStats(68, 125, 65, 65, 115, 80);
     	gallade.setWeight(52.0);
-    	gallade.addOtherForme("gallademega");
+    	gallade.setFormes("Gallade", "Gallade-Mega");
     	pokedex.put("Gallade", gallade);
 
     	Pokemon gallademega = new Pokemon("Gallade-Mega");
@@ -2605,8 +2475,6 @@ public class Pokedex
     	gallademega.addAbilities("Inner Focus");
     	gallademega.setAllBaseStats(68, 165, 95, 65, 115, 110);
     	gallademega.setWeight(56.4);
-    	gallademega.setBaseSpecies("Gallade");
-    	gallademega.setForme("Mega");
     	pokedex.put("Gallade-Mega", gallademega);
 
     	Pokemon galvantula = new Pokemon("Galvantula");
@@ -2631,7 +2499,7 @@ public class Pokedex
     	garchomp.addAbilities("Sand Veil", "Rough Skin");
     	garchomp.setAllBaseStats(108, 130, 95, 80, 85, 102);
     	garchomp.setWeight(95.0);
-    	garchomp.addOtherForme("garchompmega");
+    	garchomp.setFormes("Garchomp", "Garchomp-Mega");
     	pokedex.put("Garchomp", garchomp);
 
     	Pokemon garchompmega = new Pokemon("Garchomp-Mega");
@@ -2640,8 +2508,6 @@ public class Pokedex
     	garchompmega.addAbilities("Sand Force");
     	garchompmega.setAllBaseStats(108, 170, 115, 120, 95, 92);
     	garchompmega.setWeight(95.0);
-    	garchompmega.setBaseSpecies("Garchomp");
-    	garchompmega.setForme("Mega");
     	pokedex.put("Garchomp-Mega", garchompmega);
 
     	Pokemon gardevoir = new Pokemon("Gardevoir");
@@ -2650,7 +2516,7 @@ public class Pokedex
     	gardevoir.addAbilities("Synchronize", "Trace", "Telepathy");
     	gardevoir.setAllBaseStats(68, 65, 65, 125, 115, 80);
     	gardevoir.setWeight(48.4);
-    	gardevoir.addOtherForme("gardevoirmega");
+    	gardevoir.setFormes("Gardevoir", "Gardevoir-Mega");
     	pokedex.put("Gardevoir", gardevoir);
 
     	Pokemon gardevoirmega = new Pokemon("Gardevoir-Mega");
@@ -2659,8 +2525,6 @@ public class Pokedex
     	gardevoirmega.addAbilities("Pixilate");
     	gardevoirmega.setAllBaseStats(68, 85, 65, 165, 135, 100);
     	gardevoirmega.setWeight(48.4);
-    	gardevoirmega.setBaseSpecies("Gardevoir");
-    	gardevoirmega.setForme("Mega");
     	pokedex.put("Gardevoir-Mega", gardevoirmega);
 
     	Pokemon gastly = new Pokemon("Gastly");
@@ -2685,10 +2549,6 @@ public class Pokedex
     	genesect.addAbilities("Download");
     	genesect.setAllBaseStats(71, 120, 95, 120, 95, 99);
     	genesect.setWeight(82.5);
-    	genesect.addOtherForme("genesectdouse");
-    	genesect.addOtherForme("genesectshock");
-    	genesect.addOtherForme("genesectburn");
-    	genesect.addOtherForme("genesectchill");
     	pokedex.put("Genesect", genesect);
 
     	Pokemon genesectburn = new Pokemon("Genesect-Burn");
@@ -2697,8 +2557,6 @@ public class Pokedex
     	genesectburn.addAbilities("Download");
     	genesectburn.setAllBaseStats(71, 120, 95, 120, 95, 99);
     	genesectburn.setWeight(82.5);
-    	genesectburn.setBaseSpecies("Genesect");
-    	genesectburn.setForme("Burn");
     	pokedex.put("Genesect-Burn", genesectburn);
 
     	Pokemon genesectchill = new Pokemon("Genesect-Chill");
@@ -2707,8 +2565,6 @@ public class Pokedex
     	genesectchill.addAbilities("Download");
     	genesectchill.setAllBaseStats(71, 120, 95, 120, 95, 99);
     	genesectchill.setWeight(82.5);
-    	genesectchill.setBaseSpecies("Genesect");
-    	genesectchill.setForme("Chill");
     	pokedex.put("Genesect-Chill", genesectchill);
 
     	Pokemon genesectdouse = new Pokemon("Genesect-Douse");
@@ -2717,8 +2573,6 @@ public class Pokedex
     	genesectdouse.addAbilities("Download");
     	genesectdouse.setAllBaseStats(71, 120, 95, 120, 95, 99);
     	genesectdouse.setWeight(82.5);
-    	genesectdouse.setBaseSpecies("Genesect");
-    	genesectdouse.setForme("Douse");
     	pokedex.put("Genesect-Douse", genesectdouse);
 
     	Pokemon genesectshock = new Pokemon("Genesect-Shock");
@@ -2727,8 +2581,6 @@ public class Pokedex
     	genesectshock.addAbilities("Download");
     	genesectshock.setAllBaseStats(71, 120, 95, 120, 95, 99);
     	genesectshock.setWeight(82.5);
-    	genesectshock.setBaseSpecies("Genesect");
-    	genesectshock.setForme("Shock");
     	pokedex.put("Genesect-Shock", genesectshock);
 
     	Pokemon gengar = new Pokemon("Gengar");
@@ -2737,7 +2589,7 @@ public class Pokedex
     	gengar.addAbilities("Cursed Body");
     	gengar.setAllBaseStats(60, 65, 60, 130, 75, 110);
     	gengar.setWeight(40.5);
-    	gengar.addOtherForme("gengarmega");
+    	gengar.setFormes("Gengar", "Gengar-Mega");
     	pokedex.put("Gengar", gengar);
 
     	Pokemon gengarmega = new Pokemon("Gengar-Mega");
@@ -2746,8 +2598,6 @@ public class Pokedex
     	gengarmega.addAbilities("Shadow Tag");
     	gengarmega.setAllBaseStats(60, 65, 80, 170, 95, 130);
     	gengarmega.setWeight(40.5);
-    	gengarmega.setBaseSpecies("Gengar");
-    	gengarmega.setForme("Mega");
     	pokedex.put("Gengar-Mega", gengarmega);
 
     	Pokemon geodude = new Pokemon("Geodude");
@@ -2756,7 +2606,6 @@ public class Pokedex
     	geodude.addAbilities("Rock Head", "Sturdy", "Sand Veil");
     	geodude.setAllBaseStats(40, 80, 100, 30, 30, 20);
     	geodude.setWeight(20.0);
-    	geodude.addOtherForme("geodudealola");
     	pokedex.put("Geodude", geodude);
 
     	Pokemon geodudealola = new Pokemon("Geodude-Alola");
@@ -2765,8 +2614,6 @@ public class Pokedex
     	geodudealola.addAbilities("Magnet Pull", "Sturdy", "Galvanize");
     	geodudealola.setAllBaseStats(40, 80, 100, 30, 30, 20);
     	geodudealola.setWeight(20.3);
-    	geodudealola.setBaseSpecies("Geodude");
-    	geodudealola.setForme("Alola");
     	pokedex.put("Geodude-Alola", geodudealola);
 
     	Pokemon gible = new Pokemon("Gible");
@@ -2799,7 +2646,6 @@ public class Pokedex
     	giratina.addAbilities("Pressure", "Telepathy");
     	giratina.setAllBaseStats(150, 100, 120, 100, 120, 90);
     	giratina.setWeight(750.0);
-    	giratina.addOtherForme("giratinaorigin");
     	pokedex.put("Giratina", giratina);
 
     	Pokemon giratinaorigin = new Pokemon("Giratina-Origin");
@@ -2808,8 +2654,6 @@ public class Pokedex
     	giratinaorigin.addAbilities("Levitate");
     	giratinaorigin.setAllBaseStats(150, 120, 100, 120, 100, 90);
     	giratinaorigin.setWeight(650.0);
-    	giratinaorigin.setBaseSpecies("Giratina");
-    	giratinaorigin.setForme("Origin");
     	pokedex.put("Giratina-Origin", giratinaorigin);
 
     	Pokemon glaceon = new Pokemon("Glaceon");
@@ -2826,7 +2670,7 @@ public class Pokedex
     	glalie.addAbilities("Inner Focus", "Ice Body", "Moody");
     	glalie.setAllBaseStats(80, 80, 80, 80, 80, 80);
     	glalie.setWeight(256.5);
-    	glalie.addOtherForme("glaliemega");
+    	glalie.setFormes("Glalie", "Glalie-Mega");
     	pokedex.put("Glalie", glalie);
 
     	Pokemon glaliemega = new Pokemon("Glalie-Mega");
@@ -2835,8 +2679,6 @@ public class Pokedex
     	glaliemega.addAbilities("Refrigerate");
     	glaliemega.setAllBaseStats(80, 120, 80, 120, 80, 100);
     	glaliemega.setWeight(350.2);
-    	glaliemega.setBaseSpecies("Glalie");
-    	glaliemega.setForme("Mega");
     	pokedex.put("Glalie-Mega", glaliemega);
 
     	Pokemon glameow = new Pokemon("Glameow");
@@ -2909,7 +2751,6 @@ public class Pokedex
     	golem.addAbilities("Rock Head", "Sturdy", "Sand Veil");
     	golem.setAllBaseStats(80, 120, 130, 55, 65, 45);
     	golem.setWeight(300.0);
-    	golem.addOtherForme("golemalola");
     	pokedex.put("Golem", golem);
 
     	Pokemon golemalola = new Pokemon("Golem-Alola");
@@ -2918,8 +2759,6 @@ public class Pokedex
     	golemalola.addAbilities("Magnet Pull", "Sturdy", "Galvanize");
     	golemalola.setAllBaseStats(80, 120, 130, 55, 65, 45);
     	golemalola.setWeight(316.0);
-    	golemalola.setBaseSpecies("Golem");
-    	golemalola.setForme("Alola");
     	pokedex.put("Golem-Alola", golemalola);
 
     	Pokemon golett = new Pokemon("Golett");
@@ -3000,9 +2839,6 @@ public class Pokedex
     	gourgeist.addAbilities("Pickup", "Frisk", "Insomnia");
     	gourgeist.setAllBaseStats(65, 90, 122, 58, 75, 84);
     	gourgeist.setWeight(12.5);
-    	gourgeist.addOtherForme("gourgeistsmall");
-    	gourgeist.addOtherForme("gourgeistlarge");
-    	gourgeist.addOtherForme("gourgeistsuper");
     	pokedex.put("Gourgeist", gourgeist);
 
     	Pokemon gourgeistlarge = new Pokemon("Gourgeist-Large");
@@ -3011,8 +2847,6 @@ public class Pokedex
     	gourgeistlarge.addAbilities("Pickup", "Frisk", "Insomnia");
     	gourgeistlarge.setAllBaseStats(75, 95, 122, 58, 75, 69);
     	gourgeistlarge.setWeight(14.0);
-    	gourgeistlarge.setBaseSpecies("Gourgeist");
-    	gourgeistlarge.setForme("Large");
     	pokedex.put("Gourgeist-Large", gourgeistlarge);
 
     	Pokemon gourgeistsmall = new Pokemon("Gourgeist-Small");
@@ -3021,8 +2855,6 @@ public class Pokedex
     	gourgeistsmall.addAbilities("Pickup", "Frisk", "Insomnia");
     	gourgeistsmall.setAllBaseStats(55, 85, 122, 58, 75, 99);
     	gourgeistsmall.setWeight(9.5);
-    	gourgeistsmall.setBaseSpecies("Gourgeist");
-    	gourgeistsmall.setForme("Small");
     	pokedex.put("Gourgeist-Small", gourgeistsmall);
 
     	Pokemon gourgeistsuper = new Pokemon("Gourgeist-Super");
@@ -3031,8 +2863,6 @@ public class Pokedex
     	gourgeistsuper.addAbilities("Pickup", "Frisk", "Insomnia");
     	gourgeistsuper.setAllBaseStats(85, 100, 122, 58, 75, 54);
     	gourgeistsuper.setWeight(39.0);
-    	gourgeistsuper.setBaseSpecies("Gourgeist");
-    	gourgeistsuper.setForme("Super");
     	pokedex.put("Gourgeist-Super", gourgeistsuper);
 
     	Pokemon granbull = new Pokemon("Granbull");
@@ -3049,7 +2879,6 @@ public class Pokedex
     	graveler.addAbilities("Rock Head", "Sturdy", "Sand Veil");
     	graveler.setAllBaseStats(55, 95, 115, 45, 45, 35);
     	graveler.setWeight(105.0);
-    	graveler.addOtherForme("graveleralola");
     	pokedex.put("Graveler", graveler);
 
     	Pokemon graveleralola = new Pokemon("Graveler-Alola");
@@ -3058,8 +2887,6 @@ public class Pokedex
     	graveleralola.addAbilities("Magnet Pull", "Sturdy", "Galvanize");
     	graveleralola.setAllBaseStats(55, 95, 115, 45, 45, 35);
     	graveleralola.setWeight(110.0);
-    	graveleralola.setBaseSpecies("Graveler");
-    	graveleralola.setForme("Alola");
     	pokedex.put("Graveler-Alola", graveleralola);
 
     	Pokemon greninja = new Pokemon("Greninja");
@@ -3068,7 +2895,7 @@ public class Pokedex
     	greninja.addAbilities("Torrent", "Protean");
     	greninja.setAllBaseStats(72, 95, 67, 103, 71, 122);
     	greninja.setWeight(40.0);
-    	greninja.addOtherForme("greninjaash");
+    	greninja.setFormes("Greninja", "Greninja-Ash");
     	pokedex.put("Greninja", greninja);
 
     	Pokemon greninjaash = new Pokemon("Greninja-Ash");
@@ -3077,8 +2904,6 @@ public class Pokedex
     	greninjaash.addAbilities("Battle Bond");
     	greninjaash.setAllBaseStats(72, 145, 67, 153, 71, 132);
     	greninjaash.setWeight(40.0);
-    	greninjaash.setBaseSpecies("Greninja");
-    	greninjaash.setForme("Ash");
     	pokedex.put("Greninja-Ash", greninjaash);
 
     	Pokemon grimer = new Pokemon("Grimer");
@@ -3087,7 +2912,6 @@ public class Pokedex
     	grimer.addAbilities("Stench", "Sticky Hold", "Poison Touch");
     	grimer.setAllBaseStats(80, 80, 50, 40, 50, 25);
     	grimer.setWeight(30.0);
-    	grimer.addOtherForme("grimeralola");
     	pokedex.put("Grimer", grimer);
 
     	Pokemon grimeralola = new Pokemon("Grimer-Alola");
@@ -3096,8 +2920,6 @@ public class Pokedex
     	grimeralola.addAbilities("Poison Touch", "Gluttony", "Power of Alchemy");
     	grimeralola.setAllBaseStats(80, 80, 50, 40, 50, 25);
     	grimeralola.setWeight(42.0);
-    	grimeralola.setBaseSpecies("Grimer");
-    	grimeralola.setForme("Alola");
     	pokedex.put("Grimer-Alola", grimeralola);
 
     	Pokemon grotle = new Pokemon("Grotle");
@@ -3114,7 +2936,7 @@ public class Pokedex
     	groudon.addAbilities("Drought");
     	groudon.setAllBaseStats(100, 150, 140, 100, 90, 90);
     	groudon.setWeight(950.0);
-    	groudon.addOtherForme("groudonprimal");
+    	groudon.setFormes("Groudon", "Groudon-Primal");
     	pokedex.put("Groudon", groudon);
 
     	Pokemon groudonprimal = new Pokemon("Groudon-Primal");
@@ -3123,8 +2945,6 @@ public class Pokedex
     	groudonprimal.addAbilities("Desolate Land");
     	groudonprimal.setAllBaseStats(100, 180, 160, 150, 90, 90);
     	groudonprimal.setWeight(999.7);
-    	groudonprimal.setBaseSpecies("Groudon");
-    	groudonprimal.setForme("Primal");
     	pokedex.put("Groudon-Primal", groudonprimal);
 
     	Pokemon grovyle = new Pokemon("Grovyle");
@@ -3173,7 +2993,6 @@ public class Pokedex
     	gumshoos.addAbilities("Stakeout", "Strong Jaw", "Adaptability");
     	gumshoos.setAllBaseStats(88, 110, 60, 55, 60, 45);
     	gumshoos.setWeight(14.2);
-    	gumshoos.addOtherForme("gumshoostotem");
     	pokedex.put("Gumshoos", gumshoos);
 
     	Pokemon gumshoostotem = new Pokemon("Gumshoos-Totem");
@@ -3182,8 +3001,6 @@ public class Pokedex
     	gumshoostotem.addAbilities("Adaptability");
     	gumshoostotem.setAllBaseStats(88, 110, 60, 55, 60, 45);
     	gumshoostotem.setWeight(60.0);
-    	gumshoostotem.setBaseSpecies("Gumshoos");
-    	gumshoostotem.setForme("Totem");
     	pokedex.put("Gumshoos-Totem", gumshoostotem);
 
     	Pokemon gurdurr = new Pokemon("Gurdurr");
@@ -3208,7 +3025,7 @@ public class Pokedex
     	gyarados.addAbilities("Intimidate", "Moxie");
     	gyarados.setAllBaseStats(95, 125, 79, 60, 100, 81);
     	gyarados.setWeight(235.0);
-    	gyarados.addOtherForme("gyaradosmega");
+    	gyarados.setFormes("Gyarados", "Gyarados-Mega");
     	pokedex.put("Gyarados", gyarados);
 
     	Pokemon gyaradosmega = new Pokemon("Gyarados-Mega");
@@ -3217,8 +3034,6 @@ public class Pokedex
     	gyaradosmega.addAbilities("Mold Breaker");
     	gyaradosmega.setAllBaseStats(95, 155, 109, 70, 130, 81);
     	gyaradosmega.setWeight(305.0);
-    	gyaradosmega.setBaseSpecies("Gyarados");
-    	gyaradosmega.setForme("Mega");
     	pokedex.put("Gyarados-Mega", gyaradosmega);
 
     	Pokemon hakamoo = new Pokemon("Hakamo-o");
@@ -3307,7 +3122,7 @@ public class Pokedex
     	heracross.addAbilities("Swarm", "Guts", "Moxie");
     	heracross.setAllBaseStats(80, 125, 75, 40, 95, 85);
     	heracross.setWeight(54.0);
-    	heracross.addOtherForme("heracrossmega");
+    	heracross.setFormes("Heracross", "Heracross-Mega");
     	pokedex.put("Heracross", heracross);
 
     	Pokemon heracrossmega = new Pokemon("Heracross-Mega");
@@ -3316,8 +3131,6 @@ public class Pokedex
     	heracrossmega.addAbilities("Skill Link");
     	heracrossmega.setAllBaseStats(80, 185, 115, 40, 105, 75);
     	heracrossmega.setWeight(62.5);
-    	heracrossmega.setBaseSpecies("Heracross");
-    	heracrossmega.setForme("Mega");
     	pokedex.put("Heracross-Mega", heracrossmega);
 
     	Pokemon herdier = new Pokemon("Herdier");
@@ -3398,7 +3211,6 @@ public class Pokedex
     	hoopa.addAbilities("Magician");
     	hoopa.setAllBaseStats(80, 110, 60, 150, 130, 70);
     	hoopa.setWeight(9.0);
-    	hoopa.addOtherForme("hoopaunbound");
     	pokedex.put("Hoopa", hoopa);
 
     	Pokemon hoopaunbound = new Pokemon("Hoopa-Unbound");
@@ -3407,8 +3219,6 @@ public class Pokedex
     	hoopaunbound.addAbilities("Magician");
     	hoopaunbound.setAllBaseStats(80, 160, 60, 170, 130, 80);
     	hoopaunbound.setWeight(490.0);
-    	hoopaunbound.setBaseSpecies("Hoopa");
-    	hoopaunbound.setForme("Unbound");
     	pokedex.put("Hoopa-Unbound", hoopaunbound);
 
     	Pokemon hoothoot = new Pokemon("Hoothoot");
@@ -3441,7 +3251,7 @@ public class Pokedex
     	houndoom.addAbilities("Early Bird", "Flash Fire", "Unnerve");
     	houndoom.setAllBaseStats(75, 90, 50, 110, 80, 95);
     	houndoom.setWeight(35.0);
-    	houndoom.addOtherForme("houndoommega");
+    	houndoom.setFormes("Houndoom", "Houndoom-Mega");
     	pokedex.put("Houndoom", houndoom);
 
     	Pokemon houndoommega = new Pokemon("Houndoom-Mega");
@@ -3450,8 +3260,6 @@ public class Pokedex
     	houndoommega.addAbilities("Solar Power");
     	houndoommega.setAllBaseStats(75, 90, 90, 140, 90, 115);
     	houndoommega.setWeight(49.5);
-    	houndoommega.setBaseSpecies("Houndoom");
-    	houndoommega.setForme("Mega");
     	pokedex.put("Houndoom-Mega", houndoommega);
 
     	Pokemon houndour = new Pokemon("Houndour");
@@ -3636,7 +3444,7 @@ public class Pokedex
     	kangaskhan.addAbilities("Early Bird", "Scrappy", "Inner Focus");
     	kangaskhan.setAllBaseStats(105, 95, 80, 40, 80, 90);
     	kangaskhan.setWeight(80.0);
-    	kangaskhan.addOtherForme("kangaskhanmega");
+    	kangaskhan.setFormes("Kangaskhan", "Kangaskhan-Mega");
     	pokedex.put("Kangaskhan", kangaskhan);
 
     	Pokemon kangaskhanmega = new Pokemon("Kangaskhan-Mega");
@@ -3645,8 +3453,6 @@ public class Pokedex
     	kangaskhanmega.addAbilities("Parental Bond");
     	kangaskhanmega.setAllBaseStats(105, 125, 100, 60, 100, 100);
     	kangaskhanmega.setWeight(100.0);
-    	kangaskhanmega.setBaseSpecies("Kangaskhan");
-    	kangaskhanmega.setForme("Mega");
     	pokedex.put("Kangaskhan-Mega", kangaskhanmega);
 
     	Pokemon karrablast = new Pokemon("Karrablast");
@@ -3679,7 +3485,6 @@ public class Pokedex
     	keldeo.addAbilities("Justified");
     	keldeo.setAllBaseStats(91, 72, 90, 129, 90, 108);
     	keldeo.setWeight(48.5);
-    	keldeo.addOtherForme("keldeoresolute");
     	pokedex.put("Keldeo", keldeo);
 
     	Pokemon keldeoresolute = new Pokemon("Keldeo-Resolute");
@@ -3688,8 +3493,6 @@ public class Pokedex
     	keldeoresolute.addAbilities("Justified");
     	keldeoresolute.setAllBaseStats(91, 72, 90, 129, 90, 108);
     	keldeoresolute.setWeight(48.5);
-    	keldeoresolute.setBaseSpecies("Keldeo");
-    	keldeoresolute.setForme("Resolute");
     	pokedex.put("Keldeo-Resolute", keldeoresolute);
 
     	Pokemon kerfluffle = new Pokemon("Kerfluffle");
@@ -3786,7 +3589,6 @@ public class Pokedex
     	kommoo.addAbilities("Bulletproof", "Soundproof", "Overcoat");
     	kommoo.setAllBaseStats(75, 110, 125, 100, 105, 85);
     	kommoo.setWeight(78.2);
-    	kommoo.addOtherForme("kommoototem");
     	pokedex.put("Kommo-o", kommoo);
 
     	Pokemon kommoototem = new Pokemon("Kommo-o-Totem");
@@ -3795,8 +3597,6 @@ public class Pokedex
     	kommoototem.addAbilities("Overcoat");
     	kommoototem.setAllBaseStats(75, 110, 125, 100, 105, 85);
     	kommoototem.setWeight(207.5);
-    	kommoototem.setBaseSpecies("Kommo-o");
-    	kommoototem.setForme("Totem");
     	pokedex.put("Kommo-o-Totem", kommoototem);
 
     	Pokemon krabby = new Pokemon("Krabby");
@@ -3853,7 +3653,7 @@ public class Pokedex
     	kyogre.addAbilities("Drizzle");
     	kyogre.setAllBaseStats(100, 100, 90, 150, 140, 90);
     	kyogre.setWeight(352.0);
-    	kyogre.addOtherForme("kyogreprimal");
+    	kyogre.setFormes("Kyogre", "Kyogre-Primal");
     	pokedex.put("Kyogre", kyogre);
 
     	Pokemon kyogreprimal = new Pokemon("Kyogre-Primal");
@@ -3862,8 +3662,6 @@ public class Pokedex
     	kyogreprimal.addAbilities("Primordial Sea");
     	kyogreprimal.setAllBaseStats(100, 150, 90, 180, 160, 90);
     	kyogreprimal.setWeight(430.0);
-    	kyogreprimal.setBaseSpecies("Kyogre");
-    	kyogreprimal.setForme("Primal");
     	pokedex.put("Kyogre-Primal", kyogreprimal);
 
     	Pokemon kyurem = new Pokemon("Kyurem");
@@ -3872,8 +3670,6 @@ public class Pokedex
     	kyurem.addAbilities("Pressure");
     	kyurem.setAllBaseStats(125, 130, 90, 130, 90, 95);
     	kyurem.setWeight(325.0);
-    	kyurem.addOtherForme("kyuremblack");
-    	kyurem.addOtherForme("kyuremwhite");
     	pokedex.put("Kyurem", kyurem);
 
     	Pokemon kyuremblack = new Pokemon("Kyurem-Black");
@@ -3882,8 +3678,6 @@ public class Pokedex
     	kyuremblack.addAbilities("Teravolt");
     	kyuremblack.setAllBaseStats(125, 170, 100, 120, 90, 95);
     	kyuremblack.setWeight(325.0);
-    	kyuremblack.setBaseSpecies("Kyurem");
-    	kyuremblack.setForme("Black");
     	pokedex.put("Kyurem-Black", kyuremblack);
 
     	Pokemon kyuremwhite = new Pokemon("Kyurem-White");
@@ -3892,8 +3686,6 @@ public class Pokedex
     	kyuremwhite.addAbilities("Turboblaze");
     	kyuremwhite.setAllBaseStats(125, 120, 90, 170, 100, 95);
     	kyuremwhite.setWeight(325.0);
-    	kyuremwhite.setBaseSpecies("Kyurem");
-    	kyuremwhite.setForme("White");
     	pokedex.put("Kyurem-White", kyuremwhite);
 
     	Pokemon lairon = new Pokemon("Lairon");
@@ -3918,7 +3710,6 @@ public class Pokedex
     	landorus.addAbilities("Sand Force", "Sheer Force");
     	landorus.setAllBaseStats(89, 125, 90, 115, 80, 101);
     	landorus.setWeight(68.0);
-    	landorus.addOtherForme("landorustherian");
     	pokedex.put("Landorus", landorus);
 
     	Pokemon landorustherian = new Pokemon("Landorus-Therian");
@@ -3927,8 +3718,6 @@ public class Pokedex
     	landorustherian.addAbilities("Intimidate");
     	landorustherian.setAllBaseStats(89, 145, 90, 105, 80, 91);
     	landorustherian.setWeight(68.0);
-    	landorustherian.setBaseSpecies("Landorus");
-    	landorustherian.setForme("Therian");
     	pokedex.put("Landorus-Therian", landorustherian);
 
     	Pokemon lanturn = new Pokemon("Lanturn");
@@ -3969,7 +3758,7 @@ public class Pokedex
     	latias.addAbilities("Levitate");
     	latias.setAllBaseStats(80, 80, 90, 110, 130, 110);
     	latias.setWeight(40.0);
-    	latias.addOtherForme("latiasmega");
+    	latias.setFormes("Latias", "Latias-Mega");
     	pokedex.put("Latias", latias);
 
     	Pokemon latiasmega = new Pokemon("Latias-Mega");
@@ -3978,8 +3767,6 @@ public class Pokedex
     	latiasmega.addAbilities("Levitate");
     	latiasmega.setAllBaseStats(80, 100, 120, 140, 150, 110);
     	latiasmega.setWeight(52.0);
-    	latiasmega.setBaseSpecies("Latias");
-    	latiasmega.setForme("Mega");
     	pokedex.put("Latias-Mega", latiasmega);
 
     	Pokemon latios = new Pokemon("Latios");
@@ -3988,7 +3775,7 @@ public class Pokedex
     	latios.addAbilities("Levitate");
     	latios.setAllBaseStats(80, 90, 80, 130, 110, 110);
     	latios.setWeight(60.0);
-    	latios.addOtherForme("latiosmega");
+    	latios.setFormes("Latios", "Latios-Mega");
     	pokedex.put("Latios", latios);
 
     	Pokemon latiosmega = new Pokemon("Latios-Mega");
@@ -3997,8 +3784,6 @@ public class Pokedex
     	latiosmega.addAbilities("Levitate");
     	latiosmega.setAllBaseStats(80, 130, 100, 160, 120, 110);
     	latiosmega.setWeight(70.0);
-    	latiosmega.setBaseSpecies("Latios");
-    	latiosmega.setForme("Mega");
     	pokedex.put("Latios-Mega", latiosmega);
 
     	Pokemon leafeon = new Pokemon("Leafeon");
@@ -4127,7 +3912,7 @@ public class Pokedex
     	lopunny.addAbilities("Cute Charm", "Klutz", "Limber");
     	lopunny.setAllBaseStats(65, 76, 84, 54, 96, 105);
     	lopunny.setWeight(33.3);
-    	lopunny.addOtherForme("lopunnymega");
+    	lopunny.setFormes("Lopunny", "Lopunny-Mega");
     	pokedex.put("Lopunny", lopunny);
 
     	Pokemon lopunnymega = new Pokemon("Lopunny-Mega");
@@ -4136,8 +3921,6 @@ public class Pokedex
     	lopunnymega.addAbilities("Scrappy");
     	lopunnymega.setAllBaseStats(65, 136, 94, 54, 96, 135);
     	lopunnymega.setWeight(28.3);
-    	lopunnymega.setBaseSpecies("Lopunny");
-    	lopunnymega.setForme("Mega");
     	pokedex.put("Lopunny-Mega", lopunnymega);
 
     	Pokemon lotad = new Pokemon("Lotad");
@@ -4162,7 +3945,7 @@ public class Pokedex
     	lucario.addAbilities("Steadfast", "Inner Focus", "Justified");
     	lucario.setAllBaseStats(70, 110, 70, 115, 70, 90);
     	lucario.setWeight(54.0);
-    	lucario.addOtherForme("lucariomega");
+    	lucario.setFormes("Lucario", "Lucario-Mega");
     	pokedex.put("Lucario", lucario);
 
     	Pokemon lucariomega = new Pokemon("Lucario-Mega");
@@ -4171,8 +3954,6 @@ public class Pokedex
     	lucariomega.addAbilities("Adaptability");
     	lucariomega.setAllBaseStats(70, 145, 88, 140, 70, 112);
     	lucariomega.setWeight(57.5);
-    	lucariomega.setBaseSpecies("Lucario");
-    	lucariomega.setForme("Mega");
     	pokedex.put("Lucario-Mega", lucariomega);
 
     	Pokemon ludicolo = new Pokemon("Ludicolo");
@@ -4221,7 +4002,6 @@ public class Pokedex
     	lurantis.addAbilities("Leaf Guard", "Contrary");
     	lurantis.setAllBaseStats(70, 105, 90, 80, 90, 45);
     	lurantis.setWeight(18.5);
-    	lurantis.addOtherForme("lurantistotem");
     	pokedex.put("Lurantis", lurantis);
 
     	Pokemon lurantistotem = new Pokemon("Lurantis-Totem");
@@ -4230,8 +4010,6 @@ public class Pokedex
     	lurantistotem.addAbilities("Leaf Guard");
     	lurantistotem.setAllBaseStats(70, 105, 90, 80, 90, 45);
     	lurantistotem.setWeight(58.0);
-    	lurantistotem.setBaseSpecies("Lurantis");
-    	lurantistotem.setForme("Totem");
     	pokedex.put("Lurantis-Totem", lurantistotem);
 
     	Pokemon luvdisc = new Pokemon("Luvdisc");
@@ -4264,8 +4042,6 @@ public class Pokedex
     	lycanroc.addAbilities("Keen Eye", "Sand Rush", "Steadfast");
     	lycanroc.setAllBaseStats(75, 115, 65, 55, 65, 112);
     	lycanroc.setWeight(25.0);
-    	lycanroc.addOtherForme("lycanrocmidnight");
-    	lycanroc.addOtherForme("lycanrocdusk");
     	pokedex.put("Lycanroc", lycanroc);
 
     	Pokemon lycanrocdusk = new Pokemon("Lycanroc-Dusk");
@@ -4274,8 +4050,6 @@ public class Pokedex
     	lycanrocdusk.addAbilities("Tough Claws");
     	lycanrocdusk.setAllBaseStats(75, 117, 65, 55, 65, 110);
     	lycanrocdusk.setWeight(25.0);
-    	lycanrocdusk.setBaseSpecies("Lycanroc");
-    	lycanrocdusk.setForme("Dusk");
     	pokedex.put("Lycanroc-Dusk", lycanrocdusk);
 
     	Pokemon lycanrocmidnight = new Pokemon("Lycanroc-Midnight");
@@ -4284,8 +4058,6 @@ public class Pokedex
     	lycanrocmidnight.addAbilities("Keen Eye", "Vital Spirit", "No Guard");
     	lycanrocmidnight.setAllBaseStats(85, 115, 75, 55, 75, 82);
     	lycanrocmidnight.setWeight(25.0);
-    	lycanrocmidnight.setBaseSpecies("Lycanroc");
-    	lycanrocmidnight.setForme("Midnight");
     	pokedex.put("Lycanroc-Midnight", lycanrocmidnight);
 
     	Pokemon machamp = new Pokemon("Machamp");
@@ -4334,7 +4106,6 @@ public class Pokedex
     	magearna.addAbilities("Soul-Heart");
     	magearna.setAllBaseStats(80, 95, 115, 130, 115, 65);
     	magearna.setWeight(80.5);
-    	magearna.addOtherForme("magearnaoriginal");
     	pokedex.put("Magearna", magearna);
 
     	Pokemon magearnaoriginal = new Pokemon("Magearna-Original");
@@ -4343,8 +4114,6 @@ public class Pokedex
     	magearnaoriginal.addAbilities("Soul-Heart");
     	magearnaoriginal.setAllBaseStats(80, 95, 115, 130, 115, 65);
     	magearnaoriginal.setWeight(80.5);
-    	magearnaoriginal.setBaseSpecies("Magearna");
-    	magearnaoriginal.setForme("Original");
     	pokedex.put("Magearna-Original", magearnaoriginal);
 
     	Pokemon magikarp = new Pokemon("Magikarp");
@@ -4449,7 +4218,7 @@ public class Pokedex
     	manectric.addAbilities("Static", "Lightning Rod", "Minus");
     	manectric.setAllBaseStats(70, 75, 60, 105, 60, 105);
     	manectric.setWeight(40.2);
-    	manectric.addOtherForme("manectricmega");
+    	manectric.setFormes("Manectric", "Manectric-Mega");
     	pokedex.put("Manectric", manectric);
 
     	Pokemon manectricmega = new Pokemon("Manectric-Mega");
@@ -4458,8 +4227,6 @@ public class Pokedex
     	manectricmega.addAbilities("Intimidate");
     	manectricmega.setAllBaseStats(70, 75, 80, 135, 80, 135);
     	manectricmega.setWeight(44.0);
-    	manectricmega.setBaseSpecies("Manectric");
-    	manectricmega.setForme("Mega");
     	pokedex.put("Manectric-Mega", manectricmega);
 
     	Pokemon mankey = new Pokemon("Mankey");
@@ -4493,7 +4260,9 @@ public class Pokedex
     	maractus.setAllBaseStats(75, 86, 67, 106, 67, 60);
     	maractus.setWeight(28.0);
     	pokedex.put("Maractus", maractus);
-
+    }
+    public void initSecondHalf()
+    {
     	Pokemon mareanie = new Pokemon("Mareanie");
     	mareanie.setDexNumber(747);
     	mareanie.setTypes("Poison", "Water");
@@ -4509,10 +4278,7 @@ public class Pokedex
     	mareep.setAllBaseStats(55, 40, 40, 65, 45, 35);
     	mareep.setWeight(7.8);
     	pokedex.put("Mareep", mareep);
-    }
-    
-    public void initSecondHalf()
-    {
+
     	Pokemon marill = new Pokemon("Marill");
     	marill.setDexNumber(183);
     	marill.setTypes("Water", "Fairy");
@@ -4527,8 +4293,6 @@ public class Pokedex
     	marowak.addAbilities("Rock Head", "Lightning Rod", "Battle Armor");
     	marowak.setAllBaseStats(60, 80, 110, 50, 80, 45);
     	marowak.setWeight(45.0);
-    	marowak.addOtherForme("marowakalola");
-    	marowak.addOtherForme("marowakalolatotem");
     	pokedex.put("Marowak", marowak);
 
     	Pokemon marowakalola = new Pokemon("Marowak-Alola");
@@ -4537,8 +4301,6 @@ public class Pokedex
     	marowakalola.addAbilities("Cursed Body", "Lightning Rod", "Rock Head");
     	marowakalola.setAllBaseStats(60, 80, 110, 50, 80, 45);
     	marowakalola.setWeight(34.0);
-    	marowakalola.setBaseSpecies("Marowak");
-    	marowakalola.setForme("Alola");
     	pokedex.put("Marowak-Alola", marowakalola);
 
     	Pokemon marowakalolatotem = new Pokemon("Marowak-Alola-Totem");
@@ -4547,8 +4309,6 @@ public class Pokedex
     	marowakalolatotem.addAbilities("Rock Head");
     	marowakalolatotem.setAllBaseStats(60, 80, 110, 50, 80, 45);
     	marowakalolatotem.setWeight(98.0);
-    	marowakalolatotem.setBaseSpecies("Marowak");
-    	marowakalolatotem.setForme("Alola-Totem");
     	pokedex.put("Marowak-Alola-Totem", marowakalolatotem);
 
     	Pokemon marshadow = new Pokemon("Marshadow");
@@ -4581,7 +4341,7 @@ public class Pokedex
     	mawile.addAbilities("Hyper Cutter", "Intimidate", "Sheer Force");
     	mawile.setAllBaseStats(50, 85, 85, 55, 55, 50);
     	mawile.setWeight(11.5);
-    	mawile.addOtherForme("mawilemega");
+    	mawile.setFormes("Mawile", "Mawile-Mega");
     	pokedex.put("Mawile", mawile);
 
     	Pokemon mawilemega = new Pokemon("Mawile-Mega");
@@ -4590,8 +4350,6 @@ public class Pokedex
     	mawilemega.addAbilities("Huge Power");
     	mawilemega.setAllBaseStats(50, 105, 125, 55, 95, 50);
     	mawilemega.setWeight(23.5);
-    	mawilemega.setBaseSpecies("Mawile");
-    	mawilemega.setForme("Mega");
     	pokedex.put("Mawile-Mega", mawilemega);
 
     	Pokemon medicham = new Pokemon("Medicham");
@@ -4600,7 +4358,7 @@ public class Pokedex
     	medicham.addAbilities("Pure Power", "Telepathy");
     	medicham.setAllBaseStats(60, 60, 75, 60, 75, 80);
     	medicham.setWeight(31.5);
-    	medicham.addOtherForme("medichammega");
+    	medicham.setFormes("Medicham", "Medicham-Mega");
     	pokedex.put("Medicham", medicham);
 
     	Pokemon medichammega = new Pokemon("Medicham-Mega");
@@ -4609,8 +4367,6 @@ public class Pokedex
     	medichammega.addAbilities("Pure Power");
     	medichammega.setAllBaseStats(60, 100, 85, 80, 85, 100);
     	medichammega.setWeight(31.5);
-    	medichammega.setBaseSpecies("Medicham");
-    	medichammega.setForme("Mega");
     	pokedex.put("Medicham-Mega", medichammega);
 
     	Pokemon meditite = new Pokemon("Meditite");
@@ -4635,7 +4391,7 @@ public class Pokedex
     	meloetta.addAbilities("Serene Grace");
     	meloetta.setAllBaseStats(100, 77, 77, 128, 128, 90);
     	meloetta.setWeight(6.5);
-    	meloetta.addOtherForme("meloettapirouette");
+    	meloetta.setFormes("Meloetta", "Meloetta-Pirouette");
     	pokedex.put("Meloetta", meloetta);
 
     	Pokemon meloettapirouette = new Pokemon("Meloetta-Pirouette");
@@ -4644,8 +4400,6 @@ public class Pokedex
     	meloettapirouette.addAbilities("Serene Grace");
     	meloettapirouette.setAllBaseStats(100, 128, 90, 77, 77, 128);
     	meloettapirouette.setWeight(6.5);
-    	meloettapirouette.setBaseSpecies("Meloetta");
-    	meloettapirouette.setForme("Pirouette");
     	pokedex.put("Meloetta-Pirouette", meloettapirouette);
 
     	Pokemon meowstic = new Pokemon("Meowstic");
@@ -4654,7 +4408,6 @@ public class Pokedex
     	meowstic.addAbilities("Keen Eye", "Infiltrator", "Prankster");
     	meowstic.setAllBaseStats(74, 48, 76, 83, 81, 104);
     	meowstic.setWeight(8.5);
-    	meowstic.addOtherForme("meowsticf");
     	pokedex.put("Meowstic", meowstic);
 
     	Pokemon meowsticf = new Pokemon("Meowstic-F");
@@ -4663,8 +4416,6 @@ public class Pokedex
     	meowsticf.addAbilities("Keen Eye", "Infiltrator", "Competitive");
     	meowsticf.setAllBaseStats(74, 48, 76, 83, 81, 104);
     	meowsticf.setWeight(8.5);
-    	meowsticf.setBaseSpecies("Meowstic");
-    	meowsticf.setForme("F");
     	pokedex.put("Meowstic-F", meowsticf);
 
     	Pokemon meowth = new Pokemon("Meowth");
@@ -4673,7 +4424,6 @@ public class Pokedex
     	meowth.addAbilities("Pickup", "Technician", "Unnerve");
     	meowth.setAllBaseStats(40, 45, 35, 40, 40, 90);
     	meowth.setWeight(4.2);
-    	meowth.addOtherForme("meowthalola");
     	pokedex.put("Meowth", meowth);
 
     	Pokemon meowthalola = new Pokemon("Meowth-Alola");
@@ -4682,8 +4432,6 @@ public class Pokedex
     	meowthalola.addAbilities("Pickup", "Technician", "Rattled");
     	meowthalola.setAllBaseStats(40, 35, 35, 50, 40, 90);
     	meowthalola.setWeight(4.2);
-    	meowthalola.setBaseSpecies("Meowth");
-    	meowthalola.setForme("Alola");
     	pokedex.put("Meowth-Alola", meowthalola);
 
     	Pokemon mesprit = new Pokemon("Mesprit");
@@ -4700,7 +4448,7 @@ public class Pokedex
     	metagross.addAbilities("Clear Body", "Light Metal");
     	metagross.setAllBaseStats(80, 135, 130, 95, 90, 70);
     	metagross.setWeight(550.0);
-    	metagross.addOtherForme("metagrossmega");
+    	metagross.setFormes("Metagross", "Metagross-Mega");
     	pokedex.put("Metagross", metagross);
 
     	Pokemon metagrossmega = new Pokemon("Metagross-Mega");
@@ -4709,8 +4457,6 @@ public class Pokedex
     	metagrossmega.addAbilities("Tough Claws");
     	metagrossmega.setAllBaseStats(80, 145, 150, 105, 110, 110);
     	metagrossmega.setWeight(942.9);
-    	metagrossmega.setBaseSpecies("Metagross");
-    	metagrossmega.setForme("Mega");
     	pokedex.put("Metagross-Mega", metagrossmega);
 
     	Pokemon metang = new Pokemon("Metang");
@@ -4743,8 +4489,7 @@ public class Pokedex
     	mewtwo.addAbilities("Pressure", "Unnerve");
     	mewtwo.setAllBaseStats(106, 110, 90, 154, 90, 130);
     	mewtwo.setWeight(122.0);
-    	mewtwo.addOtherForme("mewtwomegax");
-    	mewtwo.addOtherForme("mewtwomegay");
+    	mewtwo.setFormes("Mewtwo", "Mewtwo-Mega-X", "Mewtwo-Mega-Y");
     	pokedex.put("Mewtwo", mewtwo);
 
     	Pokemon mewtwomegax = new Pokemon("Mewtwo-Mega-X");
@@ -4753,8 +4498,6 @@ public class Pokedex
     	mewtwomegax.addAbilities("Steadfast");
     	mewtwomegax.setAllBaseStats(106, 190, 100, 154, 100, 130);
     	mewtwomegax.setWeight(127.0);
-    	mewtwomegax.setBaseSpecies("Mewtwo");
-    	mewtwomegax.setForme("Mega-X");
     	pokedex.put("Mewtwo-Mega-X", mewtwomegax);
 
     	Pokemon mewtwomegay = new Pokemon("Mewtwo-Mega-Y");
@@ -4763,8 +4506,6 @@ public class Pokedex
     	mewtwomegay.addAbilities("Insomnia");
     	mewtwomegay.setAllBaseStats(106, 150, 70, 194, 120, 140);
     	mewtwomegay.setWeight(33.0);
-    	mewtwomegay.setBaseSpecies("Mewtwo");
-    	mewtwomegay.setForme("Mega-Y");
     	pokedex.put("Mewtwo-Mega-Y", mewtwomegay);
 
     	Pokemon mienfoo = new Pokemon("Mienfoo");
@@ -4821,9 +4562,6 @@ public class Pokedex
     	mimikyu.addAbilities("Disguise");
     	mimikyu.setAllBaseStats(55, 90, 80, 50, 105, 96);
     	mimikyu.setWeight(0.7);
-    	mimikyu.addOtherForme("mimikyubusted");
-    	mimikyu.addOtherForme("mimikyutotem");
-    	mimikyu.addOtherForme("mimikyubustedtotem");
     	pokedex.put("Mimikyu", mimikyu);
 
     	Pokemon mimikyubusted = new Pokemon("Mimikyu-Busted");
@@ -4832,8 +4570,6 @@ public class Pokedex
     	mimikyubusted.addAbilities("Disguise");
     	mimikyubusted.setAllBaseStats(55, 90, 80, 50, 105, 96);
     	mimikyubusted.setWeight(0.7);
-    	mimikyubusted.setBaseSpecies("Mimikyu");
-    	mimikyubusted.setForme("Busted");
     	pokedex.put("Mimikyu-Busted", mimikyubusted);
 
     	Pokemon mimikyubustedtotem = new Pokemon("Mimikyu-Busted-Totem");
@@ -4842,8 +4578,6 @@ public class Pokedex
     	mimikyubustedtotem.addAbilities("Disguise");
     	mimikyubustedtotem.setAllBaseStats(55, 90, 80, 50, 105, 96);
     	mimikyubustedtotem.setWeight(2.8);
-    	mimikyubustedtotem.setBaseSpecies("Mimikyu");
-    	mimikyubustedtotem.setForme("Busted-Totem");
     	pokedex.put("Mimikyu-Busted-Totem", mimikyubustedtotem);
 
     	Pokemon mimikyutotem = new Pokemon("Mimikyu-Totem");
@@ -4852,8 +4586,6 @@ public class Pokedex
     	mimikyutotem.addAbilities("Disguise");
     	mimikyutotem.setAllBaseStats(55, 90, 80, 50, 105, 96);
     	mimikyutotem.setWeight(2.8);
-    	mimikyutotem.setBaseSpecies("Mimikyu");
-    	mimikyutotem.setForme("Totem");
     	pokedex.put("Mimikyu-Totem", mimikyutotem);
 
     	Pokemon minccino = new Pokemon("Minccino");
@@ -4870,7 +4602,7 @@ public class Pokedex
     	minior.addAbilities("Shields Down");
     	minior.setAllBaseStats(60, 100, 60, 100, 60, 120);
     	minior.setWeight(0.3);
-    	minior.addOtherForme("miniormeteor");
+    	minior.setFormes("Minior", "Minior-Meteor");
     	pokedex.put("Minior", minior);
 
     	Pokemon miniormeteor = new Pokemon("Minior-Meteor");
@@ -4879,8 +4611,6 @@ public class Pokedex
     	miniormeteor.addAbilities("Shields Down");
     	miniormeteor.setAllBaseStats(60, 60, 100, 60, 100, 60);
     	miniormeteor.setWeight(40.0);
-    	miniormeteor.setBaseSpecies("Minior");
-    	miniormeteor.setForme("Meteor");
     	pokedex.put("Minior-Meteor", miniormeteor);
 
     	Pokemon minun = new Pokemon("Minun");
@@ -4993,7 +4723,6 @@ public class Pokedex
     	muk.addAbilities("Stench", "Sticky Hold", "Poison Touch");
     	muk.setAllBaseStats(105, 105, 75, 65, 100, 50);
     	muk.setWeight(30.0);
-    	muk.addOtherForme("mukalola");
     	pokedex.put("Muk", muk);
 
     	Pokemon mukalola = new Pokemon("Muk-Alola");
@@ -5002,8 +4731,6 @@ public class Pokedex
     	mukalola.addAbilities("Poison Touch", "Gluttony", "Power of Alchemy");
     	mukalola.setAllBaseStats(105, 105, 75, 65, 100, 50);
     	mukalola.setWeight(52.0);
-    	mukalola.setBaseSpecies("Muk");
-    	mukalola.setForme("Alola");
     	pokedex.put("Muk-Alola", mukalola);
 
     	Pokemon munchlax = new Pokemon("Munchlax");
@@ -5068,9 +4795,6 @@ public class Pokedex
     	necrozma.addAbilities("Prism Armor");
     	necrozma.setAllBaseStats(97, 107, 101, 127, 89, 79);
     	necrozma.setWeight(230.0);
-    	necrozma.addOtherForme("necrozmaduskmane");
-    	necrozma.addOtherForme("necrozmadawnwings");
-    	necrozma.addOtherForme("necrozmaultra");
     	pokedex.put("Necrozma", necrozma);
 
     	Pokemon necrozmadawnwings = new Pokemon("Necrozma-Dawn-Wings");
@@ -5079,8 +4803,7 @@ public class Pokedex
     	necrozmadawnwings.addAbilities("Prism Armor");
     	necrozmadawnwings.setAllBaseStats(97, 113, 109, 157, 127, 77);
     	necrozmadawnwings.setWeight(350.0);
-    	necrozmadawnwings.setBaseSpecies("Necrozma");
-    	necrozmadawnwings.setForme("Dawn-Wings");
+    	necrozmadawnwings.setFormes("Necrozma-Dawn-Wings", "Necrozma-Ultra");
     	pokedex.put("Necrozma-Dawn-Wings", necrozmadawnwings);
 
     	Pokemon necrozmaduskmane = new Pokemon("Necrozma-Dusk-Mane");
@@ -5089,8 +4812,7 @@ public class Pokedex
     	necrozmaduskmane.addAbilities("Prism Armor");
     	necrozmaduskmane.setAllBaseStats(97, 157, 127, 113, 109, 77);
     	necrozmaduskmane.setWeight(460.0);
-    	necrozmaduskmane.setBaseSpecies("Necrozma");
-    	necrozmaduskmane.setForme("Dusk-Mane");
+    	necrozmaduskmane.setFormes("Necrozma-Dusk-Mane", "Necrozma-Ultra");
     	pokedex.put("Necrozma-Dusk-Mane", necrozmaduskmane);
 
     	Pokemon necrozmaultra = new Pokemon("Necrozma-Ultra");
@@ -5099,8 +4821,6 @@ public class Pokedex
     	necrozmaultra.addAbilities("Neuroforce");
     	necrozmaultra.setAllBaseStats(97, 167, 97, 167, 97, 129);
     	necrozmaultra.setWeight(230.0);
-    	necrozmaultra.setBaseSpecies("Necrozma");
-    	necrozmaultra.setForme("Ultra");
     	pokedex.put("Necrozma-Ultra", necrozmaultra);
 
     	Pokemon necturine = new Pokemon("Necturine");
@@ -5189,7 +4909,6 @@ public class Pokedex
     	ninetales.addAbilities("Flash Fire", "Drought");
     	ninetales.setAllBaseStats(73, 76, 75, 81, 100, 100);
     	ninetales.setWeight(19.9);
-    	ninetales.addOtherForme("ninetalesalola");
     	pokedex.put("Ninetales", ninetales);
 
     	Pokemon ninetalesalola = new Pokemon("Ninetales-Alola");
@@ -5198,8 +4917,6 @@ public class Pokedex
     	ninetalesalola.addAbilities("Snow Cloak", "Snow Warning");
     	ninetalesalola.setAllBaseStats(73, 67, 75, 81, 100, 109);
     	ninetalesalola.setWeight(19.9);
-    	ninetalesalola.setBaseSpecies("Ninetales");
-    	ninetalesalola.setForme("Alola");
     	pokedex.put("Ninetales-Alola", ninetalesalola);
 
     	Pokemon ninjask = new Pokemon("Ninjask");
@@ -5312,9 +5029,6 @@ public class Pokedex
     	oricorio.addAbilities("Dancer");
     	oricorio.setAllBaseStats(75, 70, 70, 98, 70, 93);
     	oricorio.setWeight(3.4);
-    	oricorio.addOtherForme("oricoriopompom");
-    	oricorio.addOtherForme("oricoriopau");
-    	oricorio.addOtherForme("oricoriosensu");
     	pokedex.put("Oricorio", oricorio);
 
     	Pokemon oricoriopau = new Pokemon("Oricorio-Pa'u");
@@ -5323,8 +5037,6 @@ public class Pokedex
     	oricoriopau.addAbilities("Dancer");
     	oricoriopau.setAllBaseStats(75, 70, 70, 98, 70, 93);
     	oricoriopau.setWeight(3.4);
-    	oricoriopau.setBaseSpecies("Oricorio");
-    	oricoriopau.setForme("Pa'u");
     	pokedex.put("Oricorio-Pa'u", oricoriopau);
 
     	Pokemon oricoriopompom = new Pokemon("Oricorio-Pom-Pom");
@@ -5333,8 +5045,6 @@ public class Pokedex
     	oricoriopompom.addAbilities("Dancer");
     	oricoriopompom.setAllBaseStats(75, 70, 70, 98, 70, 93);
     	oricoriopompom.setWeight(3.4);
-    	oricoriopompom.setBaseSpecies("Oricorio");
-    	oricoriopompom.setForme("Pom-Pom");
     	pokedex.put("Oricorio-Pom-Pom", oricoriopompom);
 
     	Pokemon oricoriosensu = new Pokemon("Oricorio-Sensu");
@@ -5343,8 +5053,6 @@ public class Pokedex
     	oricoriosensu.addAbilities("Dancer");
     	oricoriosensu.setAllBaseStats(75, 70, 70, 98, 70, 93);
     	oricoriosensu.setWeight(3.4);
-    	oricoriosensu.setBaseSpecies("Oricorio");
-    	oricoriosensu.setForme("Sensu");
     	pokedex.put("Oricorio-Sensu", oricoriosensu);
 
     	Pokemon oshawott = new Pokemon("Oshawott");
@@ -5489,7 +5197,6 @@ public class Pokedex
     	persian.addAbilities("Limber", "Technician", "Unnerve");
     	persian.setAllBaseStats(65, 70, 60, 65, 65, 115);
     	persian.setWeight(32.0);
-    	persian.addOtherForme("persianalola");
     	pokedex.put("Persian", persian);
 
     	Pokemon persianalola = new Pokemon("Persian-Alola");
@@ -5498,8 +5205,6 @@ public class Pokedex
     	persianalola.addAbilities("Fur Coat", "Technician", "Rattled");
     	persianalola.setAllBaseStats(65, 60, 60, 75, 65, 115);
     	persianalola.setWeight(33.0);
-    	persianalola.setBaseSpecies("Persian");
-    	persianalola.setForme("Alola");
     	pokedex.put("Persian-Alola", persianalola);
 
     	Pokemon petilil = new Pokemon("Petilil");
@@ -5548,7 +5253,6 @@ public class Pokedex
     	pichu.addAbilities("Static", "Lightning Rod");
     	pichu.setAllBaseStats(20, 40, 15, 35, 35, 60);
     	pichu.setWeight(2.0);
-    	pichu.addOtherForme("pichuspikyeared");
     	pokedex.put("Pichu", pichu);
 
     	Pokemon pichuspikyeared = new Pokemon("Pichu-Spiky-eared");
@@ -5557,8 +5261,6 @@ public class Pokedex
     	pichuspikyeared.addAbilities("Static");
     	pichuspikyeared.setAllBaseStats(20, 40, 15, 35, 35, 60);
     	pichuspikyeared.setWeight(2.0);
-    	pichuspikyeared.setBaseSpecies("Pichu");
-    	pichuspikyeared.setForme("Spiky-eared");
     	pokedex.put("Pichu-Spiky-eared", pichuspikyeared);
 
     	Pokemon pidgeot = new Pokemon("Pidgeot");
@@ -5567,7 +5269,7 @@ public class Pokedex
     	pidgeot.addAbilities("Keen Eye", "Tangled Feet", "Big Pecks");
     	pidgeot.setAllBaseStats(83, 80, 75, 70, 70, 101);
     	pidgeot.setWeight(39.5);
-    	pidgeot.addOtherForme("pidgeotmega");
+    	pidgeot.setFormes("Pidgeot", "Pidgeot-Mega");
     	pokedex.put("Pidgeot", pidgeot);
 
     	Pokemon pidgeotmega = new Pokemon("Pidgeot-Mega");
@@ -5576,8 +5278,6 @@ public class Pokedex
     	pidgeotmega.addAbilities("No Guard");
     	pidgeotmega.setAllBaseStats(83, 80, 80, 135, 80, 121);
     	pidgeotmega.setWeight(50.5);
-    	pidgeotmega.setBaseSpecies("Pidgeot");
-    	pidgeotmega.setForme("Mega");
     	pokedex.put("Pidgeot-Mega", pidgeotmega);
 
     	Pokemon pidgeotto = new Pokemon("Pidgeotto");
@@ -5618,19 +5318,6 @@ public class Pokedex
     	pikachu.addAbilities("Static", "Lightning Rod");
     	pikachu.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachu.setWeight(6.0);
-    	pikachu.addOtherForme("pikachucosplay");
-    	pikachu.addOtherForme("pikachurockstar");
-    	pikachu.addOtherForme("pikachubelle");
-    	pikachu.addOtherForme("pikachupopstar");
-    	pikachu.addOtherForme("pikachuphd");
-    	pikachu.addOtherForme("pikachulibre");
-    	pikachu.addOtherForme("pikachuoriginal");
-    	pikachu.addOtherForme("pikachuhoenn");
-    	pikachu.addOtherForme("pikachusinnoh");
-    	pikachu.addOtherForme("pikachuunova");
-    	pikachu.addOtherForme("pikachukalos");
-    	pikachu.addOtherForme("pikachualola");
-    	pikachu.addOtherForme("pikachupartner");
     	pokedex.put("Pikachu", pikachu);
 
     	Pokemon pikachualola = new Pokemon("Pikachu-Alola");
@@ -5639,8 +5326,6 @@ public class Pokedex
     	pikachualola.addAbilities("Static");
     	pikachualola.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachualola.setWeight(6.0);
-    	pikachualola.setBaseSpecies("Pikachu");
-    	pikachualola.setForme("Alola");
     	pokedex.put("Pikachu-Alola", pikachualola);
 
     	Pokemon pikachubelle = new Pokemon("Pikachu-Belle");
@@ -5649,8 +5334,6 @@ public class Pokedex
     	pikachubelle.addAbilities("Lightning Rod");
     	pikachubelle.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachubelle.setWeight(6.0);
-    	pikachubelle.setBaseSpecies("Pikachu");
-    	pikachubelle.setForme("Belle");
     	pokedex.put("Pikachu-Belle", pikachubelle);
 
     	Pokemon pikachucosplay = new Pokemon("Pikachu-Cosplay");
@@ -5659,8 +5342,6 @@ public class Pokedex
     	pikachucosplay.addAbilities("Lightning Rod");
     	pikachucosplay.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachucosplay.setWeight(6.0);
-    	pikachucosplay.setBaseSpecies("Pikachu");
-    	pikachucosplay.setForme("Cosplay");
     	pokedex.put("Pikachu-Cosplay", pikachucosplay);
 
     	Pokemon pikachuhoenn = new Pokemon("Pikachu-Hoenn");
@@ -5669,8 +5350,6 @@ public class Pokedex
     	pikachuhoenn.addAbilities("Static");
     	pikachuhoenn.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachuhoenn.setWeight(6.0);
-    	pikachuhoenn.setBaseSpecies("Pikachu");
-    	pikachuhoenn.setForme("Hoenn");
     	pokedex.put("Pikachu-Hoenn", pikachuhoenn);
 
     	Pokemon pikachukalos = new Pokemon("Pikachu-Kalos");
@@ -5679,8 +5358,6 @@ public class Pokedex
     	pikachukalos.addAbilities("Static");
     	pikachukalos.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachukalos.setWeight(6.0);
-    	pikachukalos.setBaseSpecies("Pikachu");
-    	pikachukalos.setForme("Kalos");
     	pokedex.put("Pikachu-Kalos", pikachukalos);
 
     	Pokemon pikachulibre = new Pokemon("Pikachu-Libre");
@@ -5689,8 +5366,6 @@ public class Pokedex
     	pikachulibre.addAbilities("Lightning Rod");
     	pikachulibre.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachulibre.setWeight(6.0);
-    	pikachulibre.setBaseSpecies("Pikachu");
-    	pikachulibre.setForme("Libre");
     	pokedex.put("Pikachu-Libre", pikachulibre);
 
     	Pokemon pikachuoriginal = new Pokemon("Pikachu-Original");
@@ -5699,8 +5374,6 @@ public class Pokedex
     	pikachuoriginal.addAbilities("Static");
     	pikachuoriginal.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachuoriginal.setWeight(6.0);
-    	pikachuoriginal.setBaseSpecies("Pikachu");
-    	pikachuoriginal.setForme("Original");
     	pokedex.put("Pikachu-Original", pikachuoriginal);
 
     	Pokemon pikachupartner = new Pokemon("Pikachu-Partner");
@@ -5709,8 +5382,6 @@ public class Pokedex
     	pikachupartner.addAbilities("Static");
     	pikachupartner.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachupartner.setWeight(6.0);
-    	pikachupartner.setBaseSpecies("Pikachu");
-    	pikachupartner.setForme("Partner");
     	pokedex.put("Pikachu-Partner", pikachupartner);
 
     	Pokemon pikachuphd = new Pokemon("Pikachu-PhD");
@@ -5719,8 +5390,6 @@ public class Pokedex
     	pikachuphd.addAbilities("Lightning Rod");
     	pikachuphd.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachuphd.setWeight(6.0);
-    	pikachuphd.setBaseSpecies("Pikachu");
-    	pikachuphd.setForme("PhD");
     	pokedex.put("Pikachu-PhD", pikachuphd);
 
     	Pokemon pikachupopstar = new Pokemon("Pikachu-Pop-Star");
@@ -5729,8 +5398,6 @@ public class Pokedex
     	pikachupopstar.addAbilities("Lightning Rod");
     	pikachupopstar.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachupopstar.setWeight(6.0);
-    	pikachupopstar.setBaseSpecies("Pikachu");
-    	pikachupopstar.setForme("Pop-Star");
     	pokedex.put("Pikachu-Pop-Star", pikachupopstar);
 
     	Pokemon pikachurockstar = new Pokemon("Pikachu-Rock-Star");
@@ -5739,8 +5406,6 @@ public class Pokedex
     	pikachurockstar.addAbilities("Lightning Rod");
     	pikachurockstar.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachurockstar.setWeight(6.0);
-    	pikachurockstar.setBaseSpecies("Pikachu");
-    	pikachurockstar.setForme("Rock-Star");
     	pokedex.put("Pikachu-Rock-Star", pikachurockstar);
 
     	Pokemon pikachusinnoh = new Pokemon("Pikachu-Sinnoh");
@@ -5749,8 +5414,6 @@ public class Pokedex
     	pikachusinnoh.addAbilities("Static");
     	pikachusinnoh.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachusinnoh.setWeight(6.0);
-    	pikachusinnoh.setBaseSpecies("Pikachu");
-    	pikachusinnoh.setForme("Sinnoh");
     	pokedex.put("Pikachu-Sinnoh", pikachusinnoh);
 
     	Pokemon pikachuunova = new Pokemon("Pikachu-Unova");
@@ -5759,8 +5422,6 @@ public class Pokedex
     	pikachuunova.addAbilities("Static");
     	pikachuunova.setAllBaseStats(35, 55, 40, 50, 50, 90);
     	pikachuunova.setWeight(6.0);
-    	pikachuunova.setBaseSpecies("Pikachu");
-    	pikachuunova.setForme("Unova");
     	pokedex.put("Pikachu-Unova", pikachuunova);
 
     	Pokemon pikipek = new Pokemon("Pikipek");
@@ -5793,7 +5454,7 @@ public class Pokedex
     	pinsir.addAbilities("Hyper Cutter", "Mold Breaker", "Moxie");
     	pinsir.setAllBaseStats(65, 125, 100, 55, 70, 85);
     	pinsir.setWeight(55.0);
-    	pinsir.addOtherForme("pinsirmega");
+    	pinsir.setFormes("Pinsir", "Pinsir-Mega");
     	pokedex.put("Pinsir", pinsir);
 
     	Pokemon pinsirmega = new Pokemon("Pinsir-Mega");
@@ -5802,8 +5463,6 @@ public class Pokedex
     	pinsirmega.addAbilities("Aerilate");
     	pinsirmega.setAllBaseStats(65, 155, 120, 65, 90, 105);
     	pinsirmega.setWeight(59.0);
-    	pinsirmega.setBaseSpecies("Pinsir");
-    	pinsirmega.setForme("Mega");
     	pokedex.put("Pinsir-Mega", pinsirmega);
 
     	Pokemon piplup = new Pokemon("Piplup");
@@ -5956,8 +5615,6 @@ public class Pokedex
     	pokestarufo.addAbilities("Levitate");
     	pokestarufo.setAllBaseStats(100, 100, 100, 100, 100, 100);
     	pokestarufo.setWeight(61.0);
-    	pokestarufo.addOtherForme("pokestarufo2");
-    	pokestarufo.addOtherForme("pokestarufopropu2");
     	pokedex.put("Pokestar UFO", pokestarufo);
 
     	Pokemon pokestarufo2 = new Pokemon("Pokestar UFO-2");
@@ -5966,8 +5623,6 @@ public class Pokedex
     	pokestarufo2.addAbilities("Levitate");
     	pokestarufo2.setAllBaseStats(100, 100, 100, 100, 100, 100);
     	pokestarufo2.setWeight(61.0);
-    	pokestarufo2.setBaseSpecies("Pokestar UFO");
-    	pokestarufo2.setForme("2");
     	pokedex.put("Pokestar UFO-2", pokestarufo2);
 
     	Pokemon pokestarufopropu2 = new Pokemon("Pokestar UFO-PropU2");
@@ -5976,7 +5631,6 @@ public class Pokedex
     	pokestarufopropu2.addAbilities("Levitate");
     	pokestarufopropu2.setAllBaseStats(100, 100, 100, 100, 100, 100);
     	pokestarufopropu2.setWeight(61.0);
-    	pokestarufopropu2.setForme("PropU2");
     	pokedex.put("Pokestar UFO-PropU2", pokestarufopropu2);
 
     	Pokemon pokestarwhitedoor = new Pokemon("Pokestar White Door");
@@ -6121,9 +5775,6 @@ public class Pokedex
     	pumpkaboo.addAbilities("Pickup", "Frisk", "Insomnia");
     	pumpkaboo.setAllBaseStats(49, 66, 70, 44, 55, 51);
     	pumpkaboo.setWeight(5.0);
-    	pumpkaboo.addOtherForme("pumpkaboosmall");
-    	pumpkaboo.addOtherForme("pumpkaboolarge");
-    	pumpkaboo.addOtherForme("pumpkaboosuper");
     	pokedex.put("Pumpkaboo", pumpkaboo);
 
     	Pokemon pumpkaboolarge = new Pokemon("Pumpkaboo-Large");
@@ -6132,8 +5783,6 @@ public class Pokedex
     	pumpkaboolarge.addAbilities("Pickup", "Frisk", "Insomnia");
     	pumpkaboolarge.setAllBaseStats(54, 66, 70, 44, 55, 46);
     	pumpkaboolarge.setWeight(7.5);
-    	pumpkaboolarge.setBaseSpecies("Pumpkaboo");
-    	pumpkaboolarge.setForme("Large");
     	pokedex.put("Pumpkaboo-Large", pumpkaboolarge);
 
     	Pokemon pumpkaboosmall = new Pokemon("Pumpkaboo-Small");
@@ -6142,8 +5791,6 @@ public class Pokedex
     	pumpkaboosmall.addAbilities("Pickup", "Frisk", "Insomnia");
     	pumpkaboosmall.setAllBaseStats(44, 66, 70, 44, 55, 56);
     	pumpkaboosmall.setWeight(3.5);
-    	pumpkaboosmall.setBaseSpecies("Pumpkaboo");
-    	pumpkaboosmall.setForme("Small");
     	pokedex.put("Pumpkaboo-Small", pumpkaboosmall);
 
     	Pokemon pumpkaboosuper = new Pokemon("Pumpkaboo-Super");
@@ -6152,8 +5799,6 @@ public class Pokedex
     	pumpkaboosuper.addAbilities("Pickup", "Frisk", "Insomnia");
     	pumpkaboosuper.setAllBaseStats(59, 66, 70, 44, 55, 41);
     	pumpkaboosuper.setWeight(15.0);
-    	pumpkaboosuper.setBaseSpecies("Pumpkaboo");
-    	pumpkaboosuper.setForme("Super");
     	pokedex.put("Pumpkaboo-Super", pumpkaboosuper);
 
     	Pokemon pupitar = new Pokemon("Pupitar");
@@ -6242,7 +5887,6 @@ public class Pokedex
     	raichu.addAbilities("Static", "Lightning Rod");
     	raichu.setAllBaseStats(60, 90, 55, 90, 80, 110);
     	raichu.setWeight(30.0);
-    	raichu.addOtherForme("raichualola");
     	pokedex.put("Raichu", raichu);
 
     	Pokemon raichualola = new Pokemon("Raichu-Alola");
@@ -6251,8 +5895,6 @@ public class Pokedex
     	raichualola.addAbilities("Surge Surfer");
     	raichualola.setAllBaseStats(60, 85, 50, 95, 85, 110);
     	raichualola.setWeight(21.0);
-    	raichualola.setBaseSpecies("Raichu");
-    	raichualola.setForme("Alola");
     	pokedex.put("Raichu-Alola", raichualola);
 
     	Pokemon raikou = new Pokemon("Raikou");
@@ -6293,8 +5935,6 @@ public class Pokedex
     	raticate.addAbilities("Run Away", "Guts", "Hustle");
     	raticate.setAllBaseStats(55, 81, 60, 50, 70, 97);
     	raticate.setWeight(18.5);
-    	raticate.addOtherForme("raticatealola");
-    	raticate.addOtherForme("raticatealolatotem");
     	pokedex.put("Raticate", raticate);
 
     	Pokemon raticatealola = new Pokemon("Raticate-Alola");
@@ -6303,8 +5943,6 @@ public class Pokedex
     	raticatealola.addAbilities("Gluttony", "Hustle", "Thick Fat");
     	raticatealola.setAllBaseStats(75, 71, 70, 40, 80, 77);
     	raticatealola.setWeight(25.5);
-    	raticatealola.setBaseSpecies("Raticate");
-    	raticatealola.setForme("Alola");
     	pokedex.put("Raticate-Alola", raticatealola);
 
     	Pokemon raticatealolatotem = new Pokemon("Raticate-Alola-Totem");
@@ -6313,8 +5951,6 @@ public class Pokedex
     	raticatealolatotem.addAbilities("Thick Fat");
     	raticatealolatotem.setAllBaseStats(75, 71, 70, 40, 80, 77);
     	raticatealolatotem.setWeight(105.0);
-    	raticatealolatotem.setBaseSpecies("Raticate");
-    	raticatealolatotem.setForme("Alola-Totem");
     	pokedex.put("Raticate-Alola-Totem", raticatealolatotem);
 
     	Pokemon rattata = new Pokemon("Rattata");
@@ -6323,7 +5959,6 @@ public class Pokedex
     	rattata.addAbilities("Run Away", "Guts", "Hustle");
     	rattata.setAllBaseStats(30, 56, 35, 25, 35, 72);
     	rattata.setWeight(3.5);
-    	rattata.addOtherForme("rattataalola");
     	pokedex.put("Rattata", rattata);
 
     	Pokemon rattataalola = new Pokemon("Rattata-Alola");
@@ -6332,8 +5967,6 @@ public class Pokedex
     	rattataalola.addAbilities("Gluttony", "Hustle", "Thick Fat");
     	rattataalola.setAllBaseStats(30, 56, 35, 25, 35, 72);
     	rattataalola.setWeight(3.8);
-    	rattataalola.setBaseSpecies("Rattata");
-    	rattataalola.setForme("Alola");
     	pokedex.put("Rattata-Alola", rattataalola);
 
     	Pokemon rayquaza = new Pokemon("Rayquaza");
@@ -6342,7 +5975,7 @@ public class Pokedex
     	rayquaza.addAbilities("Air Lock");
     	rayquaza.setAllBaseStats(105, 150, 90, 150, 90, 95);
     	rayquaza.setWeight(206.5);
-    	rayquaza.addOtherForme("rayquazamega");
+    	rayquaza.setFormes("Rayquaza", "Rayquaza-Mega");
     	pokedex.put("Rayquaza", rayquaza);
 
     	Pokemon rayquazamega = new Pokemon("Rayquaza-Mega");
@@ -6351,8 +5984,6 @@ public class Pokedex
     	rayquazamega.addAbilities("Delta Stream");
     	rayquazamega.setAllBaseStats(105, 180, 100, 180, 100, 115);
     	rayquazamega.setWeight(392.0);
-    	rayquazamega.setBaseSpecies("Rayquaza");
-    	rayquazamega.setForme("Mega");
     	pokedex.put("Rayquaza-Mega", rayquazamega);
 
     	Pokemon rebble = new Pokemon("Rebble");
@@ -6465,7 +6096,6 @@ public class Pokedex
     	ribombee.addAbilities("Honey Gather", "Shield Dust", "Sweet Veil");
     	ribombee.setAllBaseStats(60, 55, 60, 95, 70, 124);
     	ribombee.setWeight(0.5);
-    	ribombee.addOtherForme("ribombeetotem");
     	pokedex.put("Ribombee", ribombee);
 
     	Pokemon ribombeetotem = new Pokemon("Ribombee-Totem");
@@ -6474,8 +6104,6 @@ public class Pokedex
     	ribombeetotem.addAbilities("Sweet Veil");
     	ribombeetotem.setAllBaseStats(60, 55, 60, 95, 70, 124);
     	ribombeetotem.setWeight(2.0);
-    	ribombeetotem.setBaseSpecies("Ribombee");
-    	ribombeetotem.setForme("Totem");
     	pokedex.put("Ribombee-Totem", ribombeetotem);
 
     	Pokemon riolu = new Pokemon("Riolu");
@@ -6524,11 +6152,6 @@ public class Pokedex
     	rotom.addAbilities("Levitate");
     	rotom.setAllBaseStats(50, 50, 77, 95, 77, 91);
     	rotom.setWeight(0.3);
-    	rotom.addOtherForme("rotomheat");
-    	rotom.addOtherForme("rotomwash");
-    	rotom.addOtherForme("rotomfrost");
-    	rotom.addOtherForme("rotomfan");
-    	rotom.addOtherForme("rotommow");
     	pokedex.put("Rotom", rotom);
 
     	Pokemon rotomfan = new Pokemon("Rotom-Fan");
@@ -6537,8 +6160,6 @@ public class Pokedex
     	rotomfan.addAbilities("Levitate");
     	rotomfan.setAllBaseStats(50, 65, 107, 105, 107, 86);
     	rotomfan.setWeight(0.3);
-    	rotomfan.setBaseSpecies("Rotom");
-    	rotomfan.setForme("Fan");
     	pokedex.put("Rotom-Fan", rotomfan);
 
     	Pokemon rotomfrost = new Pokemon("Rotom-Frost");
@@ -6547,8 +6168,6 @@ public class Pokedex
     	rotomfrost.addAbilities("Levitate");
     	rotomfrost.setAllBaseStats(50, 65, 107, 105, 107, 86);
     	rotomfrost.setWeight(0.3);
-    	rotomfrost.setBaseSpecies("Rotom");
-    	rotomfrost.setForme("Frost");
     	pokedex.put("Rotom-Frost", rotomfrost);
 
     	Pokemon rotomheat = new Pokemon("Rotom-Heat");
@@ -6557,8 +6176,6 @@ public class Pokedex
     	rotomheat.addAbilities("Levitate");
     	rotomheat.setAllBaseStats(50, 65, 107, 105, 107, 86);
     	rotomheat.setWeight(0.3);
-    	rotomheat.setBaseSpecies("Rotom");
-    	rotomheat.setForme("Heat");
     	pokedex.put("Rotom-Heat", rotomheat);
 
     	Pokemon rotommow = new Pokemon("Rotom-Mow");
@@ -6567,8 +6184,6 @@ public class Pokedex
     	rotommow.addAbilities("Levitate");
     	rotommow.setAllBaseStats(50, 65, 107, 105, 107, 86);
     	rotommow.setWeight(0.3);
-    	rotommow.setBaseSpecies("Rotom");
-    	rotommow.setForme("Mow");
     	pokedex.put("Rotom-Mow", rotommow);
 
     	Pokemon rotomwash = new Pokemon("Rotom-Wash");
@@ -6577,8 +6192,6 @@ public class Pokedex
     	rotomwash.addAbilities("Levitate");
     	rotomwash.setAllBaseStats(50, 65, 107, 105, 107, 86);
     	rotomwash.setWeight(0.3);
-    	rotomwash.setBaseSpecies("Rotom");
-    	rotomwash.setForme("Wash");
     	pokedex.put("Rotom-Wash", rotomwash);
 
     	Pokemon rowlet = new Pokemon("Rowlet");
@@ -6603,7 +6216,7 @@ public class Pokedex
     	sableye.addAbilities("Keen Eye", "Stall", "Prankster");
     	sableye.setAllBaseStats(50, 75, 75, 65, 65, 50);
     	sableye.setWeight(11.0);
-    	sableye.addOtherForme("sableyemega");
+    	sableye.setFormes("Sableye", "Sableye-Mega");
     	pokedex.put("Sableye", sableye);
 
     	Pokemon sableyemega = new Pokemon("Sableye-Mega");
@@ -6612,8 +6225,6 @@ public class Pokedex
     	sableyemega.addAbilities("Magic Bounce");
     	sableyemega.setAllBaseStats(50, 85, 125, 85, 115, 20);
     	sableyemega.setWeight(161.0);
-    	sableyemega.setBaseSpecies("Sableye");
-    	sableyemega.setForme("Mega");
     	pokedex.put("Sableye-Mega", sableyemega);
 
     	Pokemon salamence = new Pokemon("Salamence");
@@ -6622,7 +6233,7 @@ public class Pokedex
     	salamence.addAbilities("Intimidate", "Moxie");
     	salamence.setAllBaseStats(95, 135, 80, 110, 80, 100);
     	salamence.setWeight(102.6);
-    	salamence.addOtherForme("salamencemega");
+    	salamence.setFormes("Salamence", "Salamence-Mega");
     	pokedex.put("Salamence", salamence);
 
     	Pokemon salamencemega = new Pokemon("Salamence-Mega");
@@ -6631,8 +6242,6 @@ public class Pokedex
     	salamencemega.addAbilities("Aerilate");
     	salamencemega.setAllBaseStats(95, 145, 130, 120, 90, 120);
     	salamencemega.setWeight(112.6);
-    	salamencemega.setBaseSpecies("Salamence");
-    	salamencemega.setForme("Mega");
     	pokedex.put("Salamence-Mega", salamencemega);
 
     	Pokemon salandit = new Pokemon("Salandit");
@@ -6649,7 +6258,6 @@ public class Pokedex
     	salazzle.addAbilities("Corrosion", "Oblivious");
     	salazzle.setAllBaseStats(68, 64, 60, 111, 60, 117);
     	salazzle.setWeight(22.2);
-    	salazzle.addOtherForme("salazzletotem");
     	pokedex.put("Salazzle", salazzle);
 
     	Pokemon salazzletotem = new Pokemon("Salazzle-Totem");
@@ -6658,8 +6266,6 @@ public class Pokedex
     	salazzletotem.addAbilities("Corrosion");
     	salazzletotem.setAllBaseStats(68, 64, 60, 111, 60, 117);
     	salazzletotem.setWeight(81.0);
-    	salazzletotem.setBaseSpecies("Salazzle");
-    	salazzletotem.setForme("Totem");
     	pokedex.put("Salazzle-Totem", salazzletotem);
 
     	Pokemon samurott = new Pokemon("Samurott");
@@ -6684,7 +6290,6 @@ public class Pokedex
     	sandshrew.addAbilities("Sand Veil", "Sand Rush");
     	sandshrew.setAllBaseStats(50, 75, 85, 20, 30, 40);
     	sandshrew.setWeight(12.0);
-    	sandshrew.addOtherForme("sandshrewalola");
     	pokedex.put("Sandshrew", sandshrew);
 
     	Pokemon sandshrewalola = new Pokemon("Sandshrew-Alola");
@@ -6693,8 +6298,6 @@ public class Pokedex
     	sandshrewalola.addAbilities("Snow Cloak", "Slush Rush");
     	sandshrewalola.setAllBaseStats(50, 75, 90, 10, 35, 40);
     	sandshrewalola.setWeight(40.0);
-    	sandshrewalola.setBaseSpecies("Sandshrew");
-    	sandshrewalola.setForme("Alola");
     	pokedex.put("Sandshrew-Alola", sandshrewalola);
 
     	Pokemon sandslash = new Pokemon("Sandslash");
@@ -6703,7 +6306,6 @@ public class Pokedex
     	sandslash.addAbilities("Sand Veil", "Sand Rush");
     	sandslash.setAllBaseStats(75, 100, 110, 45, 55, 65);
     	sandslash.setWeight(29.5);
-    	sandslash.addOtherForme("sandslashalola");
     	pokedex.put("Sandslash", sandslash);
 
     	Pokemon sandslashalola = new Pokemon("Sandslash-Alola");
@@ -6712,8 +6314,6 @@ public class Pokedex
     	sandslashalola.addAbilities("Snow Cloak", "Slush Rush");
     	sandslashalola.setAllBaseStats(75, 100, 120, 25, 65, 65);
     	sandslashalola.setWeight(55.0);
-    	sandslashalola.setBaseSpecies("Sandslash");
-    	sandslashalola.setForme("Alola");
     	pokedex.put("Sandslash-Alola", sandslashalola);
 
     	Pokemon sandygast = new Pokemon("Sandygast");
@@ -6754,7 +6354,7 @@ public class Pokedex
     	sceptile.addAbilities("Overgrow", "Unburden");
     	sceptile.setAllBaseStats(70, 85, 65, 105, 85, 120);
     	sceptile.setWeight(52.2);
-    	sceptile.addOtherForme("sceptilemega");
+    	sceptile.setFormes("Sceptile", "Sceptile-Mega");
     	pokedex.put("Sceptile", sceptile);
 
     	Pokemon sceptilemega = new Pokemon("Sceptile-Mega");
@@ -6763,8 +6363,6 @@ public class Pokedex
     	sceptilemega.addAbilities("Lightning Rod");
     	sceptilemega.setAllBaseStats(70, 110, 75, 145, 85, 145);
     	sceptilemega.setWeight(55.2);
-    	sceptilemega.setBaseSpecies("Sceptile");
-    	sceptilemega.setForme("Mega");
     	pokedex.put("Sceptile-Mega", sceptilemega);
 
     	Pokemon scizor = new Pokemon("Scizor");
@@ -6773,7 +6371,7 @@ public class Pokedex
     	scizor.addAbilities("Swarm", "Technician", "Light Metal");
     	scizor.setAllBaseStats(70, 130, 100, 55, 80, 65);
     	scizor.setWeight(118.0);
-    	scizor.addOtherForme("scizormega");
+    	scizor.setFormes("Scizor", "Scizor-Mega");
     	pokedex.put("Scizor", scizor);
 
     	Pokemon scizormega = new Pokemon("Scizor-Mega");
@@ -6782,8 +6380,6 @@ public class Pokedex
     	scizormega.addAbilities("Technician");
     	scizormega.setAllBaseStats(70, 150, 140, 65, 100, 75);
     	scizormega.setWeight(125.0);
-    	scizormega.setBaseSpecies("Scizor");
-    	scizormega.setForme("Mega");
     	pokedex.put("Scizor-Mega", scizormega);
 
     	Pokemon scolipede = new Pokemon("Scolipede");
@@ -6920,7 +6516,7 @@ public class Pokedex
     	sharpedo.addAbilities("Rough Skin", "Speed Boost");
     	sharpedo.setAllBaseStats(70, 120, 40, 95, 40, 95);
     	sharpedo.setWeight(88.8);
-    	sharpedo.addOtherForme("sharpedomega");
+    	sharpedo.setFormes("Sharpedo", "Sharpedo-Mega");
     	pokedex.put("Sharpedo", sharpedo);
 
     	Pokemon sharpedomega = new Pokemon("Sharpedo-Mega");
@@ -6929,8 +6525,6 @@ public class Pokedex
     	sharpedomega.addAbilities("Strong Jaw");
     	sharpedomega.setAllBaseStats(70, 140, 70, 110, 65, 105);
     	sharpedomega.setWeight(130.3);
-    	sharpedomega.setBaseSpecies("Sharpedo");
-    	sharpedomega.setForme("Mega");
     	pokedex.put("Sharpedo-Mega", sharpedomega);
 
     	Pokemon shaymin = new Pokemon("Shaymin");
@@ -6939,7 +6533,6 @@ public class Pokedex
     	shaymin.addAbilities("Natural Cure");
     	shaymin.setAllBaseStats(100, 100, 100, 100, 100, 100);
     	shaymin.setWeight(2.1);
-    	shaymin.addOtherForme("shayminsky");
     	pokedex.put("Shaymin", shaymin);
 
     	Pokemon shayminsky = new Pokemon("Shaymin-Sky");
@@ -6948,8 +6541,6 @@ public class Pokedex
     	shayminsky.addAbilities("Serene Grace");
     	shayminsky.setAllBaseStats(100, 103, 75, 120, 75, 127);
     	shayminsky.setWeight(5.2);
-    	shayminsky.setBaseSpecies("Shaymin");
-    	shayminsky.setForme("Sky");
     	pokedex.put("Shaymin-Sky", shayminsky);
 
     	Pokemon shedinja = new Pokemon("Shedinja");
@@ -7070,23 +6661,6 @@ public class Pokedex
     	silvally.addAbilities("RKS System");
     	silvally.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvally.setWeight(100.5);
-    	silvally.addOtherForme("silvallybug");
-    	silvally.addOtherForme("silvallydark");
-    	silvally.addOtherForme("silvallydragon");
-    	silvally.addOtherForme("silvallyelectric");
-    	silvally.addOtherForme("silvallyfairy");
-    	silvally.addOtherForme("silvallyfighting");
-    	silvally.addOtherForme("silvallyfire");
-    	silvally.addOtherForme("silvallyflying");
-    	silvally.addOtherForme("silvallyghost");
-    	silvally.addOtherForme("silvallygrass");
-    	silvally.addOtherForme("silvallyground");
-    	silvally.addOtherForme("silvallyice");
-    	silvally.addOtherForme("silvallypoison");
-    	silvally.addOtherForme("silvallypsychic");
-    	silvally.addOtherForme("silvallyrock");
-    	silvally.addOtherForme("silvallysteel");
-    	silvally.addOtherForme("silvallywater");
     	pokedex.put("Silvally", silvally);
 
     	Pokemon silvallybug = new Pokemon("Silvally-Bug");
@@ -7095,8 +6669,6 @@ public class Pokedex
     	silvallybug.addAbilities("RKS System");
     	silvallybug.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallybug.setWeight(100.5);
-    	silvallybug.setBaseSpecies("Silvally");
-    	silvallybug.setForme("Bug");
     	pokedex.put("Silvally-Bug", silvallybug);
 
     	Pokemon silvallydark = new Pokemon("Silvally-Dark");
@@ -7105,8 +6677,6 @@ public class Pokedex
     	silvallydark.addAbilities("RKS System");
     	silvallydark.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallydark.setWeight(100.5);
-    	silvallydark.setBaseSpecies("Silvally");
-    	silvallydark.setForme("Dark");
     	pokedex.put("Silvally-Dark", silvallydark);
 
     	Pokemon silvallydragon = new Pokemon("Silvally-Dragon");
@@ -7115,8 +6685,6 @@ public class Pokedex
     	silvallydragon.addAbilities("RKS System");
     	silvallydragon.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallydragon.setWeight(100.5);
-    	silvallydragon.setBaseSpecies("Silvally");
-    	silvallydragon.setForme("Dragon");
     	pokedex.put("Silvally-Dragon", silvallydragon);
 
     	Pokemon silvallyelectric = new Pokemon("Silvally-Electric");
@@ -7125,8 +6693,6 @@ public class Pokedex
     	silvallyelectric.addAbilities("RKS System");
     	silvallyelectric.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyelectric.setWeight(100.5);
-    	silvallyelectric.setBaseSpecies("Silvally");
-    	silvallyelectric.setForme("Electric");
     	pokedex.put("Silvally-Electric", silvallyelectric);
 
     	Pokemon silvallyfairy = new Pokemon("Silvally-Fairy");
@@ -7135,8 +6701,6 @@ public class Pokedex
     	silvallyfairy.addAbilities("RKS System");
     	silvallyfairy.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyfairy.setWeight(100.5);
-    	silvallyfairy.setBaseSpecies("Silvally");
-    	silvallyfairy.setForme("Fairy");
     	pokedex.put("Silvally-Fairy", silvallyfairy);
 
     	Pokemon silvallyfighting = new Pokemon("Silvally-Fighting");
@@ -7145,8 +6709,6 @@ public class Pokedex
     	silvallyfighting.addAbilities("RKS System");
     	silvallyfighting.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyfighting.setWeight(100.5);
-    	silvallyfighting.setBaseSpecies("Silvally");
-    	silvallyfighting.setForme("Fighting");
     	pokedex.put("Silvally-Fighting", silvallyfighting);
 
     	Pokemon silvallyfire = new Pokemon("Silvally-Fire");
@@ -7155,8 +6717,6 @@ public class Pokedex
     	silvallyfire.addAbilities("RKS System");
     	silvallyfire.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyfire.setWeight(100.5);
-    	silvallyfire.setBaseSpecies("Silvally");
-    	silvallyfire.setForme("Fire");
     	pokedex.put("Silvally-Fire", silvallyfire);
 
     	Pokemon silvallyflying = new Pokemon("Silvally-Flying");
@@ -7165,8 +6725,6 @@ public class Pokedex
     	silvallyflying.addAbilities("RKS System");
     	silvallyflying.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyflying.setWeight(100.5);
-    	silvallyflying.setBaseSpecies("Silvally");
-    	silvallyflying.setForme("Flying");
     	pokedex.put("Silvally-Flying", silvallyflying);
 
     	Pokemon silvallyghost = new Pokemon("Silvally-Ghost");
@@ -7175,8 +6733,6 @@ public class Pokedex
     	silvallyghost.addAbilities("RKS System");
     	silvallyghost.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyghost.setWeight(100.5);
-    	silvallyghost.setBaseSpecies("Silvally");
-    	silvallyghost.setForme("Ghost");
     	pokedex.put("Silvally-Ghost", silvallyghost);
 
     	Pokemon silvallygrass = new Pokemon("Silvally-Grass");
@@ -7185,8 +6741,6 @@ public class Pokedex
     	silvallygrass.addAbilities("RKS System");
     	silvallygrass.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallygrass.setWeight(100.5);
-    	silvallygrass.setBaseSpecies("Silvally");
-    	silvallygrass.setForme("Grass");
     	pokedex.put("Silvally-Grass", silvallygrass);
 
     	Pokemon silvallyground = new Pokemon("Silvally-Ground");
@@ -7195,8 +6749,6 @@ public class Pokedex
     	silvallyground.addAbilities("RKS System");
     	silvallyground.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyground.setWeight(100.5);
-    	silvallyground.setBaseSpecies("Silvally");
-    	silvallyground.setForme("Ground");
     	pokedex.put("Silvally-Ground", silvallyground);
 
     	Pokemon silvallyice = new Pokemon("Silvally-Ice");
@@ -7205,8 +6757,6 @@ public class Pokedex
     	silvallyice.addAbilities("RKS System");
     	silvallyice.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyice.setWeight(100.5);
-    	silvallyice.setBaseSpecies("Silvally");
-    	silvallyice.setForme("Ice");
     	pokedex.put("Silvally-Ice", silvallyice);
 
     	Pokemon silvallypoison = new Pokemon("Silvally-Poison");
@@ -7215,8 +6765,6 @@ public class Pokedex
     	silvallypoison.addAbilities("RKS System");
     	silvallypoison.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallypoison.setWeight(100.5);
-    	silvallypoison.setBaseSpecies("Silvally");
-    	silvallypoison.setForme("Poison");
     	pokedex.put("Silvally-Poison", silvallypoison);
 
     	Pokemon silvallypsychic = new Pokemon("Silvally-Psychic");
@@ -7225,8 +6773,6 @@ public class Pokedex
     	silvallypsychic.addAbilities("RKS System");
     	silvallypsychic.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallypsychic.setWeight(100.5);
-    	silvallypsychic.setBaseSpecies("Silvally");
-    	silvallypsychic.setForme("Psychic");
     	pokedex.put("Silvally-Psychic", silvallypsychic);
 
     	Pokemon silvallyrock = new Pokemon("Silvally-Rock");
@@ -7235,8 +6781,6 @@ public class Pokedex
     	silvallyrock.addAbilities("RKS System");
     	silvallyrock.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallyrock.setWeight(100.5);
-    	silvallyrock.setBaseSpecies("Silvally");
-    	silvallyrock.setForme("Rock");
     	pokedex.put("Silvally-Rock", silvallyrock);
 
     	Pokemon silvallysteel = new Pokemon("Silvally-Steel");
@@ -7245,8 +6789,6 @@ public class Pokedex
     	silvallysteel.addAbilities("RKS System");
     	silvallysteel.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallysteel.setWeight(100.5);
-    	silvallysteel.setBaseSpecies("Silvally");
-    	silvallysteel.setForme("Steel");
     	pokedex.put("Silvally-Steel", silvallysteel);
 
     	Pokemon silvallywater = new Pokemon("Silvally-Water");
@@ -7255,8 +6797,6 @@ public class Pokedex
     	silvallywater.addAbilities("RKS System");
     	silvallywater.setAllBaseStats(95, 95, 95, 95, 95, 95);
     	silvallywater.setWeight(100.5);
-    	silvallywater.setBaseSpecies("Silvally");
-    	silvallywater.setForme("Water");
     	pokedex.put("Silvally-Water", silvallywater);
 
     	Pokemon simipour = new Pokemon("Simipour");
@@ -7369,7 +6909,7 @@ public class Pokedex
     	slowbro.addAbilities("Oblivious", "Own Tempo", "Regenerator");
     	slowbro.setAllBaseStats(95, 75, 110, 100, 80, 30);
     	slowbro.setWeight(78.5);
-    	slowbro.addOtherForme("slowbromega");
+    	slowbro.setFormes("Slowbro", "Slowbro-Mega");
     	pokedex.put("Slowbro", slowbro);
 
     	Pokemon slowbromega = new Pokemon("Slowbro-Mega");
@@ -7378,8 +6918,6 @@ public class Pokedex
     	slowbromega.addAbilities("Shell Armor");
     	slowbromega.setAllBaseStats(95, 75, 180, 130, 80, 30);
     	slowbromega.setWeight(120.0);
-    	slowbromega.setBaseSpecies("Slowbro");
-    	slowbromega.setForme("Mega");
     	pokedex.put("Slowbro-Mega", slowbromega);
 
     	Pokemon slowking = new Pokemon("Slowking");
@@ -7644,7 +7182,7 @@ public class Pokedex
     	steelix.addAbilities("Rock Head", "Sturdy", "Sheer Force");
     	steelix.setAllBaseStats(75, 85, 200, 55, 65, 30);
     	steelix.setWeight(400.0);
-    	steelix.addOtherForme("steelixmega");
+    	steelix.setFormes("Steelix", "Steelix-Mega");
     	pokedex.put("Steelix", steelix);
 
     	Pokemon steelixmega = new Pokemon("Steelix-Mega");
@@ -7653,8 +7191,6 @@ public class Pokedex
     	steelixmega.addAbilities("Sand Force");
     	steelixmega.setAllBaseStats(75, 125, 230, 55, 95, 30);
     	steelixmega.setWeight(740.0);
-    	steelixmega.setBaseSpecies("Steelix");
-    	steelixmega.setForme("Mega");
     	pokedex.put("Steelix-Mega", steelixmega);
 
     	Pokemon steenee = new Pokemon("Steenee");
@@ -7775,7 +7311,7 @@ public class Pokedex
     	swampert.addAbilities("Torrent", "Damp");
     	swampert.setAllBaseStats(100, 110, 90, 85, 90, 60);
     	swampert.setWeight(81.9);
-    	swampert.addOtherForme("swampertmega");
+    	swampert.setFormes("Swampert", "Swampert-Mega");
     	pokedex.put("Swampert", swampert);
 
     	Pokemon swampertmega = new Pokemon("Swampert-Mega");
@@ -7784,8 +7320,6 @@ public class Pokedex
     	swampertmega.addAbilities("Swift Swim");
     	swampertmega.setAllBaseStats(100, 150, 110, 95, 110, 70);
     	swampertmega.setWeight(102.0);
-    	swampertmega.setBaseSpecies("Swampert");
-    	swampertmega.setForme("Mega");
     	pokedex.put("Swampert-Mega", swampertmega);
 
     	Pokemon swanna = new Pokemon("Swanna");
@@ -7986,7 +7520,6 @@ public class Pokedex
     	thundurus.addAbilities("Prankster", "Defiant");
     	thundurus.setAllBaseStats(79, 115, 70, 125, 80, 111);
     	thundurus.setWeight(61.0);
-    	thundurus.addOtherForme("thundurustherian");
     	pokedex.put("Thundurus", thundurus);
 
     	Pokemon thundurustherian = new Pokemon("Thundurus-Therian");
@@ -7995,8 +7528,6 @@ public class Pokedex
     	thundurustherian.addAbilities("Volt Absorb");
     	thundurustherian.setAllBaseStats(79, 105, 70, 145, 80, 101);
     	thundurustherian.setWeight(61.0);
-    	thundurustherian.setBaseSpecies("Thundurus");
-    	thundurustherian.setForme("Therian");
     	pokedex.put("Thundurus-Therian", thundurustherian);
 
     	Pokemon timburr = new Pokemon("Timburr");
@@ -8021,7 +7552,6 @@ public class Pokedex
     	togedemaru.addAbilities("Iron Barbs", "Lightning Rod", "Sturdy");
     	togedemaru.setAllBaseStats(65, 98, 63, 40, 73, 96);
     	togedemaru.setWeight(3.3);
-    	togedemaru.addOtherForme("togedemarutotem");
     	pokedex.put("Togedemaru", togedemaru);
 
     	Pokemon togedemarutotem = new Pokemon("Togedemaru-Totem");
@@ -8030,8 +7560,6 @@ public class Pokedex
     	togedemarutotem.addAbilities("Sturdy");
     	togedemarutotem.setAllBaseStats(65, 98, 63, 40, 73, 96);
     	togedemarutotem.setWeight(13.0);
-    	togedemarutotem.setBaseSpecies("Togedemaru");
-    	togedemarutotem.setForme("Totem");
     	pokedex.put("Togedemaru-Totem", togedemarutotem);
 
     	Pokemon togekiss = new Pokemon("Togekiss");
@@ -8088,7 +7616,6 @@ public class Pokedex
     	tornadus.addAbilities("Prankster", "Defiant");
     	tornadus.setAllBaseStats(79, 115, 70, 125, 80, 111);
     	tornadus.setWeight(63.0);
-    	tornadus.addOtherForme("tornadustherian");
     	pokedex.put("Tornadus", tornadus);
 
     	Pokemon tornadustherian = new Pokemon("Tornadus-Therian");
@@ -8097,8 +7624,6 @@ public class Pokedex
     	tornadustherian.addAbilities("Regenerator");
     	tornadustherian.setAllBaseStats(79, 100, 80, 110, 90, 121);
     	tornadustherian.setWeight(63.0);
-    	tornadustherian.setBaseSpecies("Tornadus");
-    	tornadustherian.setForme("Therian");
     	pokedex.put("Tornadus-Therian", tornadustherian);
 
     	Pokemon torracat = new Pokemon("Torracat");
@@ -8267,7 +7792,7 @@ public class Pokedex
     	tyranitar.addAbilities("Sand Stream", "Unnerve");
     	tyranitar.setAllBaseStats(100, 134, 110, 95, 100, 61);
     	tyranitar.setWeight(202.0);
-    	tyranitar.addOtherForme("tyranitarmega");
+    	tyranitar.setFormes("Tyranitar", "Tyranitar-Mega");
     	pokedex.put("Tyranitar", tyranitar);
 
     	Pokemon tyranitarmega = new Pokemon("Tyranitar-Mega");
@@ -8276,8 +7801,6 @@ public class Pokedex
     	tyranitarmega.addAbilities("Sand Stream");
     	tyranitarmega.setAllBaseStats(100, 164, 150, 95, 120, 71);
     	tyranitarmega.setWeight(255.0);
-    	tyranitarmega.setBaseSpecies("Tyranitar");
-    	tyranitarmega.setForme("Mega");
     	pokedex.put("Tyranitar-Mega", tyranitarmega);
 
     	Pokemon tyrantrum = new Pokemon("Tyrantrum");
@@ -8406,7 +7929,7 @@ public class Pokedex
     	venusaur.addAbilities("Overgrow", "Chlorophyll");
     	venusaur.setAllBaseStats(80, 82, 83, 100, 100, 80);
     	venusaur.setWeight(100.0);
-    	venusaur.addOtherForme("venusaurmega");
+    	venusaur.setFormes("Venusaur", "Venusaur-Mega");
     	pokedex.put("Venusaur", venusaur);
 
     	Pokemon venusaurmega = new Pokemon("Venusaur-Mega");
@@ -8415,8 +7938,6 @@ public class Pokedex
     	venusaurmega.addAbilities("Thick Fat");
     	venusaurmega.setAllBaseStats(80, 100, 123, 122, 120, 80);
     	venusaurmega.setWeight(155.5);
-    	venusaurmega.setBaseSpecies("Venusaur");
-    	venusaurmega.setForme("Mega");
     	pokedex.put("Venusaur-Mega", venusaurmega);
 
     	Pokemon vespiquen = new Pokemon("Vespiquen");
@@ -8465,7 +7986,6 @@ public class Pokedex
     	vikavolt.addAbilities("Levitate");
     	vikavolt.setAllBaseStats(77, 70, 90, 145, 75, 43);
     	vikavolt.setWeight(45.0);
-    	vikavolt.addOtherForme("vikavolttotem");
     	pokedex.put("Vikavolt", vikavolt);
 
     	Pokemon vikavolttotem = new Pokemon("Vikavolt-Totem");
@@ -8474,8 +7994,6 @@ public class Pokedex
     	vikavolttotem.addAbilities("Levitate");
     	vikavolttotem.setAllBaseStats(77, 70, 90, 145, 75, 43);
     	vikavolttotem.setWeight(147.5);
-    	vikavolttotem.setBaseSpecies("Vikavolt");
-    	vikavolttotem.setForme("Totem");
     	pokedex.put("Vikavolt-Totem", vikavolttotem);
 
     	Pokemon vileplume = new Pokemon("Vileplume");
@@ -8500,8 +8018,6 @@ public class Pokedex
     	vivillon.addAbilities("Shield Dust", "Compound Eyes", "Friend Guard");
     	vivillon.setAllBaseStats(80, 52, 50, 90, 50, 89);
     	vivillon.setWeight(17.0);
-    	vivillon.addOtherForme("vivillonfancy");
-    	vivillon.addOtherForme("vivillonpokeball");
     	pokedex.put("Vivillon", vivillon);
 
     	Pokemon vivillonfancy = new Pokemon("Vivillon-Fancy");
@@ -8510,8 +8026,6 @@ public class Pokedex
     	vivillonfancy.addAbilities("Shield Dust", "Compound Eyes");
     	vivillonfancy.setAllBaseStats(80, 52, 50, 90, 50, 89);
     	vivillonfancy.setWeight(17.0);
-    	vivillonfancy.setBaseSpecies("Vivillon");
-    	vivillonfancy.setForme("Fancy");
     	pokedex.put("Vivillon-Fancy", vivillonfancy);
 
     	Pokemon vivillonpokeball = new Pokemon("Vivillon-Pokeball");
@@ -8520,8 +8034,6 @@ public class Pokedex
     	vivillonpokeball.addAbilities("Shield Dust", "Compound Eyes");
     	vivillonpokeball.setAllBaseStats(80, 52, 50, 90, 50, 89);
     	vivillonpokeball.setWeight(17.0);
-    	vivillonpokeball.setBaseSpecies("Vivillon");
-    	vivillonpokeball.setForme("Pokeball");
     	pokedex.put("Vivillon-Pokeball", vivillonpokeball);
 
     	Pokemon volbeat = new Pokemon("Volbeat");
@@ -8602,7 +8114,6 @@ public class Pokedex
     	vulpix.addAbilities("Flash Fire", "Drought");
     	vulpix.setAllBaseStats(38, 41, 40, 50, 65, 65);
     	vulpix.setWeight(9.9);
-    	vulpix.addOtherForme("vulpixalola");
     	pokedex.put("Vulpix", vulpix);
 
     	Pokemon vulpixalola = new Pokemon("Vulpix-Alola");
@@ -8611,8 +8122,6 @@ public class Pokedex
     	vulpixalola.addAbilities("Snow Cloak", "Snow Warning");
     	vulpixalola.setAllBaseStats(38, 41, 40, 50, 65, 65);
     	vulpixalola.setWeight(9.9);
-    	vulpixalola.setBaseSpecies("Vulpix");
-    	vulpixalola.setForme("Alola");
     	pokedex.put("Vulpix-Alola", vulpixalola);
 
     	Pokemon wailmer = new Pokemon("Wailmer");
@@ -8749,7 +8258,7 @@ public class Pokedex
     	wishiwashi.addAbilities("Schooling");
     	wishiwashi.setAllBaseStats(45, 20, 20, 25, 25, 40);
     	wishiwashi.setWeight(0.3);
-    	wishiwashi.addOtherForme("wishiwashischool");
+    	wishiwashi.setFormes("Wishiwashi", "Wishiwashi-School");
     	pokedex.put("Wishiwashi", wishiwashi);
 
     	Pokemon wishiwashischool = new Pokemon("Wishiwashi-School");
@@ -8758,8 +8267,6 @@ public class Pokedex
     	wishiwashischool.addAbilities("Schooling");
     	wishiwashischool.setAllBaseStats(45, 140, 130, 140, 135, 30);
     	wishiwashischool.setWeight(78.6);
-    	wishiwashischool.setBaseSpecies("Wishiwashi");
-    	wishiwashischool.setForme("School");
     	pokedex.put("Wishiwashi-School", wishiwashischool);
 
     	Pokemon wobbuffet = new Pokemon("Wobbuffet");
@@ -8792,8 +8299,6 @@ public class Pokedex
     	wormadam.addAbilities("Anticipation", "Overcoat");
     	wormadam.setAllBaseStats(60, 59, 85, 79, 105, 36);
     	wormadam.setWeight(6.5);
-    	wormadam.addOtherForme("wormadamsandy");
-    	wormadam.addOtherForme("wormadamtrash");
     	pokedex.put("Wormadam", wormadam);
 
     	Pokemon wormadamsandy = new Pokemon("Wormadam-Sandy");
@@ -8802,8 +8307,6 @@ public class Pokedex
     	wormadamsandy.addAbilities("Anticipation", "Overcoat");
     	wormadamsandy.setAllBaseStats(60, 79, 105, 59, 85, 36);
     	wormadamsandy.setWeight(6.5);
-    	wormadamsandy.setBaseSpecies("Wormadam");
-    	wormadamsandy.setForme("Sandy");
     	pokedex.put("Wormadam-Sandy", wormadamsandy);
 
     	Pokemon wormadamtrash = new Pokemon("Wormadam-Trash");
@@ -8812,8 +8315,6 @@ public class Pokedex
     	wormadamtrash.addAbilities("Anticipation", "Overcoat");
     	wormadamtrash.setAllBaseStats(60, 69, 95, 69, 95, 36);
     	wormadamtrash.setWeight(6.5);
-    	wormadamtrash.setBaseSpecies("Wormadam");
-    	wormadamtrash.setForme("Trash");
     	pokedex.put("Wormadam-Trash", wormadamtrash);
 
     	Pokemon wurmple = new Pokemon("Wurmple");
@@ -8982,8 +8483,7 @@ public class Pokedex
     	zygarde.addAbilities("Aura Break", "Power Construct");
     	zygarde.setAllBaseStats(108, 100, 121, 81, 95, 95);
     	zygarde.setWeight(305.0);
-    	zygarde.addOtherForme("zygarde10");
-    	zygarde.addOtherForme("zygardecomplete");
+    	zygarde.setFormes("Zygarde", "Zygarde-10%", "Zygarde-Complete");
     	pokedex.put("Zygarde", zygarde);
 
     	Pokemon zygarde10 = new Pokemon("Zygarde-10%");
@@ -8992,8 +8492,6 @@ public class Pokedex
     	zygarde10.addAbilities("Aura Break", "Power Construct");
     	zygarde10.setAllBaseStats(54, 100, 71, 61, 85, 115);
     	zygarde10.setWeight(33.5);
-    	zygarde10.setBaseSpecies("Zygarde");
-    	zygarde10.setForme("10%");
     	pokedex.put("Zygarde-10%", zygarde10);
 
     	Pokemon zygardecomplete = new Pokemon("Zygarde-Complete");
@@ -9002,8 +8500,6 @@ public class Pokedex
     	zygardecomplete.addAbilities("Power Construct");
     	zygardecomplete.setAllBaseStats(216, 100, 121, 91, 95, 85);
     	zygardecomplete.setWeight(610.0);
-    	zygardecomplete.setBaseSpecies("Zygarde");
-    	zygardecomplete.setForme("Complete");
     	pokedex.put("Zygarde-Complete", zygardecomplete);
     }
 }

@@ -50,6 +50,8 @@ public class PokemonSide
 	public int defaultLevel = 50;
 	public TextField level;
 	private ComboBox<String> forme;
+	private ObservableList<String> formes;
+	private Label formeLabel;
 
 	private TextField[] baseField = new TextField[6];
 	private TextField[] IVsField = new TextField[6];
@@ -112,7 +114,6 @@ public class PokemonSide
 		for (int i = 0; i < teamData.length; i++)
 		{
 			teamData[i] = pokedex.get(defaultPokemon).clonePokemon();
-			//System.out.println("Pokemon " + i + ": " + teamData[i].getAllBaseStats().toString());
 		}
 		
 		pokemonSide = new BorderPane();
@@ -141,15 +142,12 @@ public class PokemonSide
 		level.setPrefWidth(35);
 		GridPane.setMargin(levelLabel, new Insets(0,5,0,0));
 
-		Label formeLabel = new Label("Forme");
-		//ObservableList<String> formes = FXCollections.observableArrayList(teamData[currentPokemon].getOtherFormes());
+		formeLabel = new Label("Forme");
 		forme = new ComboBox<String>();
 		HBox formeHBox = new HBox(formeLabel, forme);
 		formeHBox.setAlignment(Pos.CENTER);
 		formeHBox.setSpacing(5);
-		TLFStructure.addRow(1, levelLabel, level);
-		//TLFStructure.addRow(1, levelLabel, level, formeHBox);
-		//Not ready yet, need to figure out how to display the alternate formes correctly TODO
+		TLFStructure.addRow(1, levelLabel, level, formeHBox);
 
 		structure.getChildren().add(TLFStructure);
 
@@ -308,6 +306,19 @@ public class PokemonSide
 		chooseMon.setValue(teamData[currentPokemon].getName());
 		typeLeft.setValue(teamData[currentPokemon].getType(0));
 		typeRight.setValue(teamData[currentPokemon].getType(1));
+		if (teamData[currentPokemon].getFormes().size() > 0)
+		{
+			forme.setVisible(true);
+			formeLabel.setVisible(true);
+			formes = FXCollections.observableArrayList(teamData[currentPokemon].getFormes());
+			forme.setItems(formes);
+			forme.setValue(teamData[currentPokemon].getFormes().get(0));
+		}
+		else
+		{
+			forme.setVisible(false);
+			formeLabel.setVisible(false);
+		}
 		teamSpritesToggles[0].setSelected(true);
 		level.setText(Integer.toString(defaultLevel));
 		teamData[currentPokemon].setNature("Hardy");;
@@ -379,6 +390,20 @@ public class PokemonSide
 			
 			typeLeft.setValue(teamData[currentPokemon].getType(0));
 			typeRight.setValue(teamData[currentPokemon].getType(1));
+			
+			if (teamData[currentPokemon].getFormes().size() > 0)
+			{
+				forme.setVisible(true);
+				formeLabel.setVisible(true);
+				formes = FXCollections.observableArrayList(teamData[currentPokemon].getFormes());
+				forme.setItems(formes);
+				forme.setValue(teamData[currentPokemon].getFormes().get(0));
+			}
+			else
+			{
+				forme.setVisible(false);
+				formeLabel.setVisible(false);
+			}
 
 			teamData[currentPokemon].setNature("Hardy");
 			ability.setValue(teamData[currentPokemon].getAbility());
@@ -444,9 +469,33 @@ public class PokemonSide
 		
 		typeRight.setOnAction(e -> 
 		{
-			teamData[currentPokemon].setType((String) typeRight.getValue(), 1);
+			teamData[currentPokemon].setType((String) typeLeft.getValue(), 0);
 		});
 		
+		forme.setOnAction(e -> 
+		{
+			if (isToggleMon) {return;}
+			String newForme = (String) forme.getValue();
+			teamData[currentPokemon].switchForme(pokedex.get(newForme));
+			try
+			{
+				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + newForme + ".png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + newForme + ".png")));
+			}
+			catch (NullPointerException ex)
+			{
+				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
+			}
+			typeLeft.setValue(teamData[currentPokemon].getType(0));
+			typeRight.setValue(teamData[currentPokemon].getType(1));
+			ability.setValue(teamData[currentPokemon].getAbility());
+			for (int i = 0; i < 6; i++)
+			{
+				baseField[i].setText(Integer.toString(teamData[currentPokemon].getBaseStat(i)));
+			}
+
+		});
 		nature.setOnAction(e ->
 		{
 			teamData[currentPokemon].setNature(nature.getValue());
@@ -771,19 +820,44 @@ public class PokemonSide
 		isToggleMon = true;
 		chooseMon.setValue(teamData[currentPokemon].getName());
 		
-		try
-		{
-			spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
-			teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
-		}
-		catch (NullPointerException ex)
-		{
-			spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
-			teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("resources/Sprites/Missingno..png")));
-		}
-		
 		typeLeft.setValue(teamData[currentPokemon].getType(0));
 		typeRight.setValue(teamData[currentPokemon].getType(1));
+		
+		if (teamData[currentPokemon].getFormes().size() > 0)
+		{
+			forme.setVisible(true);
+			formeLabel.setVisible(true);
+			formes = FXCollections.observableArrayList(teamData[currentPokemon].getFormes());
+			forme.setItems(formes);
+			String currentForme = teamData[currentPokemon].getCurrentForme();
+			if (currentForme == null) {currentForme = teamData[currentPokemon].getName();}
+			forme.setValue(currentForme);
+			try
+			{
+				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + currentForme + ".png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + currentForme + ".png")));
+			}
+			catch (NullPointerException ex)
+			{
+				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
+			}
+		}
+		else
+		{
+			forme.setVisible(false);
+			formeLabel.setVisible(false);
+			try
+			{
+				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
+			}
+			catch (NullPointerException ex)
+			{
+				spriteMain.setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
+				teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/Missingno..png")));
+			}
+		}
 
 		ability.setValue(teamData[currentPokemon].getAbility(0));
 		item.setValue(teamData[currentPokemon].getItem().getName());
@@ -895,17 +969,5 @@ public class PokemonSide
 			Collections.sort(names);
 		}
 		return names;
-	}
-
-	public static <T, E> T getKeyByValue(HashMap<T, E> map, E value)
-	{
-		for (Entry<T, E> entry : map.entrySet())
-		{
-			if (Objects.equals(value, entry.getValue()))
-			{
-				return entry.getKey();
-			}
-		}
-		return null;
 	}
 }
