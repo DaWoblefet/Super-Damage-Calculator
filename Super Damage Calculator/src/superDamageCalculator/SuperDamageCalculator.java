@@ -94,7 +94,6 @@ public class SuperDamageCalculator extends Application
 
 		/****** BEGIN TOP *******/
 		BorderPane center = new BorderPane();
-		BorderPane damages = new BorderPane();
 		GridPane damageCalcs = new GridPane();
 		HBox rollsAndCopy = new HBox();
 
@@ -113,15 +112,6 @@ public class SuperDamageCalculator extends Application
 		rollsAndCopy.setSpacing(5);
 		rollsAndCopy.setAlignment(Pos.CENTER_LEFT);
 		damageCalcs.addRow(1, rollsAndCopy);
-
-		Button refreshCalcs = new Button("Refresh damage calcs");
-		damages.setLeft(damageCalcs);
-		damages.setRight(refreshCalcs);
-		refreshCalcs.setOnAction(e ->
-		{
-			updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
-			updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
-		});
 
 		copyCalc.setOnAction(e ->
 		{
@@ -276,7 +266,17 @@ public class SuperDamageCalculator extends Application
 		updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
 		updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
 
-		subPane.setTop(damages);
+		leftMon.getTriggerCalcs().addListener((observable) ->
+		{
+			updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
+			updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
+		});
+		rightMon.getTriggerCalcs().addListener((observable) ->
+		{
+			updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
+			updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
+		});
+		subPane.setTop(damageCalcs);
 		subPane.setLeft(pokemonLeft);
 		subPane.setRight(pokemonRight);
 		subPane.setCenter(center);

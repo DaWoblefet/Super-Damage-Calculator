@@ -54,6 +54,7 @@ public class Pokemon
 		this.item = items.get("(none)");
 		this.status = "Healthy";
 		this.gender = "Genderless";
+		this.currentForme = name;
     }
 
     public String getName()
@@ -107,6 +108,7 @@ public class Pokemon
 	
 	public void switchForme(Pokemon newForme)
 	{
+
 		this.setTypes(newForme.getType(0), newForme.getType(1));
 		abilities.clear();
 		for (int i = 0; i < newForme.abilities.size(); i++)
