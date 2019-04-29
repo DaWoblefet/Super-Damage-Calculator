@@ -6,7 +6,6 @@ package superDamageCalculator;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.collections.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -32,8 +31,8 @@ public class SuperDamageCalculator extends Application
 	private PokemonSide leftMon = new PokemonSide();
 	private PokemonSide rightMon = new PokemonSide();
 
-	private BorderPane pokemonLeft = leftMon.pokemonSide;
-	private BorderPane pokemonRight = rightMon.pokemonSide;
+	private BorderPane pokemonLeft = leftMon.getPokemonSide();
+	private BorderPane pokemonRight = rightMon.getPokemonSide();
 
 	private Label mainDamageResultLabel;
 	private Label mainDamageRollsLabel;
@@ -97,13 +96,13 @@ public class SuperDamageCalculator extends Application
 		GridPane damageCalcs = new GridPane();
 		HBox rollsAndCopy = new HBox();
 
-		leftMon.damageOutput[0] = "This is where the calc would go.";
-		mainDamageResultLabel = new Label(leftMon.damageOutput[0]);
+		leftMon.setDamageOutput("This is where the calc would go.", 0);
+		mainDamageResultLabel = new Label(leftMon.getDamageOutput(0));
 		mainDamageResultLabel.setFont(new Font("Times New Roman", 20)); //formerly 28
 		mainDamageResultLabel.setWrapText(true);
 		damageCalcs.addRow(0, mainDamageResultLabel);
 
-		mainDamageRollsLabel = new Label(Arrays.toString(leftMon.damageRolls[0]));
+		mainDamageRollsLabel = new Label(Arrays.toString(leftMon.getDamageRolls(0)));
 		mainDamageRollsLabel.setFont(new Font("Times New Roman", 14));
 		Button copyCalc = new Button("Copy Calc");
 		Button copyRolls = new Button("Copy Rolls");
@@ -132,18 +131,18 @@ public class SuperDamageCalculator extends Application
 		});
 
 		/* Coordinates the ListView with the main damage output.*/
-		leftMon.topMoves.setOnMouseClicked(e ->
+		leftMon.getTopMoves().setOnMouseClicked(e ->
 		{
-			leftMon.currentMoveslot = leftMon.topMoves.getSelectionModel().getSelectedIndices().get(0);
-			mainDamageResultLabel.setText(leftMon.damageOutput[leftMon.currentMoveslot]);
-			mainDamageRollsLabel.setText(getRollsText(leftMon.damageRolls[leftMon.currentMoveslot]));
+			leftMon.setCurrentMoveslot(leftMon.getTopMoves().getSelectionModel().getSelectedIndices().get(0));
+			mainDamageResultLabel.setText(leftMon.getDamageOutput(leftMon.getCurrentMoveslot()));
+			mainDamageRollsLabel.setText(getRollsText(leftMon.getDamageRolls(leftMon.getCurrentMoveslot())));
 		});
 
-		rightMon.topMoves.setOnMouseClicked(e ->
+		rightMon.getTopMoves().setOnMouseClicked(e ->
 		{
-			rightMon.currentMoveslot = rightMon.topMoves.getSelectionModel().getSelectedIndices().get(0);
-			mainDamageResultLabel.setText(rightMon.damageOutput[rightMon.currentMoveslot ]);
-			mainDamageRollsLabel.setText(getRollsText(rightMon.damageRolls[rightMon.currentMoveslot]));
+			rightMon.setCurrentMoveslot(rightMon.getTopMoves().getSelectionModel().getSelectedIndices().get(0));
+			mainDamageResultLabel.setText(rightMon.getDamageOutput(rightMon.getCurrentMoveslot()));
+			mainDamageRollsLabel.setText(getRollsText(rightMon.getDamageRolls(rightMon.getCurrentMoveslot())));
 		});
 		/****** END TOP *******/
 
@@ -155,14 +154,14 @@ public class SuperDamageCalculator extends Application
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					leftMon.statChanges[i].setValue("+1");
+					leftMon.getStatChanges(i).setValue("+1");
 				}
 			}
 			else
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					leftMon.statChanges[i].setValue("--");
+					leftMon.getStatChanges(i).setValue("--");
 				}
 			}
 		});
@@ -172,14 +171,14 @@ public class SuperDamageCalculator extends Application
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					leftMon.statChanges[i].setValue("+2");
+					leftMon.getStatChanges(i).setValue("+2");
 				}
 			}
 			else
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					leftMon.statChanges[i].setValue("--");
+					leftMon.getStatChanges(i).setValue("--");
 				}
 			}
 		});
@@ -187,13 +186,13 @@ public class SuperDamageCalculator extends Application
 		{
 			if (leftSideFieldOptions.getSoakButton().isSelected())
 			{
-				leftMon.typeLeft.setValue("Water");
-				leftMon.typeRight.setValue("(none)");
+				leftMon.getTypeLeft().setValue("Water");
+				leftMon.getTypeRight().setValue("(none)");
 			}
 			else
 			{
-				leftMon.typeLeft.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(0));
-				leftMon.typeRight.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(1));
+				leftMon.getTypeLeft().setValue(pokedex.get(leftMon.getTeamData(leftMon.getCurrentPokemon()).getName()).getType(0));
+				leftMon.getTypeRight().setValue(pokedex.get(leftMon.getTeamData(leftMon.getCurrentPokemon()).getName()).getType(1));
 			}
 		});
 		
@@ -205,14 +204,14 @@ public class SuperDamageCalculator extends Application
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					rightMon.statChanges[i].setValue("+1");
+					rightMon.getStatChanges(i).setValue("+1");
 				}
 			}
 			else
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					rightMon.statChanges[i].setValue("--");
+					rightMon.getStatChanges(i).setValue("--");
 				}
 			}
 		});
@@ -222,14 +221,14 @@ public class SuperDamageCalculator extends Application
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					rightMon.statChanges[i].setValue("+2");
+					rightMon.getStatChanges(i).setValue("+2");
 				}
 			}
 			else
 			{
 				for (int i = 0; i < 6; i++)
 				{
-					rightMon.statChanges[i].setValue("--");
+					rightMon.getStatChanges(i).setValue("--");
 				}
 			}
 		});
@@ -237,17 +236,21 @@ public class SuperDamageCalculator extends Application
 		{
 			if (rightSideFieldOptions.getSoakButton().isSelected())
 			{
-				rightMon.typeLeft.setValue("Water");
-				rightMon.typeRight.setValue("(none)");
+				rightMon.getTypeLeft().setValue("Water");
+				rightMon.getTypeRight().setValue("(none)");
 			}
 			else
 			{
-				rightMon.typeLeft.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(0));
-				rightMon.typeRight.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(1));
+				rightMon.getTypeLeft().setValue(pokedex.get(rightMon.getTeamData(rightMon.getCurrentPokemon()).getName()).getType(0));
+				rightMon.getTypeRight().setValue(pokedex.get(rightMon.getTeamData(rightMon.getCurrentPokemon()).getName()).getType(1));
 			}
 		});
 		
 		fieldOptions = new FieldOptions(leftSideFieldOptions, rightSideFieldOptions);
+		
+		fieldOptions.getLevelFiveButton().setOnAction(e -> setDefaultLevels(5));
+		fieldOptions.getLevelFiftyButton().setOnAction(e -> setDefaultLevels(50));
+		fieldOptions.getLevelHundredButton().setOnAction(e -> setDefaultLevels(100));
 
 		ImageView bottomImage = new ImageView(new Image(getClass().getResourceAsStream("/resources/Wobbuffet-large.png")));
 		bottomImage.setPreserveRatio(true);
@@ -263,18 +266,18 @@ public class SuperDamageCalculator extends Application
 		BorderPane.setMargin(bottomImage, new Insets(0,0,20,0));
 
 		/****** END CENTER *******/
-		updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
-		updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
+		updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
+		updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
 
 		leftMon.getTriggerCalcs().addListener((observable) ->
 		{
-			updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
-			updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
+			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
+			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
 		});
 		rightMon.getTriggerCalcs().addListener((observable) ->
 		{
-			updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
-			updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
+			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
+			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
 		});
 		subPane.setTop(damageCalcs);
 		subPane.setLeft(pokemonLeft);
@@ -393,10 +396,10 @@ public class SuperDamageCalculator extends Application
 	//Assigns a default Level to all Pokemon which can be overriden manually.
 	public void setDefaultLevels(int level)
 	{
-		leftMon.level.setText(Integer.toString(level));
-		rightMon.level.setText(Integer.toString(level));
-		leftMon.defaultLevel = level;
-		rightMon.defaultLevel = level;
+		leftMon.setLevel(level);
+		rightMon.setLevel(level);
+		leftMon.setDefaultLevel(level);
+		rightMon.setDefaultLevel(level);
 	}
 	
 	//Passes in the Pokemon for damage calculation, then updates the GUI.
@@ -405,14 +408,14 @@ public class SuperDamageCalculator extends Application
 		for (int i = 0; i < 4; i++)
 		{
 			CalculateDamage damagecalc = new CalculateDamage(attacker.getMove(i), attacker, defender, fieldOptions, isLeft);
-			attackerUI.damageOutput[i] = damagecalc.getDamageOutput();
-			attackerUI.damageOutputShort[i] = damagecalc.getDamageOutputShort();
-			attackerUI.damageRolls[i] = damagecalc.getDamageRolls();
-			attackerUI.topMoveNames.set(i, (String) attackerUI.movesComboBox[i].getValue() + " " + attackerUI.damageOutputShort[i]);
+			attackerUI.setDamageOutput(damagecalc.getDamageOutput(), i);
+			attackerUI.setDamageOutputShort(damagecalc.getDamageOutputShort(), i);
+			attackerUI.setDamageRolls(damagecalc.getDamageRolls(), i);
+			attackerUI.getTopMoveNames().set(i, attackerUI.getMoveName(i) + " " + attackerUI.getDamageOutputShort(i));
 		}
 		
-		mainDamageResultLabel.setText(leftMon.damageOutput[leftMon.currentMoveslot]);
-		String rollsText = getRollsText(leftMon.damageRolls[leftMon.currentMoveslot]);
+		mainDamageResultLabel.setText(leftMon.getDamageOutput(leftMon.getCurrentMoveslot()));
+		String rollsText = getRollsText(leftMon.getDamageRolls(leftMon.getCurrentMoveslot()));
 		mainDamageRollsLabel.setText(rollsText);
 	}
 	

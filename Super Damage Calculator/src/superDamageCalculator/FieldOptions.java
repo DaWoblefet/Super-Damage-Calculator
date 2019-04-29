@@ -56,10 +56,6 @@ public class FieldOptions
 		levelDefault.setSpacing(5);
 		fieldOptions.addRow(0, levelDefault);
 
-		/*levelFive.setOnAction(e -> setDefaultLevels(5));
-		levelFifty.setOnAction(e -> setDefaultLevels(50));
-		levelHundred.setOnAction(e -> setDefaultLevels(100));*/
-
 		ObservableList<String> formatTypes = FXCollections.observableArrayList("Singles", "Doubles");
 		formats = new ListView<String>(formatTypes);
 		formats.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -206,5 +202,20 @@ public class FieldOptions
 	public SideFieldOptions getSideFieldOptions(boolean side)
 	{
 		return side ? sideFieldOptions[0] : sideFieldOptions[1];
+	}
+	
+	public RadioButton getLevelFiveButton()
+	{
+		return levelFive;
+	}
+	
+	public RadioButton getLevelFiftyButton()
+	{
+		return levelFifty;
+	}
+	
+	public RadioButton getLevelHundredButton()
+	{
+		return levelHundred;
 	}
 }

@@ -36,18 +36,18 @@ public class PokemonSide
 	private HashMap<String, Integer> abilities = new Abilitydex().abilities;
 	private HashMap<String, Integer> types = new Type().types;
 
-	public BorderPane pokemonSide;
+	private BorderPane pokemonSide;
 
-	public Pokemon[] teamData = new Pokemon[6];
-	private String defaultPokemon = "Abra";
+	private Pokemon[] teamData = new Pokemon[6];
+	private String defaultPokemon = "Abomasnow";
 	private ComboBox<String> chooseMon;
-	public int currentPokemon = 0;
+	private int currentPokemon = 0;
 	private boolean isToggleMon = false;
 	private boolean currentlyZ = false;
-	public ComboBox<String> typeLeft;
-	public ComboBox<String> typeRight;
-	public int defaultLevel = 50;
-	public TextField level;
+	private ComboBox<String> typeLeft;
+	private ComboBox<String> typeRight;
+	private int defaultLevel = 50;
+	private TextField level;
 	private ComboBox<String> forme;
 	private ObservableList<String> formes;
 	private Label formeLabel;
@@ -56,7 +56,7 @@ public class PokemonSide
 	private TextField[] IVsField = new TextField[6];
 	private TextField[] EVsField = new TextField[6];
 	private Label[] calculatedStats = new Label[6];
-	public ComboBox[] statChanges = new ComboBox[6];
+	private ComboBox[] statChanges = new ComboBox[6];
 
 	private ComboBox<String> nature;
 	private ComboBox<String> ability;
@@ -73,19 +73,19 @@ public class PokemonSide
 	private Label totalEVsRemainingLabel;
 
 	private Move[] moveData = new Move[4];
-	public int currentMoveslot;
-	public ComboBox[] movesComboBox = new ComboBox[4];
+	private int currentMoveslot;
+	private ComboBox[] movesComboBox = new ComboBox[4];
 	private TextField[] basePower = new TextField[4];
 	private ComboBox[] type = new ComboBox[4];
 	private ComboBox[] category = new ComboBox[4];
 	private CheckBox[] crit = new CheckBox[4];
 	private CheckBox[] zOption = new CheckBox[4];
-	public ObservableList<String> topMoveNames;
-	public ListView<String> topMoves;
+	private ObservableList<String> topMoveNames;
+	private ListView<String> topMoves;
 
-	public String[] damageOutput = new String[4];
-	public int[][] damageRolls = new int[4][16];
-	public String[] damageOutputShort = new String[4];
+	private String[] damageOutput = new String[4];
+	private int[][] damageRolls = new int[4][16];
+	private String[] damageOutputShort = new String[4];
 
 	private ImageView spriteMain;
 	private ImageView[] teamSprites = new ImageView[6];
@@ -210,7 +210,6 @@ public class PokemonSide
 		GridPane NAISstructure = new GridPane();
 		Label natureLabel = new Label("Nature");
 		nature = new ComboBox<String>(natureNames);
-		nature.setPrefWidth(85);
 
 		Label abilityLabel = new Label("Ability");
 		ability = new ComboBox<String>(abilityNames);
@@ -959,8 +958,109 @@ public class PokemonSide
 		return names;
 	}
 	
+	/*Needed getters and setters*/
 	public SimpleBooleanProperty getTriggerCalcs()
 	{
 		return triggerCalcs;
+	}
+	
+	public BorderPane getPokemonSide()
+	{
+		return pokemonSide;
+	}
+	
+	public Pokemon getTeamData(int slot)
+	{
+		return teamData[slot];
+	}
+	
+	public int getCurrentPokemon()
+	{
+		return currentPokemon;
+	}
+
+	public void setCurrentPokemon(int currentPokemon)
+	{
+		this.currentPokemon = currentPokemon;
+	}
+	
+	public ComboBox<String> getTypeLeft()
+	{
+		return typeLeft;
+	}
+	
+	public ComboBox<String> getTypeRight()
+	{
+		return typeRight;
+	}
+	
+	public void setLevel(int level)
+	{
+		this.level.setText(Integer.toString(level));
+	}
+	
+	public void setDefaultLevel(int defaultLevel)
+	{
+		this.defaultLevel = defaultLevel;
+	}
+	
+	public ComboBox getStatChanges(int slot)
+	{
+		return statChanges[slot];
+	}
+
+	public int getCurrentMoveslot()
+	{
+		return currentMoveslot;
+	}
+
+	public void setCurrentMoveslot(int currentMoveslot)
+	{
+		this.currentMoveslot = currentMoveslot;
+	}
+	
+	public String getMoveName (int slot)
+	{
+		return (String) movesComboBox[slot].getValue();
+	}
+	
+	public ListView<String> getTopMoves()
+	{
+		return topMoves;
+	}
+
+	public ObservableList<String> getTopMoveNames()
+	{
+		return topMoveNames;
+	}
+	
+	public String getDamageOutput(int slot)
+	{
+		return damageOutput[slot];
+	}
+	
+	public void setDamageOutput(String damageOutput, int slot)
+	{
+		this.damageOutput[slot] = damageOutput;
+	}
+	
+	public int[] getDamageRolls(int slot)
+	{
+		return damageRolls[slot];
+	}
+	
+	public void setDamageRolls(int[] damageRolls, int slot)
+	{
+		this.damageRolls[slot] = damageRolls;
+	}
+	
+	public void setDamageOutputShort(String damageOutputShort, int slot)
+	{
+		this.damageOutputShort[slot] = damageOutputShort;
+	}
+	
+	public String getDamageOutputShort(int slot)
+	{
+		return damageOutputShort[slot];
 	}
 }
