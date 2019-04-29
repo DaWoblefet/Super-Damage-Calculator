@@ -3,6 +3,7 @@
 
 package superDamageCalculator;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -25,7 +26,6 @@ public class FieldOptions
 	private boolean isDarkAura;
 	private boolean isAuraBreak;
 	
-	//Left side is 0, right side is 1
 	private GridPane fieldOptions;
 	private RadioButton levelFive;
 	private RadioButton levelFifty;
@@ -34,7 +34,10 @@ public class FieldOptions
 	private ListView<String> terrains;
 	private ListView<String> weathers;
 	private ListView<String> auras;
+	
+	//Left side is 0, right side is 1
 	private SideFieldOptions[] sideFieldOptions = new SideFieldOptions[2];
+	private SimpleBooleanProperty triggerCalcs = new SimpleBooleanProperty(false);
 	
 	public FieldOptions(SideFieldOptions leftSideOptions, SideFieldOptions rightSideOptions)
 	{
@@ -62,6 +65,7 @@ public class FieldOptions
 		formats.setOnMouseClicked(e ->
 		{
 			format = formats.getSelectionModel().getSelectedItem();
+			triggerCalcs();
 		});
 		formats.setOrientation(Orientation.HORIZONTAL);
  		formats.setMaxWidth(111);
@@ -76,6 +80,7 @@ public class FieldOptions
 		terrains.setOnMouseClicked(e ->
 		{
 			terrain = terrains.getSelectionModel().getSelectedItem();
+			triggerCalcs();
 		});
 		terrains.setOrientation(Orientation.HORIZONTAL);
 		terrains.setMaxWidth(242);
@@ -90,6 +95,7 @@ public class FieldOptions
  		weathers.setOnMouseClicked(e ->
 		{
 			weather = weathers.getSelectionModel().getSelectedItem();
+			triggerCalcs();
 		});
  		weathers.setOrientation(Orientation.HORIZONTAL);
  		weathers.setPrefWidth(277);
@@ -125,6 +131,7 @@ public class FieldOptions
 						break;
 				}
 			}
+			triggerCalcs();
 		});
  		auras.setOrientation(Orientation.HORIZONTAL);
  		auras.setMaxWidth(208);
@@ -142,6 +149,17 @@ public class FieldOptions
  		terrains.getSelectionModel().select(0);
  		weather = "None";
  		weathers.getSelectionModel().select(0);
+	}
+	
+	//Flips a boolean to trigger event handlers elsewhere
+	public void triggerCalcs()
+	{
+		triggerCalcs.setValue(!triggerCalcs.getValue());
+	}
+	
+	public SimpleBooleanProperty getTriggerCalcs()
+	{
+		return triggerCalcs;
 	}
 	
 	public String getFormat() 

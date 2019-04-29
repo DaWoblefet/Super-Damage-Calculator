@@ -2,6 +2,7 @@
 
 package superDamageCalculator;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.ToggleButton;
@@ -34,6 +35,7 @@ public class SideFieldOptions
 	private boolean isFriendGuard;
 	private boolean isBattery;
 	
+	private SimpleBooleanProperty triggerCalcs = new SimpleBooleanProperty(false);
 	
 	public SideFieldOptions(boolean isLeftSide)
 	{
@@ -45,6 +47,7 @@ public class SideFieldOptions
  		protect.setOnAction(e -> 
  		{
  			isProtect = protect.isSelected();
+ 			triggerCalcs();
  		});
  		options.addRow(0, protect);
 
@@ -53,11 +56,13 @@ public class SideFieldOptions
  		reflect.setOnAction(e -> 
  		{
  			isReflect = reflect.isSelected();
+ 			triggerCalcs();
  		});
  		lightScreen = new ToggleButton("Light Screen");
  		lightScreen.setOnAction(e -> 
  		{
  			isLightScreen = lightScreen.isSelected();
+ 			triggerCalcs();
  		});
  		screens.getChildren().addAll(reflect, lightScreen);
  		options.addRow(1, screens);
@@ -66,6 +71,7 @@ public class SideFieldOptions
  		auroraVeil.setOnAction(e -> 
  		{
  			isAuroraVeil = auroraVeil.isSelected();
+ 			triggerCalcs();
  		});
  		options.addRow(2, auroraVeil);
 
@@ -73,6 +79,7 @@ public class SideFieldOptions
  		helpingHand.setOnAction(e -> 
  		{
  			isHelpingHand = helpingHand.isSelected();
+ 			triggerCalcs();
  		});
  		options.addRow(3, helpingHand);
 
@@ -80,6 +87,7 @@ public class SideFieldOptions
  		friendGuard.setOnAction(e -> 
  		{
  			isFriendGuard = friendGuard.isSelected();
+ 			triggerCalcs();
  		});
  		options.addRow(4, friendGuard);
  		
@@ -87,6 +95,7 @@ public class SideFieldOptions
  		battery.setOnAction(e -> 
  		{
  			isBattery = battery.isSelected();
+ 			triggerCalcs();
  		});
  		options.addRow(5, battery);
 
@@ -117,9 +126,20 @@ public class SideFieldOptions
 		}
 	}
 	
+	//Flips a boolean to trigger event handlers elsewhere
+	public void triggerCalcs()
+	{
+		triggerCalcs.setValue(!triggerCalcs.getValue());
+	}
+	
 	public boolean isLeftSide()
 	{
 		return isLeftSide;
+	}
+	
+	public SimpleBooleanProperty getTriggerCalcs()
+	{
+		return triggerCalcs;
 	}
 	
 	public GridPane getOptions()

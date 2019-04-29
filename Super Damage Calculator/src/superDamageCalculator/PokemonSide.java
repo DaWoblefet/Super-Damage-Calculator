@@ -448,7 +448,7 @@ public class PokemonSide
 		
 		typeRight.setOnAction(e -> 
 		{
-			teamData[currentPokemon].setType((String) typeLeft.getValue(), 0);
+			teamData[currentPokemon].setType((String) typeRight.getValue(), 1);
 			triggerCalcs();
 		});
 		
@@ -617,6 +617,7 @@ public class PokemonSide
 			statChanges[j].setOnAction(e ->
 			{
 				teamData[currentPokemon].getStat(j).setBoostLevel((String) statChanges[j].getValue());
+				triggerCalcs();
 			});
 			
 		}

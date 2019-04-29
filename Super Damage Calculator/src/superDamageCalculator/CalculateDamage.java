@@ -181,15 +181,15 @@ public class CalculateDamage
 		isDarkAura = fieldOptions.isDarkAura();
 		isAuraBreak = fieldOptions.isAuraBreak();
 		isHelpingHand = fieldOptions.getSideFieldOptions(isLeft).isHelpingHand();
-		isProtect = fieldOptions.getSideFieldOptions(isLeft).isProtect();
-		isReflect = fieldOptions.getSideFieldOptions(isLeft).isReflect();
-		isLightScreen = fieldOptions.getSideFieldOptions(isLeft).isLightScreen();
-		if (fieldOptions.getSideFieldOptions(isLeft).isAuroraVeil())
+		isProtect = fieldOptions.getSideFieldOptions(!isLeft).isProtect();
+		isReflect = fieldOptions.getSideFieldOptions(!isLeft).isReflect();
+		isLightScreen = fieldOptions.getSideFieldOptions(!isLeft).isLightScreen();
+		if (fieldOptions.getSideFieldOptions(!isLeft).isAuroraVeil())
 		{
 			isReflect = true;
 			isLightScreen = true;
 		}
-		isFriendGuard = fieldOptions.getSideFieldOptions(isLeft).isFriendGuard();
+		isFriendGuard = fieldOptions.getSideFieldOptions(!isLeft).isFriendGuard();
 		isBattery = fieldOptions.getSideFieldOptions(isLeft).isBattery();
 
 		typeMod = typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];

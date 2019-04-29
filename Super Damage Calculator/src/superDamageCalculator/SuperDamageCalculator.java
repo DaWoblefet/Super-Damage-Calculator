@@ -191,8 +191,9 @@ public class SuperDamageCalculator extends Application
 			}
 			else
 			{
-				leftMon.getTypeLeft().setValue(pokedex.get(leftMon.getTeamData(leftMon.getCurrentPokemon()).getName()).getType(0));
-				leftMon.getTypeRight().setValue(pokedex.get(leftMon.getTeamData(leftMon.getCurrentPokemon()).getName()).getType(1));
+				Pokemon tempMon = pokedex.get(leftMon.getTeamData(leftMon.getCurrentPokemon()).getName());
+				leftMon.getTypeLeft().setValue(tempMon.getType(0));
+				leftMon.getTypeRight().setValue(tempMon.getType(1));
 			}
 		});
 		
@@ -241,8 +242,9 @@ public class SuperDamageCalculator extends Application
 			}
 			else
 			{
-				rightMon.getTypeLeft().setValue(pokedex.get(rightMon.getTeamData(rightMon.getCurrentPokemon()).getName()).getType(0));
-				rightMon.getTypeRight().setValue(pokedex.get(rightMon.getTeamData(rightMon.getCurrentPokemon()).getName()).getType(1));
+				Pokemon tempMon = pokedex.get(rightMon.getTeamData(rightMon.getCurrentPokemon()).getName());
+				rightMon.getTypeLeft().setValue(tempMon.getType(0));
+				rightMon.getTypeRight().setValue(tempMon.getType(1));
 			}
 		});
 		
@@ -275,6 +277,24 @@ public class SuperDamageCalculator extends Application
 			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
 		});
 		rightMon.getTriggerCalcs().addListener((observable) ->
+		{
+			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
+			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
+		});
+		
+		fieldOptions.getTriggerCalcs().addListener((observable) ->
+		{
+			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
+			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
+		});
+		
+		leftSideFieldOptions.getTriggerCalcs().addListener((observable) ->
+		{
+			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
+			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
+		});
+		
+		rightSideFieldOptions.getTriggerCalcs().addListener((observable) ->
 		{
 			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
 			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
