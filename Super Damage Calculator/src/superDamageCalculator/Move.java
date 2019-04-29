@@ -297,6 +297,22 @@ public class Move
 		move.setZBP(this.zbp);
 		move.setCategory(this.category);
 		move.setType(this.type);
+		move.setSpread(isSpread);
+		move.setMakesContact(makesContact);
+		move.setHasSecondaryEffect(hasSecondaryEffect);
+		move.setSignatureZ(isSignatureZ);
+		move.setHasRecoil(hasRecoil);
+		move.setTwoHit(isTwoHit);
+		move.setMultiHit(isMultiHit);
+		move.setPunch(isPunch);
+		move.setPulse(isPulse);
+		move.setBite(isBite);
+		move.setSound(isSound);
+		move.setBullet(isBullet);
+		move.setHasSpecialModifier(hasSpecialModifier);
+		move.setIgnoresDefenseBoosts(ignoresDefenseBoosts);
+		move.setIgnoresAbilities(ignoresAbilities);
+		
 		return move;
 	}
 }

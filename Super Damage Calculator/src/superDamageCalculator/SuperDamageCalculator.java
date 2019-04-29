@@ -268,9 +268,6 @@ public class SuperDamageCalculator extends Application
 		BorderPane.setMargin(bottomImage, new Insets(0,0,20,0));
 
 		/****** END CENTER *******/
-		updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
-		updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
-
 		leftMon.getTriggerCalcs().addListener((observable) ->
 		{
 			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
@@ -306,6 +303,11 @@ public class SuperDamageCalculator extends Application
 
 		mainPane.setTop(menubar);
 		mainPane.setCenter(subPane);
+		
+		//Run damage calculation initially before launching
+		updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
+		updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
+
 
 		Scene scene = new Scene(mainPane, 1200, 680);
 		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
