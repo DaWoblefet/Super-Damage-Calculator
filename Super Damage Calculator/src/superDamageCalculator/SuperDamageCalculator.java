@@ -38,36 +38,9 @@ public class SuperDamageCalculator extends Application
 	private Label mainDamageResultLabel;
 	private Label mainDamageRollsLabel;
 
-	//Center Options
-	private RadioButton levelFive;
-	private RadioButton levelFifty;
-	private RadioButton levelHundred;
-	private ListView<String> format;
-	private ListView<String> terrains;
-	private ListView<String> weathers;
-	private ListView<String> auras;
-
-	private ToggleButton leftProtect;
-	private ToggleButton leftReflect;
-	private ToggleButton leftLightScreen;
-	private ToggleButton leftAuroraVeil;
-	private ToggleButton leftHelpingHand;
-	private ToggleButton leftFriendGuard;
-	private ToggleButton leftPlusOneAll;
-	private ToggleButton leftPlusTwoAll;
-	private ToggleButton leftSoak;
-
-	private ToggleButton rightProtect;
-	private ToggleButton rightReflect;
-	private ToggleButton rightLightScreen;
-	private ToggleButton rightAuroraVeil;
-	private ToggleButton rightHelpingHand;
-	private ToggleButton rightFriendGuard;
-	private ToggleButton rightPlusOneAll;
-	private ToggleButton rightPlusTwoAll;
-	private ToggleButton rightSoak;
-	
-	private FieldOptions fieldOptionsLogic = new FieldOptions();
+	private SideFieldOptions leftSideFieldOptions;
+	private SideFieldOptions rightSideFieldOptions;
+	private FieldOptions fieldOptions;
 
 	private final Clipboard clipboard = Clipboard.getSystemClipboard();
     private final ClipboardContent content = new ClipboardContent();
@@ -185,163 +158,10 @@ public class SuperDamageCalculator extends Application
 		/****** END TOP *******/
 
 		/****** BEGIN CENTER *******/
-		GridPane fieldOptions = new GridPane();
-
-		HBox levelDefault = new HBox();
-		levelFive = new RadioButton("Level 5");
-		levelFifty = new RadioButton("Level 50");
-		levelHundred = new RadioButton("Level 100");
-		ToggleGroup levelTG = new ToggleGroup();
-		levelFive.setToggleGroup(levelTG);
-		levelFifty.setToggleGroup(levelTG);
-		levelHundred.setToggleGroup(levelTG);
-		levelFifty.setSelected(true);
-		levelDefault.setAlignment(Pos.CENTER);
-		levelDefault.getChildren().addAll(levelFive, levelFifty, levelHundred);
-		levelDefault.setSpacing(5);
-		fieldOptions.addRow(0, levelDefault);
-
-		levelFive.setOnAction(e -> setDefaultLevels(5));
-		levelFifty.setOnAction(e -> setDefaultLevels(50));
-		levelHundred.setOnAction(e -> setDefaultLevels(100));
-
-		ObservableList<String> formatTypes = FXCollections.observableArrayList("Singles", "Doubles");
-		format = new ListView<String>(formatTypes);
-		format.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		format.getSelectionModel().select(1);
-		fieldOptionsLogic.setFormat("Doubles");
-		format.setOnMouseClicked(e ->
+		leftSideFieldOptions = new SideFieldOptions(true);
+		leftSideFieldOptions.getPlusOneAllButton().setOnAction(e ->
 		{
-			fieldOptionsLogic.setFormat(format.getSelectionModel().getSelectedItem());
-		});
-		format.setOrientation(Orientation.HORIZONTAL);
- 		format.setMaxWidth(111);
- 		format.setMaxHeight(35);
- 		fieldOptions.addRow(1, format);
- 		GridPane.setHalignment(format, HPos.CENTER);
- 		GridPane.setValignment(format, VPos.CENTER);
-
- 		ObservableList<String> terrainNames = FXCollections.observableArrayList("None", "Electric", "Grassy", "Misty", "Psychic");
-		terrains = new ListView<String>(terrainNames);
-		terrains.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		terrains.getSelectionModel().select(0);
-		fieldOptionsLogic.setTerrain("None");
-		terrains.setOnMouseClicked(e ->
-		{
-			fieldOptionsLogic.setTerrain(terrains.getSelectionModel().getSelectedItem());
-		});
-		terrains.setOrientation(Orientation.HORIZONTAL);
-		terrains.setMaxWidth(242);
- 		terrains.setMaxHeight(35);
- 		fieldOptions.addRow(2, terrains);
- 		GridPane.setHalignment(terrains, HPos.CENTER);
- 		GridPane.setValignment(terrains, VPos.CENTER);
-
-		ObservableList<String> weatherNames = FXCollections.observableArrayList("None", "Sun", "Rain", "Sand", "Hail", "Strong Winds");
- 		weathers = new ListView<String>(weatherNames);
- 		weathers.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
- 		weathers.getSelectionModel().select(0);
- 		fieldOptionsLogic.setWeather("None");
- 		weathers.setOnMouseClicked(e ->
-		{
-			fieldOptionsLogic.setWeather(weathers.getSelectionModel().getSelectedItem());
-		});
- 		weathers.setOrientation(Orientation.HORIZONTAL);
- 		weathers.setPrefWidth(277);
- 		weathers.setMaxHeight(35);
- 		fieldOptions.addRow(3, weathers);
- 		GridPane.setHalignment(weathers, HPos.CENTER);
- 		GridPane.setValignment(weathers, VPos.CENTER);
-
- 		ObservableList<String> auraNames = FXCollections.observableArrayList("Fairy Aura", "Dark Aura", "Aura Break");
- 		auras = new ListView<String>(auraNames);
- 		auras.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
- 		auras.setOnMouseClicked(e ->
-		{
-			//Initialize options
-			fieldOptionsLogic.setFairyAura(false);
-			fieldOptionsLogic.setDarkAura(false);
-			fieldOptionsLogic.setAuraBreak(false);
-			
-			//Set auras as appropriate
-			ObservableList<String> selectedAuras = auras.getSelectionModel().getSelectedItems();
-			for (int i = 0; i < selectedAuras.size(); i++)
-			{
-				switch (selectedAuras.get(i))
-				{
-					case "Fairy Aura":
-						fieldOptionsLogic.setFairyAura(true);
-						break;
-					case "Dark Aura":
-						fieldOptionsLogic.setDarkAura(true);
-						break;
-					case "Aura Break":
-						fieldOptionsLogic.setAuraBreak(true);
-						break;
-				}
-			}
-		});
- 		auras.setOrientation(Orientation.HORIZONTAL);
- 		auras.setMaxWidth(208);
- 		auras.setMaxHeight(35);
- 		fieldOptions.addRow(4, auras);
- 		GridPane.setHalignment(auras, HPos.CENTER);
- 		GridPane.setValignment(auras, VPos.CENTER);
-
- 		BorderPane sideOptions = new BorderPane();
-
-		/****** BEGIN LEFT-CENTER SIDE OPTIONS *******/
- 		GridPane leftSideOptions = new GridPane();
-
- 		leftProtect = new ToggleButton("Protect");
- 		leftProtect.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getLeftSideOptions().setProtect(leftProtect.isSelected());
- 		});
- 		leftSideOptions.addRow(0, leftProtect);
-
-		HBox leftScreens = new HBox();
- 		leftReflect = new ToggleButton("Reflect");
- 		leftReflect.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getLeftSideOptions().setReflect(leftReflect.isSelected());
- 		});
- 		leftLightScreen = new ToggleButton("Light Screen");
- 		leftLightScreen.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getLeftSideOptions().setLightScreen(leftLightScreen.isSelected());
- 		});
- 		leftScreens.getChildren().addAll(leftReflect, leftLightScreen);
- 		leftSideOptions.addRow(1, leftScreens);
-
- 		leftAuroraVeil = new ToggleButton("Aurora Veil");
- 		leftAuroraVeil.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getLeftSideOptions().setAuroraVeil(leftAuroraVeil.isSelected());
- 		});
- 		leftSideOptions.addRow(2, leftAuroraVeil);
-
- 		leftHelpingHand = new ToggleButton("Helping Hand");
- 		leftHelpingHand.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getLeftSideOptions().setHelpingHand(leftHelpingHand.isSelected());
- 		});
- 		leftSideOptions.addRow(3, leftHelpingHand);
-
- 		leftFriendGuard = new ToggleButton("Friend Guard");
- 		leftFriendGuard.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getLeftSideOptions().setFriendGuard(leftFriendGuard.isSelected());
- 		});
- 		leftSideOptions.addRow(4, leftFriendGuard);
-
-		ToggleGroup leftBoosts = new ToggleGroup();
- 		leftPlusOneAll = new ToggleButton("+1 All Stats");
- 		leftPlusOneAll.setToggleGroup(leftBoosts);
- 		leftSideOptions.addRow(5, leftPlusOneAll);
-		leftPlusOneAll.setOnAction(e ->
- 		{
-			if (leftPlusOneAll.isSelected())
+			if (leftSideFieldOptions.getPlusOneAllButton().isSelected())
 			{
 				for (int i = 0; i < 6; i++)
 				{
@@ -356,32 +176,26 @@ public class SuperDamageCalculator extends Application
 				}
 			}
 		});
-
- 		leftPlusTwoAll = new ToggleButton("+2 All Stats");
- 		leftPlusTwoAll.setToggleGroup(leftBoosts);
- 		leftSideOptions.addRow(6, leftPlusTwoAll);
-  		leftPlusTwoAll.setOnAction(e ->
-  		{
- 			if (leftPlusTwoAll.isSelected())
- 			{
- 				for (int i = 0; i < 6; i++)
- 				{
- 					leftMon.statChanges[i].setValue("+2");
- 				}
- 			}
- 			else
- 			{
- 				for (int i = 0; i < 6; i++)
- 				{
- 					leftMon.statChanges[i].setValue("--");
- 				}
- 			}
- 		});
-
- 		leftSoak = new ToggleButton("Soak");
- 		leftSoak.setOnAction(e ->
- 		{
-			if (leftSoak.isSelected())
+		leftSideFieldOptions.getPlusTwoAllButton().setOnAction(e ->
+		{
+			if (leftSideFieldOptions.getPlusTwoAllButton().isSelected())
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					leftMon.statChanges[i].setValue("+2");
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					leftMon.statChanges[i].setValue("--");
+				}
+			}
+		});
+		leftSideFieldOptions.getSoakButton().setOnAction(e ->
+		{
+			if (leftSideFieldOptions.getSoakButton().isSelected())
 			{
 				leftMon.typeLeft.setValue("Water");
 				leftMon.typeRight.setValue("(none)");
@@ -392,61 +206,12 @@ public class SuperDamageCalculator extends Application
 				leftMon.typeRight.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(1));
 			}
 		});
-		leftSideOptions.addRow(7, leftSoak);
- 		/****** END LEFT-CENTER SIDE OPTIONS *******/
-
- 		/****** BEGIN RIGHT-CENTER SIDE OPTIONS *******/
- 		GridPane rightSideOptions = new GridPane();
-
-		rightProtect = new ToggleButton("Protect");
-		rightProtect.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getRightSideOptions().setProtect(rightProtect.isSelected());
- 		});
-		rightSideOptions.addRow(0, rightProtect);
-
-		HBox rightScreens = new HBox();
-		rightReflect = new ToggleButton("Reflect");
-		rightReflect.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getRightSideOptions().setReflect(rightReflect.isSelected());
- 		});
-		rightLightScreen = new ToggleButton("Light Screen");
-		rightLightScreen.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getRightSideOptions().setLightScreen(rightLightScreen.isSelected());
- 		});
-		rightScreens.getChildren().addAll(rightReflect, rightLightScreen);
-		rightSideOptions.addRow(1, rightScreens);
-
-		rightAuroraVeil = new ToggleButton("Aurora Veil");
-		rightAuroraVeil.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getRightSideOptions().setAuroraVeil(rightAuroraVeil.isSelected());
- 		});
-		rightSideOptions.addRow(2, rightAuroraVeil);
-
-		rightHelpingHand = new ToggleButton("Helping Hand");
-		rightHelpingHand.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getRightSideOptions().setHelpingHand(rightHelpingHand.isSelected());
- 		});
-		rightSideOptions.addRow(3, rightHelpingHand);
-
-		rightFriendGuard = new ToggleButton("Friend Guard");
-		rightFriendGuard.setOnAction(e -> 
- 		{
- 			fieldOptionsLogic.getRightSideOptions().setFriendGuard(rightFriendGuard.isSelected());
- 		});
-		rightSideOptions.addRow(4, rightFriendGuard);
-
- 		ToggleGroup rightBoosts = new ToggleGroup();
-		rightPlusOneAll = new ToggleButton("+1 All Stats");
-		rightPlusOneAll.setToggleGroup(rightBoosts);
-		rightSideOptions.addRow(5, rightPlusOneAll);
- 		rightPlusOneAll.setOnAction(e ->
- 		{
-			if (rightPlusOneAll.isSelected())
+		
+		
+		rightSideFieldOptions = new SideFieldOptions(false);
+		rightSideFieldOptions.getPlusOneAllButton().setOnAction(e ->
+		{
+			if (rightSideFieldOptions.getPlusOneAllButton().isSelected())
 			{
 				for (int i = 0; i < 6; i++)
 				{
@@ -461,13 +226,9 @@ public class SuperDamageCalculator extends Application
 				}
 			}
 		});
-
-		rightPlusTwoAll = new ToggleButton("+2 All Stats");
-		rightPlusTwoAll.setToggleGroup(rightBoosts);
-		rightSideOptions.addRow(6, rightPlusTwoAll);
- 		rightPlusTwoAll.setOnAction(e ->
- 		{
-			if (rightPlusTwoAll.isSelected())
+		rightSideFieldOptions.getPlusTwoAllButton().setOnAction(e ->
+		{
+			if (rightSideFieldOptions.getPlusTwoAllButton().isSelected())
 			{
 				for (int i = 0; i < 6; i++)
 				{
@@ -482,52 +243,38 @@ public class SuperDamageCalculator extends Application
 				}
 			}
 		});
-		rightSoak = new ToggleButton("Soak");
- 		rightSoak.setOnAction(e ->
- 		{
-			if (rightSoak.isSelected())
+		rightSideFieldOptions.getSoakButton().setOnAction(e ->
+		{
+			if (rightSideFieldOptions.getSoakButton().isSelected())
 			{
 				rightMon.typeLeft.setValue("Water");
 				rightMon.typeRight.setValue("(none)");
 			}
 			else
 			{
-				rightMon.typeLeft.setValue(pokedex.get(rightMon.teamData[rightMon.currentPokemon].getName()).getType(0));
-				rightMon.typeRight.setValue(pokedex.get(rightMon.teamData[rightMon.currentPokemon].getName()).getType(1));
+				rightMon.typeLeft.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(0));
+				rightMon.typeRight.setValue(pokedex.get(leftMon.teamData[leftMon.currentPokemon].getName()).getType(1));
 			}
 		});
-		rightSideOptions.addRow(7, rightSoak);
-
-		/* Right-aligning the right side of the center options to give a mirrored-image effect*/
-		GridPane.setHalignment(rightProtect, HPos.RIGHT);
-		GridPane.setHalignment(rightScreens, HPos.RIGHT);
-		GridPane.setHalignment(rightAuroraVeil, HPos.RIGHT);
-		GridPane.setHalignment(rightHelpingHand, HPos.RIGHT);
-		GridPane.setHalignment(rightFriendGuard, HPos.RIGHT);
-		GridPane.setHalignment(rightPlusOneAll, HPos.RIGHT);
-		GridPane.setHalignment(rightPlusTwoAll, HPos.RIGHT);
-		GridPane.setHalignment(rightSoak, HPos.RIGHT);
-
-		/****** END RIGHT-CENTER SIDE OPTIONS *******/
+		
+		fieldOptions = new FieldOptions(leftSideFieldOptions, rightSideFieldOptions);
 
 		ImageView bottomImage = new ImageView(new Image(getClass().getResourceAsStream("/resources/Wobbuffet-large.png")));
 		bottomImage.setPreserveRatio(true);
-		bottomImage.setFitHeight(235);
-
-		/****** END CENTER *******/
-		updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
-		updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
-
-		fieldOptions.setAlignment(Pos.CENTER);
-		rightSideOptions.setAlignment(Pos.TOP_RIGHT);
-		center.setTop(fieldOptions);
-		sideOptions.setLeft(leftSideOptions);
-		sideOptions.setRight(rightSideOptions);
-		BorderPane.setMargin(rightSideOptions, new Insets(0,5,0,0));
+		bottomImage.setFitHeight(200);
+		
+		center.setTop(fieldOptions.getFieldOptions());
+		BorderPane sideOptions = new BorderPane();
+		sideOptions.setLeft(leftSideFieldOptions.getOptions());
+		sideOptions.setRight(rightSideFieldOptions.getOptions());
 		center.setCenter(sideOptions);
 		center.setBottom(bottomImage);
 		BorderPane.setAlignment(bottomImage, Pos.CENTER);
 		BorderPane.setMargin(bottomImage, new Insets(0,0,20,0));
+
+		/****** END CENTER *******/
+		updateDamageCalcs(leftMon.teamData[leftMon.currentPokemon], rightMon.teamData[rightMon.currentPokemon], leftMon, true);
+		updateDamageCalcs(rightMon.teamData[rightMon.currentPokemon], leftMon.teamData[leftMon.currentPokemon], rightMon, false);
 
 		subPane.setTop(damages);
 		subPane.setLeft(pokemonLeft);
@@ -657,7 +404,7 @@ public class SuperDamageCalculator extends Application
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			CalculateDamage damagecalc = new CalculateDamage(attacker.getMove(i), attacker, defender, fieldOptionsLogic, isLeft);
+			CalculateDamage damagecalc = new CalculateDamage(attacker.getMove(i), attacker, defender, fieldOptions, isLeft);
 			attackerUI.damageOutput[i] = damagecalc.getDamageOutput();
 			attackerUI.damageOutputShort[i] = damagecalc.getDamageOutputShort();
 			attackerUI.damageRolls[i] = damagecalc.getDamageRolls();

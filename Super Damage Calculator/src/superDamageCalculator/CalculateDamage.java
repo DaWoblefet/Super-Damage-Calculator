@@ -8,12 +8,9 @@
 package superDamageCalculator;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 import static superDamageCalculator.StatConstants.*;
-
-import java.util.ArrayList;
-import java.util.Map.*;
-import java.util.Objects;
 
 public class CalculateDamage
 {
@@ -74,6 +71,7 @@ public class CalculateDamage
 	private boolean isReflect;
 	private boolean isLightScreen;
 	private boolean isFriendGuard;
+	private boolean isBattery;
 
 	private int[] damageRolls = new int[16];
 	private String damageOutput = "";
@@ -182,33 +180,17 @@ public class CalculateDamage
 		isFairyAura = fieldOptions.isFairyAura();
 		isDarkAura = fieldOptions.isDarkAura();
 		isAuraBreak = fieldOptions.isAuraBreak();
-		
-		if (isLeft)
+		isHelpingHand = fieldOptions.getSideFieldOptions(isLeft).isHelpingHand();
+		isProtect = fieldOptions.getSideFieldOptions(isLeft).isProtect();
+		isReflect = fieldOptions.getSideFieldOptions(isLeft).isReflect();
+		isLightScreen = fieldOptions.getSideFieldOptions(isLeft).isLightScreen();
+		if (fieldOptions.getSideFieldOptions(isLeft).isAuroraVeil())
 		{
-			isHelpingHand = fieldOptions.getLeftSideOptions().isHelpingHand();
-			isProtect = fieldOptions.getLeftSideOptions().isProtect();
-			isReflect = fieldOptions.getLeftSideOptions().isReflect();
-			isLightScreen = fieldOptions.getLeftSideOptions().isLightScreen();
-			if (fieldOptions.getLeftSideOptions().isAuroraVeil())
-			{
-				isReflect = true;
-				isLightScreen = true;
-			}
-			isFriendGuard = fieldOptions.getLeftSideOptions().isFriendGuard();
+			isReflect = true;
+			isLightScreen = true;
 		}
-		else
-		{
-			isHelpingHand = fieldOptions.getRightSideOptions().isHelpingHand();
-			isProtect = fieldOptions.getRightSideOptions().isProtect();
-			isReflect = fieldOptions.getRightSideOptions().isReflect();
-			isLightScreen = fieldOptions.getRightSideOptions().isLightScreen();
-			if (fieldOptions.getRightSideOptions().isAuroraVeil())
-			{
-				isReflect = true;
-				isLightScreen = true;
-			}
-			isFriendGuard = fieldOptions.getRightSideOptions().isFriendGuard();
-		}
+		isFriendGuard = fieldOptions.getSideFieldOptions(isLeft).isFriendGuard();
+		isBattery = fieldOptions.getSideFieldOptions(isLeft).isBattery();
 
 		typeMod = typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];
 		if (moveCategory.equals("Status") || typeMod == 0)
@@ -474,8 +456,10 @@ public class CalculateDamage
 		//if (Rivalry and gender is the same) TODO
 		//bpModifiers.add(0x1400);
 		
-		//if (Battery field effect active) TODO
-		//bpModifiers.add(0x14CD);
+		if (isBattery && !usesPhysicalAttack)
+		{
+			bpModifiers.add(0x14CD);
+		}
 		
 		if (attackerAbility.equals("Sheer Force") && move.getHasSecondaryEffect())
 		{
@@ -513,12 +497,12 @@ public class CalculateDamage
 			}
 		}
 		
-		if (attackerAbility.equals("Flare Boost") && attackerStatus.equals("Burned") && (moveType.equals("Special") || moveType.equals("Psyshock effect")))
+		if (attackerAbility.equals("Flare Boost") && attackerStatus.equals("Burned") && !usesPhysicalAttack)
 		{
 			bpModifiers.add(0x1800);
 		}
 		
-		if (attackerAbility.equals("Toxic Boost") && (attackerStatus.equals("Poisoned") || attackerStatus.equals("Badly Poisoned")) && moveType.equals("Physical"))
+		if (attackerAbility.equals("Toxic Boost") && (attackerStatus.equals("Poisoned") || attackerStatus.equals("Badly Poisoned")) && usesPhysicalAttack)
 		{
 			bpModifiers.add(0x1800);
 		}
