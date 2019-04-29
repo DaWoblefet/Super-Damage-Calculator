@@ -3,6 +3,7 @@ While this program was written exclusively by me (DaWoblefet), a project like th
 •Pokemon Showdown: Pokemon, moves, and item data, as well as general information.
 •Xfr, Bond697, Kaphotics, and V4Victini for their work on datamining damage calculation in Generation V. (https://www.smogon.com/bw/articles/bw_complete_damage_formula)
 •OZY for documentation on Generation VII modifiers changes, etc. (http://bbs10.aimix-z.com/mtpt.cgi?room=sonota&mode=view2&f=140&no=27-29)
+•SadisticMystic for his weight mechanics research (https://www.smogon.com/forums/threads/ultra-sun-ultra-moon-battle-mechanics-research-read-post-2.3620030/post-8095060) and general assistance in helping me understand certain logic portions of the damage formula.
 •squirrelboy1225 for currently maintaining Trainer Tower's Damage Calculator, and Honko, gamut, Tapin, and Firestorm for their work on damage calculators in the past.
 •Stats, creator of Attack Survival Calculator, for inspiration, advice, and help with algorithm designs.
 •PacoTaco and MacChaeger for helping me through the logic of parsing Pokemon Showdown's data.
