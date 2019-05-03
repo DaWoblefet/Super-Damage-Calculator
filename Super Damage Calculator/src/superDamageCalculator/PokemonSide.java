@@ -27,6 +27,8 @@ import org.controlsfx.control.textfield.TextFields;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static superDamageCalculator.StatConstants.*;
+
 public class PokemonSide
 {
 	private HashMap<String, Pokemon> pokedex = Pokedex.getPokedex();
@@ -52,6 +54,8 @@ public class PokemonSide
 	private ObservableList<String> formes;
 	private Label formeLabel;
 
+	private GridPane statsStructure;
+	private Label[] statLabel;
 	private TextField[] baseField = new TextField[6];
 	private TextField[] IVsField = new TextField[6];
 	private TextField[] EVsField = new TextField[6];
@@ -151,7 +155,7 @@ public class PokemonSide
 
 		structure.getChildren().add(TLFStructure);
 
-		GridPane statsStructure = new GridPane();
+		statsStructure = new GridPane();
 		Label baseLabel = new Label("Base");
 		Label IVsLabel = new Label("IVs");
 		Label EVsLabel = new Label("EVs");
@@ -163,7 +167,7 @@ public class PokemonSide
 		GridPane.setColumnSpan(importButton, 2);
 		GridPane.setMargin(importButton, new Insets(0,5,0,40));
 
-		Label[] statLabel = new Label[6];
+		statLabel = new Label[6];
 		ToggleGroup teamTG = new ToggleGroup();
 		Label[] teamSpriteLabels = new Label[6];
 		String[] statLabelNames = {"HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"};
@@ -468,6 +472,53 @@ public class PokemonSide
 		nature.setOnAction(e ->
 		{
 			teamData[currentPokemon].setNature(nature.getValue());
+			
+			String none = "-fx-background-color: transparent";
+			String green = "-fx-background-color: #90ee90";
+			String red = "-fx-background-color: #ff6666";
+			
+			for (int i = 0; i < statLabel.length; i++)
+			{
+				statLabel[i].setStyle(none);
+			}
+			
+			switch (nature.getValue())
+			{
+				case "Adamant": case "Brave": case "Lonely": case "Naughty":
+					statLabel[ATK].setStyle(green);
+					break;
+				case "Bold": case "Impish": case "Lax": case "Relaxed":
+					statLabel[DEF].setStyle(green);
+					break;
+				case "Mild": case "Modest": case "Quiet": case "Rash":
+					statLabel[SATK].setStyle(green);
+					break;
+				case "Calm": case "Careful": case "Gentle": case "Sassy":
+					statLabel[SDEF].setStyle(green);
+					break;
+				case "Hasty": case "Jolly": case "Naive": case "Timid":
+					statLabel[SPE].setStyle(green);
+					break;
+			}
+			switch (nature.getValue())
+			{
+				case "Bold": case "Calm": case "Modest": case "Timid":
+					statLabel[ATK].setStyle(red);
+					break;
+				case "Gentle": case "Hasty": case "Lonely": case "Mild":
+					statLabel[DEF].setStyle(red);
+					break;
+				case "Adamant": case "Careful": case "Impish": case "Jolly":
+					statLabel[SATK].setStyle(red);
+					break;
+				case "Lax": case "Naive": case "Naughty": case "Rash":
+					statLabel[SDEF].setStyle(red);
+					break;
+				case "Brave": case "Quiet": case "Relaxed": case "Sassy":
+					statLabel[SPE].setStyle(red);
+					break;
+			}
+			
 			updateStats();
 		});
 		
