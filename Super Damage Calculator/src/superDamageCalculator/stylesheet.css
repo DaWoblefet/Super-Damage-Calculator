@@ -1,0 +1,13 @@
+.root
+{
+	-fx-font-family: "Segoe UI";
+	-fx-font-size: 12;
+}
+
+#move-cells
+{
+	-fx-font-family: "Segoe UI";
+	-fx-font-size: 12.5;
+	-fx-max-width: 280;
+	-fx-max-height: 94;
+}

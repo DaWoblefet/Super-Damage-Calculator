@@ -49,6 +49,7 @@ public class SuperDamageCalculator extends Application
 	{
 		long startTime = System.currentTimeMillis();
 		Thread.setDefaultUncaughtExceptionHandler(SuperDamageCalculator::showError);
+		Font.loadFont(getClass().getResourceAsStream("/resources/segoeui.ttf"), 16);
 		BorderPane mainPane = new BorderPane();
 		BorderPane subPane = new BorderPane();
 		mainPane.setStyle("-fx-background-color: #f3f3f3;");
@@ -148,6 +149,24 @@ public class SuperDamageCalculator extends Application
 
 		/****** BEGIN CENTER *******/
 		leftSideFieldOptions = new SideFieldOptions(true);
+		leftSideFieldOptions.getGeomancyButton().setOnAction(e ->
+		{
+			if (leftSideFieldOptions.getGeomancyButton().isSelected())
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					leftMon.getStatChanges(i).setValue("--");
+					leftMon.getStatChanges(i + 3).setValue("+2");
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					leftMon.getStatChanges(i).setValue("--");
+				}
+			}
+		});
 		leftSideFieldOptions.getPlusOneAllButton().setOnAction(e ->
 		{
 			if (leftSideFieldOptions.getPlusOneAllButton().isSelected())
@@ -199,6 +218,24 @@ public class SuperDamageCalculator extends Application
 		
 		
 		rightSideFieldOptions = new SideFieldOptions(false);
+		rightSideFieldOptions.getGeomancyButton().setOnAction(e ->
+		{
+			if (rightSideFieldOptions.getGeomancyButton().isSelected())
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					rightMon.getStatChanges(i).setValue("--");
+					rightMon.getStatChanges(i + 3).setValue("+2");
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					rightMon.getStatChanges(i).setValue("--");
+				}
+			}
+		});
 		rightSideFieldOptions.getPlusOneAllButton().setOnAction(e ->
 		{
 			if (rightSideFieldOptions.getPlusOneAllButton().isSelected())
@@ -256,7 +293,9 @@ public class SuperDamageCalculator extends Application
 
 		ImageView bottomImage = new ImageView(new Image(getClass().getResourceAsStream("/resources/Wobbuffet-large.png")));
 		bottomImage.setPreserveRatio(true);
-		bottomImage.setFitHeight(200);
+		bottomImage.setFitHeight(150);
+		
+		bottomImage.setOnMouseClicked(e -> {openLink("https://www.youtube.com/watch?v=JMX00jdY5AU");});
 		
 		center.setTop(fieldOptions.getFieldOptions());
 		BorderPane sideOptions = new BorderPane();
@@ -308,8 +347,8 @@ public class SuperDamageCalculator extends Application
 		updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
 		updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
 
-
 		Scene scene = new Scene(mainPane, 1200, 680);
+		scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
 		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
 		primaryStage.getIcons().add(icon);
 		primaryStage.setTitle("Super Damage Calculator");

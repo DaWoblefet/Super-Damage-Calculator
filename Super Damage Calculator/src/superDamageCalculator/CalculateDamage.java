@@ -1242,13 +1242,12 @@ public class CalculateDamage
 			defense = "Def";
 		}
 
-		calculatePercentDamage();
-
+		damageOutputShort = calculatePercentDamage(true);
 		damageOutput += attackerOffenseStatEVs + attackerNature() + " " + offense + " ";
 		damageOutput += attackerName + " " + move.getName() + " vs. ";
 		damageOutput += defender.getStat(HP).getEVs() + " HP / " + defenderDefenseStatEVs + defenderNature() + " " + defense + " ";
 		damageOutput += defenderName + ": " + damageRolls[0] + "-" + damageRolls[15] + " ";
-		damageOutput += damageOutputShort + " -- " + getXHKO();
+		damageOutput += calculatePercentDamage(false) + " -- " + getXHKO();
 	}
 	
 	public String getXHKO()
@@ -1305,13 +1304,32 @@ public class CalculateDamage
 		damageOutput += defenderName + ": 0 - 0 " + damageOutputShort +  " -- " + message;
 	}
 
-	public void calculatePercentDamage()
+	public String calculatePercentDamage(boolean isShortMessage)
 	{
+		String damageOutputShort;
+		
 		double minRollPercent = ((double) damageRolls[0] / (double) defenderCurrentHP) * 100;
 		double maxRollPercent = ((double) damageRolls[15] / (double) defenderCurrentHP) * 100;
 
-		damageOutputShort += "(" + String.format("%.2f", minRollPercent) + " - ";
-		damageOutputShort += String.format("%.2f", maxRollPercent) + "%)";
+		if (isShortMessage)
+		{
+			if (minRollPercent >= 100.0)
+			{
+				damageOutputShort = "(OHKO)";
+			}
+			else
+			{
+				damageOutputShort = "(" + String.format("%.1f", minRollPercent) + " - ";
+				damageOutputShort += String.format("%.1f", maxRollPercent) + "%)";
+			}
+		}
+		else
+		{
+			damageOutputShort = "(" + String.format("%.2f", minRollPercent) + " - ";
+			damageOutputShort += String.format("%.2f", maxRollPercent) + "%)";
+		}
+		
+		return damageOutputShort;
 	}
 
 	public String attackerNature()

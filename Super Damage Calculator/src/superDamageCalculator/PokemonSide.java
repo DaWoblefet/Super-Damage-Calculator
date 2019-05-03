@@ -132,9 +132,7 @@ public class PokemonSide
 		GridPane TLFStructure = new GridPane();
 		Label typeLabel = new Label("Type");
 		typeLeft = new ComboBox<String>(typeNames);
-		typeLeft.setPrefWidth(90);
 		typeRight = new ComboBox<String>(typeNames);
-		typeRight.setPrefWidth(90);
 		TLFStructure.addRow(0, typeLabel, typeLeft, typeRight);
 		GridPane.setMargin(typeLabel, new Insets(0,5,0,0));
 
@@ -226,7 +224,6 @@ public class PokemonSide
 
 		Label statusLabel = new Label("Status");
 		status = new ComboBox<String>(statusNames);
-		status.setPrefWidth(85);
 		NAISstructure.addRow(1, abilityLabel, ability, new Label(""), new Label(""), statusLabel, status);
 
 		GridPane.setMargin(natureLabel, new Insets(0,5,0,0));
@@ -273,13 +270,12 @@ public class PokemonSide
 			movesComboBox[i] = new ComboBox<String>(moveNames);
 			TextFields.bindAutoCompletion(movesComboBox[i].getEditor(), movesComboBox[i].getItems());
 			movesComboBox[i].setEditable(true);
-			movesComboBox[i].setPrefWidth(110);
+			movesComboBox[i].setPrefWidth(120);
 			basePower[i] = new TextField();
 			basePower[i].setPrefWidth(35);
 			type[i] = new ComboBox<String>(typeNames);
-			type[i].setPrefWidth(85);
 			category[i] = new ComboBox<String>(categories);
-			category[i].setPrefWidth(85);
+			category[i].setPrefWidth(100);
 			crit[i] = new CheckBox();
 			zOption[i] = new CheckBox();
 			moveStructure.addRow(i + 1, movesComboBox[i], basePower[i], type[i], category[i], crit[i], zOption[i]);
@@ -349,8 +345,8 @@ public class PokemonSide
 
 		topMoves = new ListView<String>(topMoveNames);
 		topMoves.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		topMoves.setPrefHeight(94);
-		topMoves.setMaxWidth(200);
+		topMoves.setId("move-cells");
+
 		/***** END DEFAULTS *******/
 
 		/***** SetOnAction()s to update the GUI live. *******/

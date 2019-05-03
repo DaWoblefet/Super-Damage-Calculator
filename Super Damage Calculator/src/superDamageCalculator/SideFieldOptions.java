@@ -5,8 +5,11 @@ package superDamageCalculator;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -22,6 +25,7 @@ public class SideFieldOptions
 	private ToggleButton helpingHand;
 	private ToggleButton friendGuard;
 	private ToggleButton battery;
+	private ToggleButton geomancy;
 	private ToggleButton plusOneAll;
 	private ToggleButton plusTwoAll;
 	private ToggleButton soak;
@@ -97,20 +101,27 @@ public class SideFieldOptions
  			isBattery = battery.isSelected();
  			triggerCalcs();
  		});
- 		options.addRow(5, battery);
+ 		options.addRow(5, battery);		
 
 		ToggleGroup boosts = new ToggleGroup();
+		
+		ImageView xerneas = new ImageView(new Image(getClass().getResourceAsStream("/resources/Sprites/Xerneas.png"), 20, 20, true, true));
+		geomancy = new ToggleButton("Geomancy", xerneas);
+		geomancy.setToggleGroup(boosts);
+		options.addRow(6, geomancy);
+		
  		plusOneAll = new ToggleButton("+1 All Stats");
  		plusOneAll.setToggleGroup(boosts);
- 		options.addRow(6, plusOneAll);
+ 		options.addRow(7, plusOneAll);
 
  		plusTwoAll = new ToggleButton("+2 All Stats");
  		plusTwoAll.setToggleGroup(boosts);
- 		options.addRow(7, plusTwoAll);
+ 		options.addRow(8, plusTwoAll);
 
  		soak = new ToggleButton("Soak");
-		options.addRow(8, soak);
+		options.addRow(9, soak);
 		
+		options.setVgap(0.5);
 		if (!isLeftSide)
 		{
 			GridPane.setHalignment(protect, HPos.RIGHT);
@@ -119,6 +130,7 @@ public class SideFieldOptions
 			GridPane.setHalignment(helpingHand, HPos.RIGHT);
 			GridPane.setHalignment(friendGuard, HPos.RIGHT);
 			GridPane.setHalignment(battery, HPos.RIGHT);
+			GridPane.setHalignment(geomancy, HPos.RIGHT);
 			GridPane.setHalignment(plusOneAll, HPos.RIGHT);
 			GridPane.setHalignment(plusTwoAll, HPos.RIGHT);
 			GridPane.setHalignment(soak, HPos.RIGHT);
@@ -185,6 +197,11 @@ public class SideFieldOptions
 	public ToggleButton getSoakButton()
 	{
 		return soak;
+	}
+	
+	public ToggleButton getGeomancyButton()
+	{
+		return geomancy;
 	}
 	
 	public ToggleButton getPlusOneAllButton()
