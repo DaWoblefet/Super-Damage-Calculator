@@ -4,6 +4,7 @@
 package superDamageCalculator;
 
 import javafx.application.Application;
+
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
@@ -20,7 +21,6 @@ import javafx.scene.input.ClipboardContent;
 
 import java.awt.Desktop;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class SuperDamageCalculator extends Application
@@ -96,14 +96,12 @@ public class SuperDamageCalculator extends Application
 		BorderPane center = new BorderPane();
 		GridPane damageCalcs = new GridPane();
 		HBox rollsAndCopy = new HBox();
-
-		leftMon.setDamageOutput("This is where the calc would go.", 0);
-		mainDamageResultLabel = new Label(leftMon.getDamageOutput(0));
-		mainDamageResultLabel.setFont(new Font("Times New Roman", 20)); //formerly 28
-		mainDamageResultLabel.setWrapText(true);
+		
+		mainDamageResultLabel = new Label("This is where the calc would go.");
+		mainDamageResultLabel.setId("damage-label");
 		damageCalcs.addRow(0, mainDamageResultLabel);
 
-		mainDamageRollsLabel = new Label(Arrays.toString(leftMon.getDamageRolls(0)));
+		mainDamageRollsLabel = new Label(getRollsText(leftMon.getDamageRolls(leftMon.getCurrentMoveslot())));
 		mainDamageRollsLabel.setFont(new Font("Times New Roman", 14));
 		Button copyCalc = new Button("Copy Calc");
 		Button copyRolls = new Button("Copy Rolls");
@@ -291,20 +289,20 @@ public class SuperDamageCalculator extends Application
 		fieldOptions.getLevelFiftyButton().setOnAction(e -> setDefaultLevels(50));
 		fieldOptions.getLevelHundredButton().setOnAction(e -> setDefaultLevels(100));
 
-		ImageView bottomImage = new ImageView(new Image(getClass().getResourceAsStream("/resources/Wobbuffet-large.png")));
-		bottomImage.setPreserveRatio(true);
-		bottomImage.setFitHeight(150);
+		ImageView wobbuffet = new ImageView(new Image(getClass().getResourceAsStream("/resources/wobbuffet-large.png")));
+		wobbuffet.setPreserveRatio(true);
+		wobbuffet.setFitHeight(125);
+		wobbuffet.setTranslateY(-100);
 		
-		bottomImage.setOnMouseClicked(e -> {openLink("https://www.youtube.com/watch?v=JMX00jdY5AU");});
+		wobbuffet.setOnMouseClicked(e -> {openLink("https://www.youtube.com/watch?v=JMX00jdY5AU");});
 		
 		center.setTop(fieldOptions.getFieldOptions());
 		BorderPane sideOptions = new BorderPane();
 		sideOptions.setLeft(leftSideFieldOptions.getOptions());
 		sideOptions.setRight(rightSideFieldOptions.getOptions());
+		sideOptions.setCenter(wobbuffet);
+		BorderPane.setMargin(wobbuffet, new Insets(0, -100, 0, -100));
 		center.setCenter(sideOptions);
-		center.setBottom(bottomImage);
-		BorderPane.setAlignment(bottomImage, Pos.CENTER);
-		BorderPane.setMargin(bottomImage, new Insets(0,0,20,0));
 
 		/****** END CENTER *******/
 		leftMon.getTriggerCalcs().addListener((observable) ->
@@ -349,6 +347,7 @@ public class SuperDamageCalculator extends Application
 
 		Scene scene = new Scene(mainPane, 1200, 680);
 		scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
+		//mainDamageResultLabel.prefWidthProperty().bind(scene.widthProperty());
 		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
 		primaryStage.getIcons().add(icon);
 		primaryStage.setTitle("Super Damage Calculator");
