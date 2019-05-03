@@ -2,6 +2,7 @@
  * Autocomplete feature from ControlsFX (license BSD 3-Clause)*/
 
 package superDamageCalculator;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.*;
 import javafx.scene.layout.BorderPane;
@@ -407,6 +408,10 @@ public class PokemonSide
 			}
 			triggerCalcs();
 		});
+		chooseMon.getEditor().focusedProperty().addListener((observable) ->
+		{
+			Platform.runLater(chooseMon.getEditor()::selectAll);
+	    });
 
 		//Stat calculation done dynamically
 		level.textProperty().addListener((observable) -> {
@@ -440,6 +445,7 @@ public class PokemonSide
 					break;
 			}
 		});
+		level.setOnMouseClicked(e -> {level.selectAll();});
 
 		typeLeft.setOnAction(e -> 
 		{
@@ -528,11 +534,21 @@ public class PokemonSide
 			triggerCalcs();
 		});
 		
+		ability.focusedProperty().addListener((observable) ->
+		{
+			Platform.runLater(ability.getEditor()::selectAll);
+	    });
+		
 		item.setOnAction(e ->
 		{
 			teamData[currentPokemon].setItem(item.getValue());
 			triggerCalcs();
 		});
+		
+		item.getEditor().focusedProperty().addListener((observable) ->
+		{
+			Platform.runLater(item.getEditor()::selectAll);
+	    });
 		
 		status.setOnAction(e ->
 		{
@@ -557,6 +573,7 @@ public class PokemonSide
 				}
 				updateStats(j);
 			});
+			baseField[j].setOnMouseClicked(e -> {baseField[j].selectAll();});
 			IVsField[j].textProperty().addListener((observable) -> {
 				if (isToggleMon) {return;}
 				try //Make sure input is an integer.
@@ -590,6 +607,7 @@ public class PokemonSide
 						break;
 				}
 			});
+			IVsField[j].setOnMouseClicked(e -> {IVsField[j].selectAll();});
 			EVsField[j].textProperty().addListener((observable) ->
 			{
 				if (isToggleMon) {return;}
@@ -662,12 +680,12 @@ public class PokemonSide
 						break;
 				}
 			});
+			EVsField[j].setOnMouseClicked(e -> {EVsField[j].selectAll();});
 			statChanges[j].setOnAction(e ->
 			{
 				teamData[currentPokemon].getStat(j).setBoostLevel((String) statChanges[j].getValue());
 				triggerCalcs();
 			});
-			
 		}
 		
 		calculatedStats[0].textProperty().addListener((observable) ->
@@ -704,6 +722,7 @@ public class PokemonSide
 			modifyingHP = false;
 			triggerCalcs();
 		});
+		currentHP.setOnMouseClicked(e -> {currentHP.selectAll();});
 		
 		currentHPPercent.textProperty().addListener((observable) ->
 		{
@@ -729,6 +748,7 @@ public class PokemonSide
 			currentHP.setText(Integer.toString((int) (0.01 * x * HPstat)));
 			modifyingHPPercent = false;
 		});
+		currentHPPercent.setOnMouseClicked(e -> {currentHPPercent.selectAll();});
 
 		//Moves and their properties
 		for (int i = 0; i < 4; i++)
@@ -747,12 +767,18 @@ public class PokemonSide
 				triggerCalcs();
 			});
 			
+			movesComboBox[i].getEditor().focusedProperty().addListener((observable) ->
+			{
+				Platform.runLater(movesComboBox[j].getEditor()::selectAll);
+		    });
+			
 			basePower[i].textProperty().addListener((observable) ->
 			{
 				if (currentlyZ) {return;} //Don't overwrite normal BP with Z-BP.
 				teamData[currentPokemon].getMove(j).setBP(Integer.parseInt(basePower[j].getText()));
 				triggerCalcs();
 			});
+			basePower[j].setOnMouseClicked(e -> {basePower[j].selectAll();});
 			
 			type[i].setOnAction(e ->
 			{
