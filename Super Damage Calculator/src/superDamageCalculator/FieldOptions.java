@@ -13,13 +13,9 @@ import javafx.geometry.VPos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-
-import org.controlsfx.control.SegmentedButton;
 
 public class FieldOptions
 {
@@ -72,7 +68,6 @@ public class FieldOptions
 			format = formats.getSelectionModel().getSelectedItem();
 			triggerCalcs();
 		});
-		//formats.setPrefSize(formatTypes.size() * 24 + 2, formatTypes.size() * 24 + 2);
  		formats.setMaxWidth(111);
 		formats.setMaxHeight(35);
  		fieldOptions.addRow(1, formats);
@@ -103,7 +98,7 @@ public class FieldOptions
 			triggerCalcs();
 		});
  		weathers.setOrientation(Orientation.HORIZONTAL);
- 		weathers.setPrefWidth(277);
+ 		weathers.setMinWidth(277);
  		weathers.setMaxHeight(35);
  		fieldOptions.addRow(3, weathers);
  		GridPane.setHalignment(weathers, HPos.CENTER);

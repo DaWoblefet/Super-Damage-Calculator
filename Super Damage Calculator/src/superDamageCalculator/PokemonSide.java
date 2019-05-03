@@ -261,9 +261,10 @@ public class PokemonSide
 		Label moveTypeLabel = new Label("Type");
 		Label categoryLabel = new Label("Category");
 		Label critLabel = new Label("Crit");
-		Label ZLabel = new Label("Z-move");
-		moveStructure.addRow(0, new Label(""), BPLabel, moveTypeLabel, categoryLabel, critLabel, ZLabel);
-		GridPane.setMargin(critLabel, new Insets(0,0,0,5));
+		Label zLabel = new Label("Z");
+		moveStructure.addRow(0, new Label(""), BPLabel, moveTypeLabel, categoryLabel, critLabel, zLabel);
+		GridPane.setMargin(critLabel, new Insets(0,0,0,3.5));
+		GridPane.setMargin(zLabel, new Insets(0,0,0,4.5));
 
 		for (int i = 0; i < 4; i++)
 		{
