@@ -193,6 +193,12 @@ public class CalculateDamage
 		isBattery = fieldOptions.getSideFieldOptions(isLeft).isBattery();
 
 		typeMod = typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];
+		//Strong Winds completely changes the type mod for things like Neuroforce, etc.
+		if (weather.equals("Strong Winds") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")) && typechart[types.get(moveType)][types.get("Flying")] > 1)
+		{
+			typeMod *= 0.5;
+		}
+		
 		if (moveCategory.equals("Status") || typeMod == 0)
 		{
 			if (moveType.equals("Electric") && (defenderTypeLeft.equals("Ground") || defenderTypeRight.equals("Ground")))
@@ -883,41 +889,14 @@ public class CalculateDamage
 			}
 		}
 
-		//Weather 		
-		switch (weather)
+		//Weather. Note that Strong Winds is actually a modifier to type matchups, not weather. 		
+		if ((weather.equals("Sun") && moveType.equals("Fire")) ||(weather.equals("Rain") && moveType.equals("Water")))
 		{
-			case "Sun":
-				if (moveType.equals("Fire"))
-				{
-					damagePreRolls = pokeRound((damagePreRolls * 0x1800) / 0x1000);
-				}
-				else if (moveType.equals("Water"))
-				{
-					damagePreRolls = pokeRound((damagePreRolls * 0x800) / 0x1000);
-				}
-				break;
-			case "Rain":
-				if (moveType.equals("Water"))
-				{
-					damagePreRolls = pokeRound((damagePreRolls * 0x1800) / 0x1000);
-				}
-				else if (moveType.equals("Fire"))
-				{
-					damagePreRolls = pokeRound((damagePreRolls * 0x800) / 0x1000);
-				}
-				break;
-			case "Strong Winds":
-				if (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying"))
-				{
-					//If the move is super effective on a Flying-type, cut the damage by half
-					if (typechart[types.get(moveType)][types.get("Flying")] > 1)
-					{
-						damagePreRolls = pokeRound((damagePreRolls * 0x800) / 0x1000);
-					}
-				}
-				break;
-			default:
-				break;
+			damagePreRolls = pokeRound((damagePreRolls * 0x1800) / 0x1000);
+		}
+		else if ((weather.equals("Sun") && moveType.equals("Water")) ||(weather.equals("Rain") && moveType.equals("Fire")))
+		{
+			damagePreRolls = pokeRound((damagePreRolls * 0x800) / 0x1000);
 		}
 
 		//Critical hit
