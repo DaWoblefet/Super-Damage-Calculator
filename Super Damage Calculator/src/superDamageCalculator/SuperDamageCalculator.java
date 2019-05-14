@@ -42,7 +42,7 @@ public class SuperDamageCalculator extends Application
 	private FieldOptions fieldOptions;
 
 	private final Clipboard clipboard = Clipboard.getSystemClipboard();
-    private final ClipboardContent content = new ClipboardContent();
+	private final ClipboardContent content = new ClipboardContent();
 
 	@Override
 	public void start(Stage primaryStage)
@@ -305,6 +305,8 @@ public class SuperDamageCalculator extends Application
 		center.setCenter(sideOptions);
 
 		/****** END CENTER *******/
+		
+		/****** DYNAMIC UPDATES FOR DAMAGE CALCULATION/ABILITIES *******/
 		leftMon.getTriggerCalcs().addListener((observable) ->
 		{
 			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
@@ -314,6 +316,16 @@ public class SuperDamageCalculator extends Application
 		{
 			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
 			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
+		});
+		
+		leftMon.getTriggerAbilities().addListener((observable) ->
+		{
+			fieldOptions.setActiveAbilities(leftMon.getAbility(), rightMon.getAbility());
+		});
+		
+		rightMon.getTriggerAbilities().addListener((observable) ->
+		{
+			fieldOptions.setActiveAbilities(rightMon.getAbility(), leftMon.getAbility());
 		});
 		
 		fieldOptions.getTriggerCalcs().addListener((observable) ->
@@ -333,6 +345,8 @@ public class SuperDamageCalculator extends Application
 			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
 			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
 		});
+		/****** END DYNAMIC UPDATES FOR DAMAGE CALCULATION/ABILITIES *******/
+		
 		subPane.setTop(damageCalcs);
 		subPane.setLeft(pokemonLeft);
 		subPane.setRight(pokemonRight);

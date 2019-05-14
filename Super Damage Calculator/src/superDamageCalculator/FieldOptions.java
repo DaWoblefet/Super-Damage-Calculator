@@ -3,21 +3,19 @@
 
 package superDamageCalculator;
 
+import java.util.Arrays;
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
@@ -27,9 +25,6 @@ public class FieldOptions
 	private String terrain;
 	private String weather;
 	private String aura;
-	/*private boolean isFairyAura;
-	private boolean isDarkAura;
-	private boolean isAuraBreak;*/
 	
 	private GridPane fieldOptions;
 	private RadioButton levelFive;
@@ -138,12 +133,85 @@ public class FieldOptions
  		auras.getSelectionModel().select(0);
 	}
 	
+	public void setActiveAbilities(String activeAbilityNew, String activeAbilityOld)
+	{
+		String[] abilities = {activeAbilityOld, activeAbilityNew};
+		
+		//Setting defaults
+		terrain = "None";
+ 		terrains.getSelectionModel().select(0);
+ 		weather = "None";
+ 		weathers.getSelectionModel().select(0);
+ 		aura = "None";
+ 		auras.getSelectionModel().select(0);
+		
+ 		//Set the field based on old abilities, then the new ability
+		for (int i = 0; i < abilities.length; i++)
+		{
+			switch (abilities[i])
+			{
+				case "Electric Surge":
+					terrain = "Electric";
+			 		terrains.getSelectionModel().select(1);
+					break;
+				case "Grassy Surge":
+					terrain = "Grassy";
+			 		terrains.getSelectionModel().select(2);
+					break;
+				case "Misty Surge":
+					terrain = "Misty";
+			 		terrains.getSelectionModel().select(3);
+					break;
+				case "Psychic Surge":
+					terrain = "Psychic";
+			 		terrains.getSelectionModel().select(4);
+					break;
+				case "Drought":
+				case "Desolate Land":
+					weather = "Sun";
+					weathers.getSelectionModel().select(1);
+					break;
+				case "Drizzle":
+				case "Primordial Sea":
+					weather = "Rain";
+					weathers.getSelectionModel().select(2);
+					break;
+				case "Sand Stream":
+					weather = "Sand";
+					weathers.getSelectionModel().select(3);
+					break;
+				case "Snow Warning":
+					weather = "Hail";
+					weathers.getSelectionModel().select(4);
+					break;
+				case "Delta Stream":
+					weather = "Strong Winds";
+					weathers.getSelectionModel().select(5);
+					break;
+				case "Fairy Aura":
+					aura = "Fairy Aura";
+			 		auras.getSelectionModel().select(1);
+					break;
+				case "Dark Aura":
+					aura = "Dark Aura";
+			 		auras.getSelectionModel().select(2);
+					break;
+				case "Aura Break":
+					aura = "Aura Break";
+			 		auras.getSelectionModel().select(3);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
 	//Flips a boolean to trigger event handlers elsewhere
 	public void triggerCalcs()
 	{
 		triggerCalcs.setValue(!triggerCalcs.getValue());
 	}
-	
+		
 	public SimpleBooleanProperty getTriggerCalcs()
 	{
 		return triggerCalcs;

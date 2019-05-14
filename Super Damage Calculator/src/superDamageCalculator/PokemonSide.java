@@ -26,6 +26,7 @@ import java.util.Set;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static superDamageCalculator.StatConstants.*;
@@ -97,6 +98,7 @@ public class PokemonSide
 	private ToggleButton[] teamSpritesToggles = new ToggleButton[6];
 	
 	private SimpleBooleanProperty triggerCalcs = new SimpleBooleanProperty(false);
+	private SimpleBooleanProperty triggerAbilities = new SimpleBooleanProperty(false);
 	
 	public PokemonSide()
 	{
@@ -531,6 +533,15 @@ public class PokemonSide
 		ability.setOnAction(e ->
 		{
 			teamData[currentPokemon].setAbility(ability.getValue());
+			/*if (Arrays.asList(abilityTriggers).contains(ability.getValue()))
+			{
+				triggerAbilities(ability.getValue());
+			}
+			else
+			{
+				triggerAbilities("None");
+			}*/
+			triggerAbilities();
 			triggerCalcs();
 		});
 		
@@ -850,6 +861,11 @@ public class PokemonSide
 	{
 		triggerCalcs.setValue(!triggerCalcs.getValue());
 	}
+	
+	public void triggerAbilities()
+	{
+		triggerAbilities.setValue(!triggerAbilities.getValue());
+	}
 
 	public void updateStats()
 	{
@@ -1039,6 +1055,11 @@ public class PokemonSide
 		return triggerCalcs;
 	}
 	
+	public SimpleBooleanProperty getTriggerAbilities()
+	{
+		return triggerAbilities;
+	}
+	
 	public BorderPane getPokemonSide()
 	{
 		return pokemonSide;
@@ -1082,6 +1103,11 @@ public class PokemonSide
 	public ComboBox getStatChanges(int slot)
 	{
 		return statChanges[slot];
+	}
+	
+	public String getAbility()
+	{
+		return ability.getValue();
 	}
 
 	public int getCurrentMoveslot()
