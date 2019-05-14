@@ -134,7 +134,7 @@ public class CalculateDamage
 		attackerOffenseChange = parseChangeValue(attacker.getStat(whichAtk).getBoostLevel());
 		attackerSpeedChange = parseChangeValue(attacker.getStat(SPE).getBoostLevel());
 		attackerNature = attacker.getNature();
-		attackerAbility = attacker.getAbility(0);
+		attackerAbility = attacker.getAbility();
 		attackerItem = attacker.getItem();
 		attackerStatus = attacker.getStatus();
 
@@ -150,7 +150,7 @@ public class CalculateDamage
 		defenderDefenseChange = parseChangeValue(defender.getStat(whichDef).getBoostLevel());
 		defenderSpeedChange = parseChangeValue(defender.getStat(SPE).getBoostLevel());
 		defenderNature = defender.getNature();
-		defenderAbility = defender.getAbility(0);
+		defenderAbility = defender.getAbility();
 		defenderItem = defender.getItem();
 		defenderStatus = defender.getStatus();
 		

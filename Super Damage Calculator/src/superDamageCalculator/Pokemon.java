@@ -10,7 +10,6 @@ import static superDamageCalculator.StatConstants.*;
 public class Pokemon
 {
     private String name;
-    private int dexNumber;
     
     private HashMap<String, Move> movedex = new Movedex().getMovedex();
 	private HashMap<String, Item> items = new Itemdex().getItems();
@@ -22,7 +21,7 @@ public class Pokemon
     private ArrayList<String> formes = new ArrayList<String>();
     private String currentForme;
     
-    private ArrayList<String> abilities = new ArrayList<String>();
+    private String ability;
     private Move[] moves = new Move[4];
     
     private Stat[] stats = new Stat[6];
@@ -66,17 +65,6 @@ public class Pokemon
     {
     	this.name = name;
     }
-    
-    //getDexNumber and setDexNumber are only used for sprite parsing
-	public int getDexNumber()
-	{
-		return this.dexNumber;
-	}
-
-	public void setDexNumber(int dexNumber)
-	{
-		this.dexNumber = dexNumber;
-	}
 
 	public ArrayList<String> getFormes()
 	{
@@ -110,11 +98,7 @@ public class Pokemon
 	{
 
 		this.setTypes(newForme.getType(0), newForme.getType(1));
-		abilities.clear();
-		for (int i = 0; i < newForme.abilities.size(); i++)
-		{
-			this.addAbility(newForme.abilities.get(i));
-		}
+		this.setAbility(newForme.getAbility());
 		for (int i = 0; i < newForme.baseStats.length; i++)
 		{
 			this.setBaseStat(newForme.baseStats[i], i);
@@ -238,35 +222,12 @@ public class Pokemon
 
 	public String getAbility()
 	{
-		return abilities.get(abilities.size() - 1);
+		return ability;
 	}
-
-    public String getAbility(int index)
-    {
-		return abilities.get(index);
-    }
-    
-    public ArrayList<String> getAllAbilities()
-    {
-    	return abilities;
-    }
     
     public void setAbility(String ability)
     {
-    	abilities.set(0, ability);
-    }
-    
-    public void addAbility(String ability)
-    {
-    	abilities.add(ability);
-    }
-    
-    public void addAbilities(String...abilities)
-    {
-    	for (int i = 0; i < abilities.length; i++)
-    	{
-    		this.abilities.add(abilities[i]);
-    	}
+    	this.ability = ability;
     }
 
     public Move getMove(int moveslot)
@@ -314,12 +275,8 @@ public class Pokemon
 	{
 		Pokemon pokemon = new Pokemon(this.name);
 		pokemon.setName(this.name);
-		pokemon.setDexNumber(this.dexNumber);
 		pokemon.setTypes(this.types[0], this.types[1]);
-		for (int i = 0; i < this.abilities.size(); i++)
-		{
-			pokemon.addAbility(this.abilities.get(i));
-		}
+		pokemon.setAbility(this.ability);
 		for (int i = 0; i < this.baseStats.length; i++)
 		{
 			pokemon.setBaseStat(this.baseStats[i], i);
@@ -345,7 +302,7 @@ public class Pokemon
 		{
 			showdownExport += name + "\n";
 		}
-		showdownExport += "Ability: " + abilities.get(abilities.size() - 1) + "\n";
+		showdownExport += "Ability: " + ability + "\n";
 		showdownExport += "Level: " + stats[0].getLevel() + "\n";
 		showdownExport += "EVs: ";
 		for (int i = 0; i < 6; i++)
@@ -424,3 +381,13 @@ public class Pokemon
 	}
 }
 
+//getDexNumber and setDexNumber are only used for sprite parsing
+/*public int getDexNumber()
+{
+	return this.dexNumber;
+}
+
+public void setDexNumber(int dexNumber)
+{
+	this.dexNumber = dexNumber;
+}*/

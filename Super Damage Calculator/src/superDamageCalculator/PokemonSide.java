@@ -26,7 +26,6 @@ import java.util.Set;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static superDamageCalculator.StatConstants.*;
@@ -320,7 +319,7 @@ public class PokemonSide
 		level.setText(Integer.toString(defaultLevel));
 		teamData[currentPokemon].setNature("Hardy");;
 		nature.setValue("Hardy");
-		ability.setValue(teamData[currentPokemon].getAbility(0));
+		ability.setValue(teamData[currentPokemon].getAbility());
 		item.setValue("(none)");
 		status.setValue("Healthy");
 
@@ -533,14 +532,6 @@ public class PokemonSide
 		ability.setOnAction(e ->
 		{
 			teamData[currentPokemon].setAbility(ability.getValue());
-			/*if (Arrays.asList(abilityTriggers).contains(ability.getValue()))
-			{
-				triggerAbilities(ability.getValue());
-			}
-			else
-			{
-				triggerAbilities("None");
-			}*/
 			triggerAbilities();
 			triggerCalcs();
 		});
@@ -936,7 +927,7 @@ public class PokemonSide
 			loadSprites(teamData[currentPokemon].getName());
 		}
 
-		ability.setValue(teamData[currentPokemon].getAbility(0));
+		ability.setValue(teamData[currentPokemon].getAbility());
 		item.setValue(teamData[currentPokemon].getItem().getName());
 		status.setValue(teamData[currentPokemon].getStatus());
 
