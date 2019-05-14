@@ -299,49 +299,9 @@ public class PokemonSide
 
 		/****** SETTING DEFAULT VALUES ************/
 		
-		chooseMon.setValue(teamData[currentPokemon].getName());
-		typeLeft.setValue(teamData[currentPokemon].getType(0));
-		typeRight.setValue(teamData[currentPokemon].getType(1));
-		if (teamData[currentPokemon].getFormes().size() > 0)
-		{
-			forme.setVisible(true);
-			formeLabel.setVisible(true);
-			formes = FXCollections.observableArrayList(teamData[currentPokemon].getFormes());
-			forme.setItems(formes);
-			forme.setValue(teamData[currentPokemon].getFormes().get(0));
-		}
-		else
-		{
-			forme.setVisible(false);
-			formeLabel.setVisible(false);
-		}
+		loadPokemonDisplay();
+		updateStats();
 		teamSpritesToggles[0].setSelected(true);
-		level.setText(Integer.toString(defaultLevel));
-		teamData[currentPokemon].setNature("Hardy");;
-		nature.setValue("Hardy");
-		ability.setValue(teamData[currentPokemon].getAbility());
-		item.setValue("(none)");
-		status.setValue("Healthy");
-
-		for (int i = 0; i < 6; i++)
-		{
-			teamData[currentPokemon].setStat(Integer.parseInt(EVsField[i].getText()), Integer.parseInt(IVsField[i].getText()), Integer.parseInt(level.getText()), natures.get(nature.getValue()), "--", i);
-			baseField[i].setText(Integer.toString(teamData[currentPokemon].getBaseStat(i)));
-			calculatedStats[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).calculateStat()));
-		}
-		
-		currentHP.setText(Integer.toString(teamData[currentPokemon].getStat(0).calculateStat()));
-		totalHPLabel.setText("/" + Integer.toString(teamData[currentPokemon].getStat(0).calculateStat()) + " (");
-		currentHPPercent.setText("100");
-
-		for (int i = 0; i < 4; i++)
-		{
-			movesComboBox[i].setValue("(none)");
-			moveData[i] = movedex.get((String) movesComboBox[i].getValue()).cloneMove();
-			basePower[i].setText(Integer.toString(moveData[i].getBP()));
-			category[i].setValue(moveData[i].getCategory());
-			type[i].setValue(moveData[i].getType());
-		}
 
 		BorderPane topPane = new BorderPane();
 		topMoveNames = FXCollections.observableArrayList();
@@ -351,7 +311,6 @@ public class PokemonSide
 		}
 
 		topMoves = new ListView<String>(topMoveNames);
-		topMoves.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		topMoves.setId("move-cells");
 
 		/***** END DEFAULTS *******/

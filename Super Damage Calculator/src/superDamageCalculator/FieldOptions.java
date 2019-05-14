@@ -3,8 +3,6 @@
 
 package superDamageCalculator;
 
-import java.util.Arrays;
-
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,7 +59,6 @@ public class FieldOptions
 		
 		ObservableList<String> formatTypes = FXCollections.observableArrayList("Singles", "Doubles");
 		formats = new ListView<String>(formatTypes);
-		formats.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		formats.setOrientation(Orientation.HORIZONTAL);
 		formats.setOnMouseClicked(e ->
 		{
@@ -76,7 +73,6 @@ public class FieldOptions
 
  		ObservableList<String> terrainNames = FXCollections.observableArrayList("None", "Electric", "Grassy", "Misty", "Psychic");
 		terrains = new ListView<String>(terrainNames);
-		terrains.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		terrains.setOnMouseClicked(e ->
 		{
 			terrain = terrains.getSelectionModel().getSelectedItem();
@@ -91,7 +87,6 @@ public class FieldOptions
 
 		ObservableList<String> weatherNames = FXCollections.observableArrayList("None", "Sun", "Rain", "Sand", "Hail", "Strong Winds");
  		weathers = new ListView<String>(weatherNames);
- 		weathers.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
  		weathers.setOnMouseClicked(e ->
 		{
 			weather = weathers.getSelectionModel().getSelectedItem();
@@ -106,8 +101,6 @@ public class FieldOptions
 
  		ObservableList<String> auraNames = FXCollections.observableArrayList("None", "Fairy Aura", "Dark Aura", "Aura Break");
  		auras = new ListView<String>(auraNames);
- 		auras.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
- 		
  		auras.setOnMouseClicked(e ->
  		{
  			aura = auras.getSelectionModel().getSelectedItem();
@@ -122,7 +115,7 @@ public class FieldOptions
  		
  		fieldOptions.setAlignment(Pos.CENTER);
  		
- 		/*Defaults*/	
+ 		//Defaults	
  		format = "Doubles";
  		formats.getSelectionModel().select(1);
  		terrain = "None";
