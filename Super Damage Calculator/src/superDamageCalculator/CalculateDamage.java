@@ -63,9 +63,7 @@ public class CalculateDamage
 	private String format;
 	private String terrain;
 	private String weather;
-	private boolean isFairyAura;
-	private boolean isDarkAura;
-	private boolean isAuraBreak;
+	private String aura;
 	private boolean isHelpingHand;
 	private boolean isProtect;
 	private boolean isReflect;
@@ -177,9 +175,7 @@ public class CalculateDamage
 		format = fieldOptions.getFormat();
 		terrain = fieldOptions.getTerrain();
 		weather = fieldOptions.getWeather();
-		isFairyAura = fieldOptions.isFairyAura();
-		isDarkAura = fieldOptions.isDarkAura();
-		isAuraBreak = fieldOptions.isAuraBreak();
+		aura = fieldOptions.getAura();
 		isHelpingHand = fieldOptions.getSideFieldOptions(isLeft).isHelpingHand();
 		isProtect = fieldOptions.getSideFieldOptions(!isLeft).isProtect();
 		isReflect = fieldOptions.getSideFieldOptions(!isLeft).isReflect();
@@ -401,7 +397,8 @@ public class CalculateDamage
 		
 		ArrayList<Integer> bpModifiers = new ArrayList<Integer>();
 		
-		if (isAuraBreak && (isFairyAura && moveType.equals("Fairy")) || (isDarkAura && moveType.equals("Dark")))
+		//Assumes Fairy/Dark Aura is active
+		if (aura.equals("Aura Break") && (moveType.equals("Fairy")) || moveType.equals("Dark"))
 		{
 			bpModifiers.add(0xC00);
 		}
@@ -488,7 +485,8 @@ public class CalculateDamage
 			bpModifiers.add(0x14CD);
 		}
 		
-		if ((isFairyAura && moveType.equals("Fairy")) || (isDarkAura && moveType.equals("Dark")) && !isAuraBreak)
+		//Assumes Aura Break is not active
+		if ((aura.equals("Fairy Aura") && moveType.equals("Fairy")) || (aura.equals("Dark Aura") && moveType.equals("Dark")))
 		{
 			bpModifiers.add(0x1548);
 		}

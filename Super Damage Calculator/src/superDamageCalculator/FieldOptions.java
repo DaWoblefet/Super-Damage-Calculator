@@ -6,14 +6,18 @@ package superDamageCalculator;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
@@ -22,9 +26,10 @@ public class FieldOptions
 	private String format;
 	private String terrain;
 	private String weather;
-	private boolean isFairyAura;
+	private String aura;
+	/*private boolean isFairyAura;
 	private boolean isDarkAura;
-	private boolean isAuraBreak;
+	private boolean isAuraBreak;*/
 	
 	private GridPane fieldOptions;
 	private RadioButton levelFive;
@@ -104,37 +109,17 @@ public class FieldOptions
  		GridPane.setHalignment(weathers, HPos.CENTER);
  		GridPane.setValignment(weathers, VPos.CENTER);
 
- 		ObservableList<String> auraNames = FXCollections.observableArrayList("Fairy Aura", "Dark Aura", "Aura Break");
+ 		ObservableList<String> auraNames = FXCollections.observableArrayList("None", "Fairy Aura", "Dark Aura", "Aura Break");
  		auras = new ListView<String>(auraNames);
- 		auras.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+ 		auras.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+ 		
  		auras.setOnMouseClicked(e ->
-		{
-			//Initialize options
-			isFairyAura = false;
-			isDarkAura = false;
-			isAuraBreak = false;
-			
-			//Set auras as appropriate
-			ObservableList<String> selectedAuras = auras.getSelectionModel().getSelectedItems();
-			for (int i = 0; i < selectedAuras.size(); i++)
-			{
-				switch (selectedAuras.get(i))
-				{
-					case "Fairy Aura":
-						isFairyAura = true;
-						break;
-					case "Dark Aura":
-						isDarkAura = true;
-						break;
-					case "Aura Break":
-						isAuraBreak = true;
-						break;
-				}
-			}
+ 		{
+ 			aura = auras.getSelectionModel().getSelectedItem();
 			triggerCalcs();
-		});
+ 		});
  		auras.setOrientation(Orientation.HORIZONTAL);
- 		auras.setMaxWidth(208);
+ 		auras.setMaxWidth(250);
  		auras.setMaxHeight(35);
  		fieldOptions.addRow(4, auras);
  		GridPane.setHalignment(auras, HPos.CENTER);
@@ -149,6 +134,8 @@ public class FieldOptions
  		terrains.getSelectionModel().select(0);
  		weather = "None";
  		weathers.getSelectionModel().select(0);
+ 		aura = "None";
+ 		auras.getSelectionModel().select(0);
 	}
 	
 	//Flips a boolean to trigger event handlers elsewhere
@@ -186,29 +173,13 @@ public class FieldOptions
 	{
 		this.weather = weather;
 	}
-	public boolean isFairyAura() 
+	public String getAura() 
 	{
-		return isFairyAura;
+		return aura;
 	}
-	public void setFairyAura(boolean isFairyAura) 
+	public void setAura(String aura)
 	{
-		this.isFairyAura = isFairyAura;
-	}
-	public boolean isDarkAura() 
-	{
-		return isDarkAura;
-	}
-	public void setDarkAura(boolean isDarkAura) 
-	{
-		this.isDarkAura = isDarkAura;
-	}
-	public boolean isAuraBreak() 
-	{
-		return isAuraBreak;
-	}
-	public void setAuraBreak(boolean isAuraBreak) 
-	{
-		this.isAuraBreak = isAuraBreak;
+		this.aura = aura;
 	}
 	
 	public GridPane getFieldOptions()
