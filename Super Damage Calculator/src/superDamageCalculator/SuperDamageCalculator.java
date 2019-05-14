@@ -78,7 +78,7 @@ public class SuperDamageCalculator extends Application
 		MenuItem psVGC = new MenuItem("Pokemon Showdown VGC room");
 		psVGC.setOnAction(e -> openLink("https://play.pokemonshowdown.com/vgc"));
 		MenuItem speedTiers = new MenuItem("Speed Tiers");
-		speedTiers.setOnAction(e -> openLink("https://trainertower.com/vgc-2018-speed-tiers/"));
+		speedTiers.setOnAction(e -> openLink("https://victoryroad.es/en/speed-tiers-vgc19-ultra/"));
 		MenuItem survivalCalc = new MenuItem("Survival Calc");
 		survivalCalc.setOnAction(e -> openLink("https://www.trainertower.com/survivalcalc/"));
 		menuLinks.getItems().addAll(ttHome, psVGC, speedTiers, survivalCalc);
