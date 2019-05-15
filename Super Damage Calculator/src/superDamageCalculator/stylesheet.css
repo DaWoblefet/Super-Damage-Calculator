@@ -21,6 +21,23 @@
 	-fx-max-height: 94;
 }
 
+#update-button
+{
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, #add8e6, #add8e6;
+	-fx-background-radius:  6.4, 5, 4, 3;
+	-fx-background-insets: -1.4, 0, 1, 2;
+}
+
+#update-button:hover
+{
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, #c4e3ed, #c4e3ed;
+}
+
+#update-button:armed
+{
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, #76bdd5, #76bdd5;
+}
+
 .list-view .scroll-bar:vertical .increment-arrow,
 .list-view .scroll-bar:vertical .decrement-arrow,
 .list-view .scroll-bar:vertical .increment-button,

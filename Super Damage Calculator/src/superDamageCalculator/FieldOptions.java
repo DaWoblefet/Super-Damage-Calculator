@@ -7,12 +7,12 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -56,6 +56,7 @@ public class FieldOptions
 		levelDefault.getChildren().addAll(levelFive, levelFifty, levelHundred);
 		levelDefault.setSpacing(5);
 		fieldOptions.addRow(0, levelDefault);
+		GridPane.setMargin(levelDefault, new Insets(5,0,5,0));
 		
 		ObservableList<String> formatTypes = FXCollections.observableArrayList("Singles", "Doubles");
 		formats = new ListView<String>(formatTypes);

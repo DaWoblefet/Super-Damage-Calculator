@@ -4,24 +4,33 @@
 package superDamageCalculator;
 
 import javafx.application.Application;
-
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.layout.HBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.*;
-import javafx.geometry.*;
-import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
 import java.awt.Desktop;
 import java.net.URI;
+import java.net.URL;
 import java.util.Scanner;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class SuperDamageCalculator extends Application
 {
@@ -43,6 +52,9 @@ public class SuperDamageCalculator extends Application
 
 	private final Clipboard clipboard = Clipboard.getSystemClipboard();
 	private final ClipboardContent content = new ClipboardContent();
+	private final String currentVersion = "0.5.1";
+	private String latestVersion;
+	private boolean newerVersionExists;
 
 	@Override
 	public void start(Stage primaryStage)
@@ -50,12 +62,14 @@ public class SuperDamageCalculator extends Application
 		long startTime = System.currentTimeMillis();
 		Thread.setDefaultUncaughtExceptionHandler(SuperDamageCalculator::showError);
 		Font.loadFont(getClass().getResourceAsStream("/resources/segoeui.ttf"), 16);
+		latestVersion = checkForUpdates();
+		newerVersionExists = !latestVersion.equals(currentVersion);
+
 		BorderPane mainPane = new BorderPane();
 		BorderPane subPane = new BorderPane();
 		mainPane.setStyle("-fx-background-color: #f3f3f3;");
 
 		MenuBar menubar = new MenuBar();
-
 		Menu menuFile = new Menu("File");
 
 		MenuItem psImport = new MenuItem("Import from Showdown");
@@ -94,6 +108,7 @@ public class SuperDamageCalculator extends Application
 
 		/****** BEGIN TOP *******/
 		BorderPane center = new BorderPane();
+		BorderPane damages = new BorderPane();
 		GridPane damageCalcs = new GridPane();
 		HBox rollsAndCopy = new HBox();
 		
@@ -106,10 +121,22 @@ public class SuperDamageCalculator extends Application
 		Button copyCalc = new Button("Copy Calc");
 		Button copyRolls = new Button("Copy Rolls");
 		Button copyCalcAndRolls = new Button("Copy Calc + Damage Rolls");
+		
 		rollsAndCopy.getChildren().addAll(mainDamageRollsLabel, copyCalc, copyRolls, copyCalcAndRolls);
 		rollsAndCopy.setSpacing(5);
 		rollsAndCopy.setAlignment(Pos.CENTER_LEFT);
 		damageCalcs.addRow(1, rollsAndCopy);
+		
+		if (newerVersionExists)
+		{
+			Button updateButton = new Button("New Update Available! Version " + latestVersion);
+			updateButton.setId("update-button");
+			updateButton.setOnAction(e -> openLink("https://github.com/DaWoblefet/Super-Damage-Calculator/releases"));
+			damages.setRight(updateButton);
+			BorderPane.setMargin(updateButton, new Insets(3,0,0,0));
+		}
+		damages.setLeft(damageCalcs);
+		damages.setPadding(new Insets(2,5,0,0));
 
 		copyCalc.setOnAction(e ->
 		{
@@ -129,7 +156,7 @@ public class SuperDamageCalculator extends Application
 			clipboard.setContent(content);
 		});
 
-		/* Coordinates the ListView with the main damage output.*/
+		//Coordinates the ListView with the main damage output.
 		leftMon.getTopMoves().setOnMouseClicked(e ->
 		{
 			leftMon.setCurrentMoveslot(leftMon.getTopMoves().getSelectionModel().getSelectedIndices().get(0));
@@ -347,7 +374,7 @@ public class SuperDamageCalculator extends Application
 		});
 		/****** END DYNAMIC UPDATES FOR DAMAGE CALCULATION/ABILITIES *******/
 		
-		subPane.setTop(damageCalcs);
+		subPane.setTop(damages);
 		subPane.setLeft(pokemonLeft);
 		subPane.setRight(pokemonRight);
 		subPane.setCenter(center);
@@ -517,6 +544,36 @@ public class SuperDamageCalculator extends Application
 		stage.setTitle("Uncaught Exception");
 		stage.show();
     }
+	
+	
+	//Makes a connection using the Github API and just searches directly for the tag in the retrieved JSON.
+	public String checkForUpdates()
+	{
+		String tag = currentVersion;
+		String apiEndpoint = "https://api.github.com/repos/dawoblefet/super-damage-calculator/releases/latest";
+		HttpsURLConnection openConnection = null;
+		try
+		{
+			openConnection = (HttpsURLConnection) new URL(apiEndpoint).openConnection();
+			openConnection.setRequestMethod("GET");
+			openConnection.addRequestProperty("User-Agent", "Chrome/71.0.3578.98");
+			openConnection.connect();
+			
+			Scanner responseScanner = new Scanner(openConnection.getInputStream());
+			String fullResponse = responseScanner.nextLine();
+			responseScanner.close();
+			int tagLocation = fullResponse.indexOf("\"tag_name\":\"");
+			int endTagLocation = fullResponse.indexOf("\",", tagLocation);
+			tag = fullResponse.substring(tagLocation + "\"tag_name\":\"".length(), endTagLocation);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			tag = currentVersion; //If something messed up, just assume user is on latest version.
+		}
+		
+		return tag;
+	}
 
 	public static void main(String args[])
 	{
