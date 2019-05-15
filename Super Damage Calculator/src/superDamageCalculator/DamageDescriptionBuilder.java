@@ -53,7 +53,10 @@ public class DamageDescriptionBuilder
 	
 	public String getNoDamageDescription(String description)
 	{
-		return attackerName + " " + move + " vs. " + defenderName + ": 0-0 (0-0%) -- " + description;
+		String result = "";
+		if (attackerAbility != null) {result += attackerAbility + " ";}
+		result += attackerName + " " + move + " vs. " + defenderName + ": 0-0 (0-0%) -- " + description;
+		return result;
 	}
 	
 	public String getNoDamageShortDescription()

@@ -73,6 +73,7 @@ public class CalculateDamage
 	private double typeMod;
 	
 	private DamageDescriptionBuilder description;
+	private int[] zeroDamageArray = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 	/* Passes in the variables affecting damage calculation, sets them, then starts damage calculation. */
 	public CalculateDamage(Move move, Pokemon attacker, Pokemon defender, FieldOptions fieldOptions, boolean isLeft)
@@ -146,6 +147,8 @@ public class CalculateDamage
 		defenderItem = defender.getItem();
 		defenderStatus = defender.getStatus();
 		
+		description = new DamageDescriptionBuilder(attackerName, defenderName, move.getName());
+		
 		//Mold Breaker checks. Shadow Shield/Prism Armor/Full Metal Body immune to Mold Breaker
 		if (!Arrays.asList("Shadow Shield", "Prism Armor", "Full Metal Body").contains(defenderAbility))
 		{
@@ -190,15 +193,7 @@ public class CalculateDamage
 		isFriendGuard = fieldOptions.getSideFieldOptions(!isLeft).isFriendGuard();
 		isBattery = fieldOptions.getSideFieldOptions(isLeft).isBattery();
 
-		typeMod = typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];
-		//Strong Winds completely changes the type mod for things like Neuroforce, etc.
-		if (weather.equals("Strong Winds") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")) && typechart[types.get(moveType)][types.get("Flying")] > 1)
-		{
-			typeMod *= 0.5;
-			description.setWeather(weather);
-		}
-		
-		description = new DamageDescriptionBuilder(attackerName, defenderName, move.getName());
+		typeMod = getTypeMod();
 		
 		if (moveCategory.equals("Status") || typeMod == 0)
 		{
@@ -220,19 +215,22 @@ public class CalculateDamage
 			int finalDefense = calculateFinalDefense(defenderDefenseStat);
 			damageRolls = mainCalculation(finalBasePower, finalAttack, finalDefense);
 			
-			description.setAttackerOffenseChange(attackerOffenseChange);
-			description.setAttackerEVs(attacker.getStat(whichAtk).getEVs());
-			description.setAttackerNature(attacker.getNature());
-			description.setMoveCategory(moveCategory);
-			description.setDefenderHPEVs(defender.getStat(HP).getEVs());
-			description.setDefenderCurrentHP(defenderCurrentHP);
-			description.setDefenderDefenseChange(defenderDefenseChange);
-			description.setDefenderDefEVs(defender.getStat(whichDef).getEVs());
-			description.setDefenderNature(defender.getNature());
-			description.setDamageRolls(damageRolls);
-			
-			damageOutput = description.getLongDescription();
-			damageOutputShort = description.getShortDescription();
+			if (!Arrays.equals(damageRolls, zeroDamageArray)) //If the damage roll array was all zeroes, skip the detailed description
+			{
+				description.setAttackerOffenseChange(attackerOffenseChange);
+				description.setAttackerEVs(attacker.getStat(whichAtk).getEVs());
+				description.setAttackerNature(attacker.getNature());
+				description.setMoveCategory(moveCategory);
+				description.setDefenderHPEVs(defender.getStat(HP).getEVs());
+				description.setDefenderCurrentHP(defenderCurrentHP);
+				description.setDefenderDefenseChange(defenderDefenseChange);
+				description.setDefenderDefEVs(defender.getStat(whichDef).getEVs());
+				description.setDefenderNature(defender.getNature());
+				description.setDamageRolls(damageRolls);
+				
+				damageOutput = description.getLongDescription();
+				damageOutputShort = description.getShortDescription();
+			}
 		}
 	}
 	
@@ -306,6 +304,7 @@ public class CalculateDamage
 						case "Hail": moveType = "Ice"; break;
 						case "Sand": moveType = "Rock"; break;
 					}
+					typeMod = getTypeMod();
 					initialBP = 100;
 				}
 				description.setMoveBP(initialBP);
@@ -335,6 +334,7 @@ public class CalculateDamage
 				moveBP = move.getBP();
 				moveCategory = "Special";
 				description.setMoveBP(initialBP);
+				typeMod = getTypeMod();
 				break;
 			case "Fling": //Could verify an item is unFlingable by checking if BP is 0
 				initialBP = attackerItem.getFlingBP();
@@ -345,6 +345,7 @@ public class CalculateDamage
 				{
 					initialBP = attackerItem.getNaturalGiftBP();
 					moveType = attackerItem.getNaturalGiftType();
+					typeMod = getTypeMod();
 				}
 				description.setMoveBP(initialBP);
 				break;
@@ -450,27 +451,32 @@ public class CalculateDamage
 					moveType = "Flying";
 					bpModifiers.add(0x1333);
 					description.setAttackerAbility(attackerAbility);
+					typeMod = getTypeMod();
 					break;
 				case "Pixilate":
 					moveType = "Fairy";
 					bpModifiers.add(0x1333);
 					description.setAttackerAbility(attackerAbility);
+					typeMod = getTypeMod();
 					break;
 				case "Refrigerate":
 					moveType = "Ice";
 					bpModifiers.add(0x1333);
 					description.setAttackerAbility(attackerAbility);
+					typeMod = getTypeMod();
 					break;
 				case "Galvanize":
 					moveType = "Electric";
 					bpModifiers.add(0x1333);
 					description.setAttackerAbility(attackerAbility);
+					typeMod = getTypeMod();
 					break;
 				case "Liquid Voice":
 					if (move.isSound())
 					{
 						moveType = "Water";
 					}
+					typeMod = getTypeMod();
 					description.setAttackerAbility(attackerAbility);
 					break;
 				default:
@@ -484,6 +490,7 @@ public class CalculateDamage
 			moveType = "Normal";
 			bpModifiers.add(0x1333);
 			description.setAttackerAbility(attackerAbility);
+			typeMod = getTypeMod();
 		}
 		
 		if (attackerAbility.equals("Iron Fist") && move.isPunch())
@@ -1017,7 +1024,6 @@ public class CalculateDamage
 		if (debugMode)
 		{
 			System.out.println("After random factor: " + Arrays.toString(damageRolls));
-			System.out.println(); //extra space for readability in console
 		}
 
 		//Automatically account for STAB if the ability is Protean
@@ -1034,11 +1040,25 @@ public class CalculateDamage
 				damageRolls[i] = (int) Math.floor((damageRolls[i] * stabMod) / 0x1000);
 			}
 		}
-
-		//Type chart. The modifier was calculated already when it checked to see if the move was immune.
+		
+		
+		//Type modifier. If some dynamic change to change move type reached this far (e.g. from -ate abilities), break out.
+		if (typeMod == 0)
+		{
+			damageOutput = description.getNoDamageDescription("nice move there m8");
+			damageOutputShort = description.getNoDamageShortDescription();
+			return zeroDamageArray;
+		}
 		for (int i = 0; i < 16; i++)
 		{
 			damageRolls[i] = (int) Math.floor(damageRolls[i] * typeMod);
+		}
+		
+		if (debugMode)
+		{
+			System.out.println("typeMod:" + typeMod);
+			System.out.println("After typeMod: " + Arrays.toString(damageRolls));
+			System.out.println(); //extra space for readability in console
 		}
 
 		//If burned. Guts/Facade ignores the effects of burn, but the boosts are applied elsewhere.
@@ -1184,8 +1204,7 @@ public class CalculateDamage
 		return damageRolls;
 	}
 	
-	/********* HELPER FUNCTIONS ************
-	 * */
+	/********* HELPER FUNCTIONS ************/
 	
 	//Game Freak rounds down on 0.5 decimals quite often.
 	public int pokeRound(double num)
@@ -1206,6 +1225,56 @@ public class CalculateDamage
 	        }
 	    }
 	    return m;
+	}
+	
+	public double getTypeMod()
+	{
+		double modifier;
+		
+		if (attackerAbility.equals("Scrappy") && defenderTypeLeft.equals("Ghost"))
+		{
+			modifier = typechart[types.get(moveType)][types.get(defenderTypeRight)];
+			description.setAttackerAbility(attackerAbility);
+		}
+		else if (attackerAbility.equals("Scrappy") && defenderTypeRight.equals("Ghost"))
+		{
+			modifier = typechart[types.get(moveType)][types.get(defenderTypeLeft)];
+			description.setAttackerAbility(attackerAbility);
+		}
+		else if (move.getName().equals("Thousand Arrows") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")))
+		{
+			modifier = 1;
+		}
+		else if (move.getName().equals("Freeze-Dry") && (defenderTypeLeft.equals("Water") || defenderTypeRight.equals("Water")))
+		{
+			modifier = 4; //cheating a bit; 4x0.5 = 2 to balance out
+			modifier *= typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];
+		}
+		else if (move.getName().equals("Flying Press"))
+		{
+			modifier = typechart[types.get("Fighting")][types.get(defenderTypeLeft)]
+					* typechart[types.get("Flying")][types.get(defenderTypeLeft)]
+					* typechart[types.get("Fighting")][types.get(defenderTypeRight)]
+					* typechart[types.get("Flying")][types.get(defenderTypeRight)];
+		}
+		else //Normal case
+		{
+			modifier = typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];
+		}
+		
+		//Strong Winds completely changes the type mod for things like Neuroforce, etc.
+		if (weather.equals("Strong Winds") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")) && typechart[types.get(moveType)][types.get("Flying")] > 1)
+		{
+			modifier *= 0.5;
+			description.setWeather(weather);
+		}
+		
+		if (debugMode)
+		{
+			System.out.println("Type mod for " + move.getName() + ": " + modifier);
+		}
+		
+		return modifier;
 	}
 	
 	public int parseChangeValue(String changeValue)
