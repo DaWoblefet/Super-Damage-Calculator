@@ -104,7 +104,7 @@ public class ShowdownImport
 		else if (secondParen != -1) //has both gender and nickname
 		{
 			int firstEndParen = lines[0].indexOf(")");
-			int secondEndParen = lines[0].indexOf(")", firstEndParen);
+			int secondEndParen = lines[0].indexOf(")", firstEndParen + 1);
 			
 			name = lines[0].substring(firstParen + 1, firstEndParen);
 			gender = lines[0].substring(secondParen + 1, secondEndParen);
