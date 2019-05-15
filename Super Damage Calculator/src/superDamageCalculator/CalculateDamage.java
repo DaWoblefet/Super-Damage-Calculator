@@ -230,7 +230,20 @@ public class CalculateDamage
 							"Skull Bush", "Sky Attack", "Sky Drop", "Solar Beam", "Solar Blade").contains(move.getName()))
 					{
 						isBabyHit = true;
-						//TODO Checks for baby hit: PuP, Assurance, Multiscale / Shadow Shield
+						
+						//Rudimentary checks for Assurance/Power-Up Punch
+						if (move.getName().equals("Power-Up Punch"))
+						{
+							attackerOffenseChange++;
+							finalAttack = calculateFinalAttack(attackerOffenseStat);
+							attackerOffenseChange--;
+							description.setAttackerOffenseChange(attackerOffenseChange); //Display as the pre-baby hit boost
+						}
+						else if (move.getName().equals("Assurance"))
+						{
+							finalBasePower = calculateFinalBasePower(120);
+						}
+						
 						pBondDamageRolls = mainCalculation(finalBasePower, finalAttack, finalDefense);
 						description.setAttackerAbility(attackerAbility);
 						description.setParentalBond(true);
@@ -238,13 +251,11 @@ public class CalculateDamage
 					}
 				}
 				
-				description.setAttackerOffenseChange(attackerOffenseChange);
 				description.setAttackerEVs(attacker.getStat(whichAtk).getEVs());
 				description.setAttackerNature(attacker.getNature());
 				description.setMoveCategory(moveCategory);
 				description.setDefenderHPEVs(defender.getStat(HP).getEVs());
 				description.setDefenderCurrentHP(defenderCurrentHP);
-				description.setDefenderDefenseChange(defenderDefenseChange);
 				description.setDefenderDefEVs(defender.getStat(whichDef).getEVs());
 				description.setDefenderNature(defender.getNature());
 				description.setDamageRolls(damageRolls);
@@ -751,6 +762,7 @@ public class CalculateDamage
 				attackerOffenseChange = 0;
 			}
 			baseAttack = applyStatChange(baseAttack, attackerOffenseChange);
+			description.setAttackerOffenseChange(attackerOffenseChange);
 		}
 		else if (attackerOffenseChange != 0)
 		{
@@ -911,6 +923,7 @@ public class CalculateDamage
 				defenderDefenseChange = 0;
 			}		
 			baseDefense = applyStatChange(baseDefense, defenderDefenseChange);
+			description.setDefenderDefenseChange(defenderDefenseChange);
 		}
 		else if (attackerAbility.equals("Unaware") && defenderDefenseChange != 0)
 		{
@@ -1125,7 +1138,7 @@ public class CalculateDamage
 		}
 
 		//Multiscale / Shadow Shield requires the target is at full HP.
-		if ((defenderAbility.equals("Multiscale") || defenderAbility.equals("Shadow Shield")) && defenderCurrentHP == defenderHPStat)
+		if ((defenderAbility.equals("Multiscale") || defenderAbility.equals("Shadow Shield")) && ((defenderCurrentHP == defenderHPStat) && !isBabyHit))
 		{
 			finalModifiers.add(0x800);
 			description.setDefenderAbility(defenderAbility);
