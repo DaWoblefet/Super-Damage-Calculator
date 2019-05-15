@@ -74,6 +74,10 @@ public class CalculateDamage
 	
 	private DamageDescriptionBuilder description;
 	private int[] zeroDamageArray = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	
+	private boolean isBabyHit;
+	private int[] pBondDamageRolls = zeroDamageArray;
+	
 
 	/* Passes in the variables affecting damage calculation, sets them, then starts damage calculation. */
 	public CalculateDamage(Move move, Pokemon attacker, Pokemon defender, FieldOptions fieldOptions, boolean isLeft)
@@ -120,7 +124,7 @@ public class CalculateDamage
 				break;
 		}	
 		
-		attackerName = attacker.getName();
+		attackerName = attacker.getCurrentForme();
 		attackerLevel = attacker.getStat(HP).getLevel();
 		attackerTypeLeft = attacker.getType(0);
 		attackerTypeRight = attacker.getType(1);
@@ -134,7 +138,7 @@ public class CalculateDamage
 		attackerItem = attacker.getItem();
 		attackerStatus = attacker.getStatus();
 
-		defenderName = defender.getName();
+		defenderName = defender.getCurrentForme();
 		defenderTypeLeft = defender.getType(0);
 		defenderTypeRight = defender.getType(1);
 		defenderHPStat = defender.getStat(HP).calculateStat();
@@ -147,7 +151,7 @@ public class CalculateDamage
 		defenderItem = defender.getItem();
 		defenderStatus = defender.getStatus();
 		
-		description = new DamageDescriptionBuilder(attackerName, defenderName, move.getName());
+		description = new DamageDescriptionBuilder(attackerName, defenderName, move.getName(), zeroDamageArray);
 		
 		//Mold Breaker checks. Shadow Shield/Prism Armor/Full Metal Body immune to Mold Breaker
 		if (!Arrays.asList("Shadow Shield", "Prism Armor", "Full Metal Body").contains(defenderAbility))
@@ -217,6 +221,23 @@ public class CalculateDamage
 			
 			if (!Arrays.equals(damageRolls, zeroDamageArray)) //If the damage roll array was all zeroes, skip the detailed description
 			{
+				//Parental Bond does not work on spread moves, Z-moves, or multi-hit moves
+				if (attackerAbility.equals("Parental Bond") && !(move.isSpread() && !format.equals("Singles")) && !isZ && !move.isMultiHit() && !move.isTwoHit())
+				{
+					//Additionally, Parental Bond doesn't work on any of the following moves:
+					if (!Arrays.asList("Fling", "Self-Destruct", "Explosion", "Final Gambit", "Uproar", "Rollout", "Ice Ball", "Endeavor", 
+							"Bounce", "Dig", "Dive", "Fly", "Freeze Shock", "Ice Burn", "Phantom Force", "Razor Wind", "Shadow Force", 
+							"Skull Bush", "Sky Attack", "Sky Drop", "Solar Beam", "Solar Blade").contains(move.getName()))
+					{
+						isBabyHit = true;
+						//TODO Checks for baby hit: PuP, Assurance, Multiscale / Shadow Shield
+						pBondDamageRolls = mainCalculation(finalBasePower, finalAttack, finalDefense);
+						description.setAttackerAbility(attackerAbility);
+						description.setParentalBond(true);
+						description.setpBondDamageRolls(pBondDamageRolls);
+					}
+				}
+				
 				description.setAttackerOffenseChange(attackerOffenseChange);
 				description.setAttackerEVs(attacker.getStat(whichAtk).getEVs());
 				description.setAttackerNature(attacker.getNature());
@@ -979,22 +1000,14 @@ public class CalculateDamage
 		double damagePreRolls = baseDamage;
 
 		//If spread move, 0.75x
-		if (format.equals("Doubles") && move.isSpread() && !(isZ))
+		if (format.equals("Doubles") && move.isSpread() && !isZ)
 		{
 			damagePreRolls = pokeRound((damagePreRolls * 0xC00) / 0x1000);
 		}
 		
-		//TODO Parental Bond checks here
-		if (attackerAbility.equals("Parental Bond") && !move.isSpread() && !isZ)
+		if (isBabyHit)
 		{
-			//Parental Bond doesn't work on any of the following:
-			if (!Arrays.asList("Fling", "Self-Destruct", "Explosion", "Final Gambit", "Uproar", "Rollout", "Ice Ball", "Endeavor", 
-					"Bounce", "Dig", "Dive", "Fly", "Freeze Shock", "Ice Burn", "Phantom Force", "Razor Wind", "Shadow Force", 
-					"Skull Bush", "Sky Attack", "Sky Drop", "Solar Beam", "Solar Blade").contains(move.getName()))
-			{
-				//Parental Bond logic
-				//description.setAttackerAbility(attackerAbility);
-			}
+			damagePreRolls = pokeRound((damagePreRolls * 0x400) / 0x1000);
 		}
 
 		//Weather. Note that Strong Winds is actually a modifier to type matchups, not weather. 		
@@ -1015,6 +1028,9 @@ public class CalculateDamage
 			damagePreRolls = (int) Math.floor((damagePreRolls * 0x1800) / 0x1000);
 			description.setCrit(true);
 		}
+		
+		int[] damageRolls = new int[16];
+		
 		//Random factor; from now on, all modifiers are applied to each roll separately.
 		for (int i = 0; i < 16; i++)
 		{
@@ -1056,7 +1072,7 @@ public class CalculateDamage
 		
 		if (debugMode)
 		{
-			System.out.println("typeMod:" + typeMod);
+			System.out.println("typeMod: " + typeMod);
 			System.out.println("After typeMod: " + Arrays.toString(damageRolls));
 			System.out.println(); //extra space for readability in console
 		}
@@ -1241,7 +1257,7 @@ public class CalculateDamage
 			modifier = typechart[types.get(moveType)][types.get(defenderTypeLeft)];
 			description.setAttackerAbility(attackerAbility);
 		}
-		else if (move.getName().equals("Thousand Arrows") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")))
+		else if (move.getName().equals("Thousand Arrows") && moveType.equals("Ground") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")))
 		{
 			modifier = 1;
 		}
@@ -1267,11 +1283,6 @@ public class CalculateDamage
 		{
 			modifier *= 0.5;
 			description.setWeather(weather);
-		}
-		
-		if (debugMode)
-		{
-			System.out.println("Type mod for " + move.getName() + ": " + modifier);
 		}
 		
 		return modifier;
@@ -1388,9 +1399,9 @@ public class CalculateDamage
 		return baseSpeed;
 	}
 
-	public int[] getDamageRolls()
+	public String getDamageRolls()
 	{
-		return damageRolls;
+		return description.getDamageRolls();
 	}
 
 	public String getDamageOutput()

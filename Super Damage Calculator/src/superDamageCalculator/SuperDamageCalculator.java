@@ -101,7 +101,7 @@ public class SuperDamageCalculator extends Application
 		mainDamageResultLabel.setId("damage-label");
 		damageCalcs.addRow(0, mainDamageResultLabel);
 
-		mainDamageRollsLabel = new Label(getRollsText(leftMon.getDamageRolls(leftMon.getCurrentMoveslot())));
+		mainDamageRollsLabel = new Label(leftMon.getDamageRolls(leftMon.getCurrentMoveslot()));
 		mainDamageRollsLabel.setFont(new Font("Times New Roman", 14));
 		Button copyCalc = new Button("Copy Calc");
 		Button copyRolls = new Button("Copy Rolls");
@@ -134,14 +134,14 @@ public class SuperDamageCalculator extends Application
 		{
 			leftMon.setCurrentMoveslot(leftMon.getTopMoves().getSelectionModel().getSelectedIndices().get(0));
 			mainDamageResultLabel.setText(leftMon.getDamageOutput(leftMon.getCurrentMoveslot()));
-			mainDamageRollsLabel.setText(getRollsText(leftMon.getDamageRolls(leftMon.getCurrentMoveslot())));
+			mainDamageRollsLabel.setText(leftMon.getDamageRolls(leftMon.getCurrentMoveslot()));
 		});
 
 		rightMon.getTopMoves().setOnMouseClicked(e ->
 		{
 			rightMon.setCurrentMoveslot(rightMon.getTopMoves().getSelectionModel().getSelectedIndices().get(0));
 			mainDamageResultLabel.setText(rightMon.getDamageOutput(rightMon.getCurrentMoveslot()));
-			mainDamageRollsLabel.setText(getRollsText(rightMon.getDamageRolls(rightMon.getCurrentMoveslot())));
+			mainDamageRollsLabel.setText(rightMon.getDamageRolls(rightMon.getCurrentMoveslot()));
 		});
 		/****** END TOP *******/
 
@@ -489,19 +489,8 @@ public class SuperDamageCalculator extends Application
 		}
 		
 		mainDamageResultLabel.setText(leftMon.getDamageOutput(leftMon.getCurrentMoveslot()));
-		String rollsText = getRollsText(leftMon.getDamageRolls(leftMon.getCurrentMoveslot()));
+		String rollsText = leftMon.getDamageRolls(leftMon.getCurrentMoveslot());
 		mainDamageRollsLabel.setText(rollsText);
-	}
-	
-	public String getRollsText(int[] rolls)
-	{
-		String rollsText = "(";
-		for (int i = 0; i < 15; i++)
-		{
-			rollsText += rolls[i] + ", ";
-		}
-		rollsText += rolls[15] + ")";
-		return rollsText;
 	}
 	
 	//Displays a popup with some exception that gets called for beta testing.

@@ -89,7 +89,7 @@ public class PokemonSide
 	private ListView<String> topMoves;
 
 	private String[] damageOutput = new String[4];
-	private int[][] damageRolls = new int[4][16];
+	private String[] damageRolls = new String[4];
 	private String[] damageOutputShort = new String[4];
 
 	private ImageView spriteMain;
@@ -1097,12 +1097,12 @@ public class PokemonSide
 		this.damageOutput[slot] = damageOutput;
 	}
 	
-	public int[] getDamageRolls(int slot)
+	public String getDamageRolls(int slot)
 	{
 		return damageRolls[slot];
 	}
 	
-	public void setDamageRolls(int[] damageRolls, int slot)
+	public void setDamageRolls(String damageRolls, int slot)
 	{
 		this.damageRolls[slot] = damageRolls;
 	}

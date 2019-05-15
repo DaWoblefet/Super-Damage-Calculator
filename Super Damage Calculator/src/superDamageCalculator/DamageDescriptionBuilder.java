@@ -14,6 +14,10 @@ public class DamageDescriptionBuilder
 	private boolean isHelpingHand;
 	private boolean isBattery;	
 	private boolean knockOff;
+	private boolean isParentalBond;
+	private int[] pBondDamageRolls;
+	private int pBondMinComboRoll;
+	private int pBondMaxComboRoll;
 	
 	private String move;
 	private String moveCategory;
@@ -40,15 +44,15 @@ public class DamageDescriptionBuilder
 	private boolean isFriendGuard;
 	private boolean isProtect;
 	
-	private String KOChance;
 	private int[] damageRolls;
 	private int precision = 2;
 	
-	public DamageDescriptionBuilder(String attackerName, String defenderName, String move)
+	public DamageDescriptionBuilder(String attackerName, String defenderName, String move, int[] zeroDamageArray)
 	{
 		this.attackerName = attackerName;
 		this.defenderName = defenderName;
 		this.move = move;
+		this.damageRolls = zeroDamageArray;
 	}
 	
 	public String getNoDamageDescription(String description)
@@ -68,8 +72,17 @@ public class DamageDescriptionBuilder
 	{
 		String result = move + " ";
 		
-		double minRollPercent = ((double) damageRolls[0] / (double) defenderCurrentHP) * 100;
-		double maxRollPercent = ((double) damageRolls[15] / (double) defenderCurrentHP) * 100;
+		int minDamage = damageRolls[0];
+		int maxDamage = damageRolls[15];
+		
+		if (isParentalBond)
+		{
+			minDamage = pBondMinComboRoll;
+			maxDamage = pBondMaxComboRoll;
+		}
+		
+		double minRollPercent = ((double) minDamage / (double) defenderCurrentHP) * 100;
+		double maxRollPercent = ((double) maxDamage / (double) defenderCurrentHP) * 100;
 
 		if (minRollPercent >= 100.0)
 		{
@@ -139,9 +152,43 @@ public class DamageDescriptionBuilder
 		
 		//Damage rolls, %, and % to KO
 		result = result.trim() + ": ";
-		result += damageRolls[0] + "-" + damageRolls[15] + " ";
+		if (!isParentalBond)
+		{
+			result += damageRolls[0] + "-" + damageRolls[15] + " ";
+		}
+		else
+		{
+			pBondMinComboRoll = damageRolls[0] + pBondDamageRolls[0];
+			pBondMaxComboRoll = damageRolls[15] + pBondDamageRolls[15];
+			result += pBondMinComboRoll + "-" + pBondMaxComboRoll + " ";
+		}
 		result += calculatePercentDamage() + " -- ";
 		result += getXHKO();
+		
+		return result;
+	}
+	
+	public String getDamageRolls()
+	{
+		String result = "";
+		
+		result += !isParentalBond ? "(" : "(1st Hit: ";
+		
+		for (int i = 0; i < 15; i++)
+		{
+			result += damageRolls[i] + ", ";
+		}
+		result += damageRolls[15];
+		
+		result += !isParentalBond ? ")" : "; 2nd Hit: ";
+		if (isParentalBond)
+		{
+			for (int i = 0; i < 16; i++)
+			{
+				result += pBondDamageRolls[i] + ", ";
+			}
+			result += pBondDamageRolls[15] + ")";
+		}
 		
 		return result;
 	}
@@ -196,9 +243,17 @@ public class DamageDescriptionBuilder
 	public String calculatePercentDamage()
 	{
 		String damageOutputShort;
+		int minDamage = damageRolls[0];
+		int maxDamage = damageRolls[15];
 		
-		double minRollPercent = ((double) damageRolls[0] / (double) defenderCurrentHP) * 100;
-		double maxRollPercent = ((double) damageRolls[15] / (double) defenderCurrentHP) * 100;
+		if (isParentalBond)
+		{
+			minDamage = pBondMinComboRoll;
+			maxDamage = pBondMaxComboRoll;
+		}
+		
+		double minRollPercent = ((double) minDamage / (double) defenderCurrentHP) * 100;
+		double maxRollPercent = ((double) maxDamage / (double) defenderCurrentHP) * 100;
 
 		damageOutputShort = "(" + String.format("%." + precision + "f", minRollPercent) + " - ";
 		damageOutputShort += String.format("%." + precision + "f", maxRollPercent) + "%)";
@@ -379,195 +434,104 @@ public class DamageDescriptionBuilder
 		}	
 	}
 
-	public int getMoveBP() {
-		return moveBP;
-	}
-
 	public void setMoveBP(int moveBP) {
 		this.moveBP = moveBP;
-	}
-
-	public String getDefenderName() {
-		return defenderName;
 	}
 
 	public void setDefenderName(String defenderName) {
 		this.defenderName = defenderName;
 	}
 
-	public int getDefenderHPEVs() {
-		return defenderHPEVs;
-	}
-
 	public void setDefenderHPEVs(int defenderHPEVs) {
 		this.defenderHPEVs = defenderHPEVs;
-	}
-
-	public int getDefenderDefEVs() {
-		return defenderDefEVs;
 	}
 
 	public void setDefenderDefEVs(int defenderDefEVs) {
 		this.defenderDefEVs = defenderDefEVs;
 	}
 
-	public String getDefenderNature() {
-		return defenderNature;
-	}
-
 	public void setDefenderNature(String defenderNature) {
 		this.defenderNature = defenderNature;
-	}
-
-	public String getDefenderItem() {
-		return defenderItem;
 	}
 
 	public void setDefenderItem(String defenderItem) {
 		this.defenderItem = defenderItem;
 	}
 
-	public String getDefenderAbility() {
-		return defenderAbility;
-	}
-
 	public void setDefenderAbility(String defenderAbility) {
 		this.defenderAbility = defenderAbility;
-	}
-
-	public String getWeather() {
-		return weather;
 	}
 
 	public void setWeather(String weather) {
 		this.weather = weather;
 	}
 
-	public String getTerrain() {
-		return terrain;
-	}
-
 	public void setTerrain(String terrain) {
 		this.terrain = terrain;
-	}
-
-	public boolean isReflect() {
-		return isReflect;
 	}
 
 	public void setReflect(boolean isReflect) {
 		this.isReflect = isReflect;
 	}
 
-	public boolean isLightScreen() {
-		return isLightScreen;
-	}
-
 	public void setLightScreen(boolean isLightScreen) {
 		this.isLightScreen = isLightScreen;
-	}
-
-	public boolean isCrit() {
-		return isCrit;
 	}
 
 	public void setCrit(boolean isCrit) {
 		this.isCrit = isCrit;
 	}
 
-	public boolean isFriendGuard() {
-		return isFriendGuard;
-	}
-
 	public void setFriendGuard(boolean isFriendGuard) {
 		this.isFriendGuard = isFriendGuard;
 	}
 
-	public boolean isProtect() {
-		return isProtect;
-	}
-
 	public void setProtect(boolean isProtect) {
 		this.isProtect = isProtect;
-	}
-	
-	public int getAttackerOffenseChange() {
-		return attackerOffenseChange;
 	}
 
 	public void setAttackerOffenseChange(int attackerOffenseChange) {
 		this.attackerOffenseChange = attackerOffenseChange;
 	}
 
-	public boolean isHitsPhysical() {
-		return hitsPhysical;
-	}
-
 	public void setHitsPhysical(boolean hitsPhysical) {
 		this.hitsPhysical = hitsPhysical;
-	}
-
-	public boolean isUsesPhysicalAttack() {
-		return usesPhysicalAttack;
 	}
 
 	public void setUsesPhysicalAttack(boolean usesPhysicalAttack) {
 		this.usesPhysicalAttack = usesPhysicalAttack;
 	}
 
-	public int getDefenderCurrentHP() {
-		return defenderCurrentHP;
-	}
-
 	public void setDefenderCurrentHP(int defenderCurrentHP) {
 		this.defenderCurrentHP = defenderCurrentHP;
 	}
-
-	public int getDefenderDefenseChange() {
-		return defenderDefenseChange;
-	}
-
+	
 	public void setDefenderDefenseChange(int defenderDefenseChange) {
 		this.defenderDefenseChange = defenderDefenseChange;
-	}
-
-	public String getKOChance() {
-		return KOChance;
-	}
-
-	public void setKOChance(String kOChance) {
-		KOChance = kOChance;
-	}
-
-	public int[] getDamageRolls() {
-		return damageRolls;
 	}
 
 	public void setDamageRolls(int[] damageRolls) {
 		this.damageRolls = damageRolls;
 	}
 
-	public int getPrecision() {
-		return precision;
-	}
-
 	public void setPrecision(int precision) {
 		this.precision = precision;
-	}
-	
-	public String getAura() {
-		return aura;
 	}
 
 	public void setAura(String aura) {
 		this.aura = aura;
 	}
 
-	public boolean isKnockOff() {
-		return knockOff;
-	}
-
 	public void setKnockOff(boolean knockOff) {
 		this.knockOff = knockOff;
+	}
+
+	public void setParentalBond(boolean isParentalBond) {
+		this.isParentalBond = isParentalBond;
+	}
+
+
+	public void setpBondDamageRolls(int[] pBondDamageRolls) {
+		this.pBondDamageRolls = pBondDamageRolls;
 	}
 }
