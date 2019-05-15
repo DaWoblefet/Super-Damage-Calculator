@@ -136,7 +136,7 @@ public class SuperDamageCalculator extends Application
 			BorderPane.setMargin(updateButton, new Insets(3,0,0,0));
 		}
 		damages.setLeft(damageCalcs);
-		damages.setPadding(new Insets(2,5,0,0));
+		damages.setPadding(new Insets(2,5,0,5));
 
 		copyCalc.setOnAction(e ->
 		{
