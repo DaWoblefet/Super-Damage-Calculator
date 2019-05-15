@@ -137,8 +137,7 @@ public class PokemonSide
 		VBox structure = new VBox();
 
 		GridPane mon = new GridPane();
-
-		spriteMain = new ImageView(new Image("/resources/Sprites/" + defaultPokemon + ".png"));
+		spriteMain = new ImageView(new Image(getClass().getResourceAsStream("/resources/Sprites/" + defaultPokemon + ".png")));
 		chooseMon = new ComboBox<String>(pokemonNames);
 		TextFields.bindAutoCompletion(chooseMon.getEditor(), chooseMon.getItems());
 		chooseMon.setEditable(true);
