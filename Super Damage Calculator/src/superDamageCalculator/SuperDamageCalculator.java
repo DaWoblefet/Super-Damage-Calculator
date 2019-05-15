@@ -485,7 +485,7 @@ public class SuperDamageCalculator extends Application
 			attackerUI.setDamageOutput(damagecalc.getDamageOutput(), i);
 			attackerUI.setDamageOutputShort(damagecalc.getDamageOutputShort(), i);
 			attackerUI.setDamageRolls(damagecalc.getDamageRolls(), i);
-			attackerUI.getTopMoveNames().set(i, attackerUI.getMoveName(i) + " " + attackerUI.getDamageOutputShort(i));
+			attackerUI.getTopMoveNames().set(i, attackerUI.getDamageOutputShort(i));
 		}
 		
 		mainDamageResultLabel.setText(leftMon.getDamageOutput(leftMon.getCurrentMoveslot()));

@@ -302,12 +302,14 @@ public class PokemonSide
 		loadPokemonDisplay();
 		updateStats();
 		teamSpritesToggles[0].setSelected(true);
+		currentHP.setText(Integer.toString(teamData[0].getStat(HP).calculateStat()));
+		totalHPLabel.setText("/" + Integer.toString(teamData[currentPokemon].getStat(HP).calculateStat()) + " (");
 
 		BorderPane topPane = new BorderPane();
 		topMoveNames = FXCollections.observableArrayList();
 		for (int i = 0; i < 4; i++)
 		{
-			topMoveNames.add((String) movesComboBox[i].getValue() + damageOutputShort[i]);
+			topMoveNames.add(damageOutputShort[i]);
 		}
 
 		topMoves = new ListView<String>(topMoveNames);
@@ -358,8 +360,8 @@ public class PokemonSide
 				statChanges[i].setValue("--");
 			}
 			
-			currentHP.setText(Integer.toString(teamData[currentPokemon].getStat(0).calculateStat()));
-			totalHPLabel.setText("/" + Integer.toString(teamData[currentPokemon].getStat(0).calculateStat()) + " (");
+			currentHP.setText(Integer.toString(teamData[currentPokemon].getStat(HP).calculateStat()));
+			totalHPLabel.setText("/" + Integer.toString(teamData[currentPokemon].getStat(HP).calculateStat()) + " (");
 			currentHPPercent.setText("100");
 			
 			for (int i = 0; i < 4; i++)
@@ -669,7 +671,7 @@ public class PokemonSide
 				currentHP.setText("1");
 			}
 			
-			int HPstat = teamData[currentPokemon].getStat(0).calculateStat();
+			int HPstat = teamData[currentPokemon].getStat(HP).calculateStat();
 		
 			if (x > HPstat) //don't allow higher than the maximum HP stat
 			{
@@ -705,7 +707,7 @@ public class PokemonSide
 			} 
 			
 			modifyingHPPercent = true;
-			int HPstat = teamData[currentPokemon].getStat(0).calculateStat();
+			int HPstat = teamData[currentPokemon].getStat(HP).calculateStat();
 			currentHP.setText(Integer.toString((int) (0.01 * x * HPstat)));
 			modifyingHPPercent = false;
 		});
@@ -724,7 +726,7 @@ public class PokemonSide
 				category[j].setValue(moveData[j].getCategory());
 				type[j].setValue(moveData[j].getType());
 				zOption[j].setSelected(false);
-				topMoveNames.set(j, (String) movesComboBox[j].getValue());
+				topMoveNames.set(j, damageOutputShort[j]);
 				triggerCalcs();
 			});
 			

@@ -17,20 +17,19 @@ public class CalculateDamage
 	private HashMap<String, Pokemon> pokedex = Pokedex.getPokedex();
 	private HashMap<String, Move> movedex = new Movedex().getMovedex();
 	private HashMap<String, Integer> types = new Type().types;
-	private HashMap<String, Integer> natures = new Nature().natures;
 	private double typechart[][] = new Type().typeChart;
 	private boolean debugMode = false;
 
-	private Pokemon attacker;
+	private int attackerLevel;
+	private int attackerHPStat;
+	private int attackerCurrentHP;
 	private String attackerName;
 	private String attackerTypeLeft;
 	private String attackerTypeRight;
 	private int attackerOffenseStat;
-	private int attackerOffenseStatEVs;
 	private int attackerSpeedStat;
 	private int attackerOffenseChange;
 	private int attackerSpeedChange;
-	private String attackerNature;
 	private String attackerAbility;
 	private Item attackerItem;
 	private String attackerStatus;
@@ -44,18 +43,15 @@ public class CalculateDamage
 	private boolean isCrit;
 	private boolean isZ;
 
-	private Pokemon defender;
 	private String defenderName;
 	private String defenderTypeLeft;
 	private String defenderTypeRight;
 	private int defenderHPStat;
 	private int defenderCurrentHP;
 	private int defenderDefenseStat;
-	private int defenderDefenseStatEVs;
 	private int defenderSpeedStat;
 	private int defenderDefenseChange;
 	private int defenderSpeedChange;
-	private String defenderNature;
 	private String defenderAbility;
 	private Item defenderItem;
 	private String defenderStatus;
@@ -72,12 +68,11 @@ public class CalculateDamage
 	private boolean isBattery;
 
 	private int[] damageRolls = new int[16];
-	private String damageOutput = "";
-	private String damageOutputShort = "";
+	private String damageOutput;
+	private String damageOutputShort;
 	private double typeMod;
-	private int finalAttack;
-	private int finalDefense;
-	private int finalBasePower;
+	
+	private DamageDescriptionBuilder description;
 
 	/* Passes in the variables affecting damage calculation, sets them, then starts damage calculation. */
 	public CalculateDamage(Move move, Pokemon attacker, Pokemon defender, FieldOptions fieldOptions, boolean isLeft)
@@ -124,32 +119,29 @@ public class CalculateDamage
 				break;
 		}	
 		
-		this.attacker = attacker;
 		attackerName = attacker.getName();
+		attackerLevel = attacker.getStat(HP).getLevel();
 		attackerTypeLeft = attacker.getType(0);
 		attackerTypeRight = attacker.getType(1);
+		attackerHPStat = attacker.getStat(HP).calculateStat();
+		attackerCurrentHP = attacker.getCurrentHP() != 0 ? attacker.getCurrentHP() : attackerHPStat; //If currentHP is 0, ignore it
 		attackerOffenseStat = attacker.getStat(whichAtk).calculateStat();
-		attackerOffenseStatEVs = attacker.getStat(whichAtk).getEVs();
 		attackerSpeedStat = attacker.getStat(SPE).calculateStat();
 		attackerOffenseChange = parseChangeValue(attacker.getStat(whichAtk).getBoostLevel());
 		attackerSpeedChange = parseChangeValue(attacker.getStat(SPE).getBoostLevel());
-		attackerNature = attacker.getNature();
 		attackerAbility = attacker.getAbility();
 		attackerItem = attacker.getItem();
 		attackerStatus = attacker.getStatus();
 
-		this.defender = defender;
 		defenderName = defender.getName();
 		defenderTypeLeft = defender.getType(0);
 		defenderTypeRight = defender.getType(1);
 		defenderHPStat = defender.getStat(HP).calculateStat();
 		defenderCurrentHP = defender.getCurrentHP() != 0 ? defender.getCurrentHP() : defenderHPStat; //If currentHP is 0, ignore it
 		defenderDefenseStat = defender.getStat(whichDef).calculateStat();
-		defenderDefenseStatEVs = defender.getStat(whichDef).getEVs();
 		defenderSpeedStat = defender.getStat(SPE).calculateStat();
 		defenderDefenseChange = parseChangeValue(defender.getStat(whichDef).getBoostLevel());
 		defenderSpeedChange = parseChangeValue(defender.getStat(SPE).getBoostLevel());
-		defenderNature = defender.getNature();
 		defenderAbility = defender.getAbility();
 		defenderItem = defender.getItem();
 		defenderStatus = defender.getStatus();
@@ -159,9 +151,19 @@ public class CalculateDamage
 		{
 			if (Arrays.asList("Moongeist Beam", "Menacing Moonraze Maelstrom",
 							"Sunsteel Strike", "Searing Sunraze Smash",
-							"Photon Geyser", "Light That Burns the Sky").contains(move.getName()) ||
-				Arrays.asList("Mold Breaker", "Turboblaze", "Teravolt").contains(attackerAbility))
+							"Photon Geyser", "Light That Burns the Sky").contains(move.getName()))
 			{
+				defenderAbility = ""; //Suppress Ability
+			}
+			else if (Arrays.asList("Mold Breaker", "Turboblaze", "Teravolt").contains(attackerAbility))
+			{
+				//Technically doesn't display when Mold Breaker actually suppresses, only the potential to suppress
+				if (Arrays.asList("Heatproof", "Dry Skin", "Unaware", "Thick Fat", "Water Bubble",
+						"Flower Gift", "Marvel Scale", "Grass Pelt", "Fur Coat", "Multiscale",
+						"Fluffy", "Solid Rock", "Filter", "Prism Armor").contains(defenderAbility))
+				{
+					description.setAttackerAbility(attackerAbility);
+				}
 				defenderAbility = ""; //Suppress Ability
 			}
 		}
@@ -193,40 +195,57 @@ public class CalculateDamage
 		if (weather.equals("Strong Winds") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")) && typechart[types.get(moveType)][types.get("Flying")] > 1)
 		{
 			typeMod *= 0.5;
+			description.setWeather(weather);
 		}
+		
+		description = new DamageDescriptionBuilder(attackerName, defenderName, move.getName());
 		
 		if (moveCategory.equals("Status") || typeMod == 0)
 		{
 			if (moveType.equals("Electric") && (defenderTypeLeft.equals("Ground") || defenderTypeRight.equals("Ground")))
 			{
-				writeDamageOutput("try using Soak first");
+				damageOutput = description.getNoDamageDescription("try using Soak first");
 			}
 			else
 			{
-				writeDamageOutput("nice move there m8");
+				damageOutput = description.getNoDamageDescription("nice move there m8");
 			}
+			damageOutputShort = description.getNoDamageShortDescription();
 		}
 		else //Do the damage calc like normal
 		{
-			moveBP = checkForCustomBP();
-			finalBasePower = calculateFinalBasePower();
-			finalAttack = calculateFinalAttack();
-			finalDefense = calculateFinalDefense();
-			damageRolls = mainCalculation();
-			writeDamageOutput();
+			moveBP = checkForCustomBP(moveBP);
+			int finalBasePower = calculateFinalBasePower(moveBP);
+			int finalAttack = calculateFinalAttack(attackerOffenseStat);
+			int finalDefense = calculateFinalDefense(defenderDefenseStat);
+			damageRolls = mainCalculation(finalBasePower, finalAttack, finalDefense);
+			
+			description.setAttackerOffenseChange(attackerOffenseChange);
+			description.setAttackerEVs(attacker.getStat(whichAtk).getEVs());
+			description.setAttackerNature(attacker.getNature());
+			description.setMoveCategory(moveCategory);
+			description.setDefenderHPEVs(defender.getStat(HP).getEVs());
+			description.setDefenderCurrentHP(defenderCurrentHP);
+			description.setDefenderDefenseChange(defenderDefenseChange);
+			description.setDefenderDefEVs(defender.getStat(whichDef).getEVs());
+			description.setDefenderNature(defender.getNature());
+			description.setDamageRolls(damageRolls);
+			
+			damageOutput = description.getLongDescription();
+			damageOutputShort = description.getShortDescription();
 		}
 	}
 	
 	
-	public int checkForCustomBP()
+	public int checkForCustomBP(int initialBP)
 	{
-		int initialBP = moveBP;
 		switch (move.getName())
 		{
 			case "Low Kick":
 			case "Grass Knot":
 				double targetWeight = calculateWeight(defenderName, defenderAbility, defenderItem);
 				initialBP = targetWeight >= 200 ? 120 : targetWeight >= 100 ? 100 : targetWeight >= 50 ? 80 : targetWeight >= 25 ? 60 : targetWeight >= 10 ? 40 : 20;
+				description.setMoveBP(initialBP);
 				break;
 			case "Gyro Ball":
 				int userSpeed = calculateSpeed(attackerSpeedStat, attackerSpeedChange, attackerItem, attackerAbility, attackerStatus);
@@ -236,6 +255,7 @@ public class CalculateDamage
 				{
 					initialBP = Math.max(1, Math.min(150, (int) Math.floor((25 * (double) targetSpeed) / userSpeed)));
 				}
+				description.setMoveBP(initialBP);
 				break;	
 			case "Electro Ball":
 				userSpeed = calculateSpeed(attackerSpeedStat, attackerSpeedChange, attackerItem, attackerAbility, attackerStatus);
@@ -246,10 +266,12 @@ public class CalculateDamage
 				{
 					initialBP = relativeSpeed >= 4 ? 150 : relativeSpeed == 3 ? 120 : relativeSpeed == 2 ? 80 : relativeSpeed == 1 ? 60 : 40;
 				}
+				description.setMoveBP(initialBP);
 				break;
 			case "Water Spout":
 			case "Eruption":
-				initialBP = Math.max(1, (int) Math.floor((150.0 * attacker.getCurrentHP() / attacker.getStat(HP).calculateStat())));
+				initialBP = Math.max(1, (int) Math.floor((150.0 * attackerCurrentHP / attackerHPStat)));
+				description.setMoveBP(initialBP);
 				break;
 			case "Heavy Slam":
 			case "Heat Crash":
@@ -257,6 +279,7 @@ public class CalculateDamage
 				targetWeight = calculateWeight(defenderName, defenderAbility, defenderItem);
 				int relativeWeight = (int) Math.floor(userWeight / targetWeight);
 				initialBP = relativeWeight >= 5 ? 120 : relativeWeight >= 4 ? 100 : relativeWeight >= 3 ? 80 : relativeWeight >= 2 ? 60 : 40; 
+				description.setMoveBP(initialBP);
 				break;
 			case "Acrobatics":
 				if (attackerItem.getName().equals("(none)"))
@@ -267,6 +290,7 @@ public class CalculateDamage
 				{
 					initialBP = 55;
 				}
+				description.setMoveBP(initialBP);
 				break;
 			case "Weather Ball":
 				if (weather.equals("None") || weather.equals("Strong Winds"))
@@ -284,6 +308,7 @@ public class CalculateDamage
 					}
 					initialBP = 100;
 				}
+				description.setMoveBP(initialBP);
 				break;
 			case "Nature Power":
 				switch (terrain)
@@ -309,9 +334,11 @@ public class CalculateDamage
 				moveType = move.getType();
 				moveBP = move.getBP();
 				moveCategory = "Special";
+				description.setMoveBP(initialBP);
 				break;
 			case "Fling": //Could verify an item is unFlingable by checking if BP is 0
 				initialBP = attackerItem.getFlingBP();
+				description.setMoveBP(initialBP);
 				break;	
 			case "Natural Gift": //Could avoid running checks on non-Berries
 				if (attackerItem.isBerry())
@@ -319,41 +346,49 @@ public class CalculateDamage
 					initialBP = attackerItem.getNaturalGiftBP();
 					moveType = attackerItem.getNaturalGiftType();
 				}
+				description.setMoveBP(initialBP);
 				break;
 			case "Hex":
 				if (!defenderStatus.equals("Healthy"))
 				{
 					initialBP = 130;
 				}
+				description.setMoveBP(initialBP);
 				break;
 			case "Wake-Up Slap":
 				if (defenderStatus.equals("Asleep"))
 				{
 					initialBP = 140;
 				}
+				description.setMoveBP(initialBP);
 				break;
 			case "Smelling Salts":
 				if (defenderStatus.equals("Paralyzed"))
 				{
 					initialBP = 140;
 				}
+				description.setMoveBP(initialBP);
 				break;
 			case "Wring Out":
 			case "Crush Grip":
 				//Taken from https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js
 				int fancyCalculation = (int) Math.floor(Math.floor((120 * (100 * Math.floor((defenderCurrentHP * 4096.0 / defenderHPStat)) + 2048 - 1) / 4096) / 100));	
 				initialBP = Math.max(1, fancyCalculation);
+				description.setMoveBP(initialBP);
 				break;
 			case "Flail":
 			case "Reversal":
-				int p = ((int) Math.floor(48.0 * attacker.getCurrentHP() / attacker.getStat(HP).calculateStat()));
+				int p = ((int) Math.floor(48.0 * attackerCurrentHP / attackerHPStat));
 				initialBP = p <= 1 ? 200 : p <= 4 ? 150 : p <= 9 ? 100 : p <= 16 ? 80 : p <= 32 ? 40 : 20;
+				description.setMoveBP(initialBP);
 				break;
 			case "Water Shuriken":
 				if (attackerName.equals("Greninja-Ash") && attackerAbility.equals("Battle Bond"))
 				{
+					description.setAttackerAbility(attackerAbility);
 					initialBP = 20;
 				}
+				description.setMoveBP(initialBP);
 				break;
 			
 			//Higher priority to support
@@ -379,17 +414,16 @@ public class CalculateDamage
 				break;
 			case "Rollout":
 			case "Ice Ball":
-				break;
-				
+				break;	
 			default:
 				break;		
 		}
+		
 		return initialBP;
 	}
 
-	public int calculateFinalBasePower()
+	public int calculateFinalBasePower(int startingBP)
 	{
-		int startingBP = moveBP;
 		if (debugMode)
 		{
 			System.out.println("BP prior to modifiers is: " + startingBP);
@@ -398,9 +432,10 @@ public class CalculateDamage
 		ArrayList<Integer> bpModifiers = new ArrayList<Integer>();
 		
 		//Assumes Fairy/Dark Aura is active
-		if (aura.equals("Aura Break") && (moveType.equals("Fairy")) || moveType.equals("Dark"))
+		if (aura.equals("Aura Break") && (moveType.equals("Fairy") || moveType.equals("Dark")))
 		{
 			bpModifiers.add(0xC00);
+			description.setAura(aura);
 		}
 		
 		//if (Rivalry and gender is not the same) TODO
@@ -414,24 +449,29 @@ public class CalculateDamage
 				case "Aerilate":
 					moveType = "Flying";
 					bpModifiers.add(0x1333);
+					description.setAttackerAbility(attackerAbility);
 					break;
 				case "Pixilate":
 					moveType = "Fairy";
 					bpModifiers.add(0x1333);
+					description.setAttackerAbility(attackerAbility);
 					break;
 				case "Refrigerate":
 					moveType = "Ice";
 					bpModifiers.add(0x1333);
+					description.setAttackerAbility(attackerAbility);
 					break;
 				case "Galvanize":
 					moveType = "Electric";
 					bpModifiers.add(0x1333);
+					description.setAttackerAbility(attackerAbility);
 					break;
 				case "Liquid Voice":
 					if (move.isSound())
 					{
 						moveType = "Water";
 					}
+					description.setAttackerAbility(attackerAbility);
 					break;
 				default:
 					break;
@@ -443,52 +483,63 @@ public class CalculateDamage
 		{
 			moveType = "Normal";
 			bpModifiers.add(0x1333);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Iron Fist") && move.isPunch())
 		{
 			bpModifiers.add(0x1333);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
-		//Doesn't account for Jump Kick or HJK atm
-		if (attackerAbility.equals("Reckless") && move.getHasRecoil())
+		if (attackerAbility.equals("Reckless") && (move.getHasRecoil() || move.getName().equals("Jump Kick") || move.getName().equals("High Jump Kick")))
 		{
 			bpModifiers.add(0x1333);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
-		//if (Rivalry and gender is the same) TODO
-		//bpModifiers.add(0x1400);
+		/*if (Rivalry and gender is the same) TODO
+		{
+			bpModifiers.add(0x1400);
+			description.setAttackerAbility(attackerAbility);
+		}*/
 		
 		if (isBattery && !usesPhysicalAttack)
 		{
 			bpModifiers.add(0x14CD);
+			description.setBattery(true);
 		}
 		
 		if (attackerAbility.equals("Sheer Force") && move.getHasSecondaryEffect())
 		{
 			bpModifiers.add(0x14CD);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Sand Force") && weather.equals("Sand") && Arrays.asList("Rock", "Ground", "Steel").contains(moveType))
 		{
 			bpModifiers.add(0x14CD);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		//Automatically apply Analytic and skip Speed checks or whatever
 		if (attackerAbility.equals("Analytic"))
 		{
 			bpModifiers.add(0x14CD);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Tough Claws") && move.getMakesContact())
 		{
 			bpModifiers.add(0x14CD);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		//Assumes Aura Break is not active
 		if ((aura.equals("Fairy Aura") && moveType.equals("Fairy")) || (aura.equals("Dark Aura") && moveType.equals("Dark")))
 		{
 			bpModifiers.add(0x1548);
+			description.setAura(aura);
 		}
 		
 		//Technician considers any previous modifiers in its <= 60 BP check.
@@ -498,42 +549,50 @@ public class CalculateDamage
 			if (tempBP <= 60)
 			{
 				bpModifiers.add(0x1800);
+				description.setAttackerAbility(attackerAbility);
 			}
 		}
 		
 		if (attackerAbility.equals("Flare Boost") && attackerStatus.equals("Burned") && !usesPhysicalAttack)
 		{
 			bpModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Toxic Boost") && (attackerStatus.equals("Poisoned") || attackerStatus.equals("Badly Poisoned")) && usesPhysicalAttack)
 		{
 			bpModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Strong Jaw") && move.isBite())
 		{
 			bpModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Mega Launcher") && move.isPulse())
 		{
 			bpModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (defenderAbility.equals("Heatproof") && moveType.equals("Fire"))
 		{
 			bpModifiers.add(0x800);
+			description.setDefenderAbility(defenderAbility);
 		}
 		
 		if (defenderAbility.equals("Dry Skin") && moveType.equals("Fire"))
 		{
 			bpModifiers.add(0x1400);
+			description.setDefenderAbility(defenderAbility);
 		}
 		
 		if ((attackerItem.getName().equals("Muscle Band") && usesPhysicalAttack) || (attackerItem.getName().equals("Wise Glasses") && !usesPhysicalAttack))
 		{
 			bpModifiers.add(0x1199);
+			description.setAttackerItem(attackerItem.getName());
 		}
 		
 		//Plates, Incenses, other type boosting items
@@ -547,17 +606,20 @@ public class CalculateDamage
 					|| (attackerItem.getName().equals("Soul Dew") && (attackerName.contains("Latios") || attackerName.contains("Latias"))&& (moveType.equals("Dragon") || moveType.equals("Psychic"))))
 			{
 				bpModifiers.add(0x1333);
+				description.setAttackerItem(attackerItem.getName());
 			}
 		}
 		
 		if (attackerItem.isGem() && attackerItem.getTypeAssociated().equals(moveType))
 		{
 			bpModifiers.add(0x14CD);
+			description.setAttackerItem(attackerItem.getName());
 		}
 		
 		if ((move.getName().equals("Solar Beam") || move.getName().equals("Solar Blade")) && !weather.equals("Sun") && !weather.equals("None"))
 		{
 			bpModifiers.add(0x800);
+			description.setWeather(weather);
 		}
 		
 		//if (meFirst variable) TODO
@@ -574,11 +636,13 @@ public class CalculateDamage
 				|| (defenderItem.isMemory() && defenderName.contains("Silvally"))))
 		{
 			bpModifiers.add(0x1800);
+			description.setKnockOff(true);
 		}
 		
 		if (isHelpingHand)
 		{
 			bpModifiers.add(0x1800);
+			description.setHelpingHand(true);
 		}
 				
 		//if (has Charge) TODO
@@ -612,10 +676,12 @@ public class CalculateDamage
 			if (terrain.equals("Misty") && moveType.equals("Dragon"))
 			{
 				bpModifiers.add(0x800);
+				description.setTerrain(terrain);
 			}
 			if (terrain.equals("Grassy") && (move.getName().equals("Earthquake") || move.getName().equals("Bulldoze") || move.getName().equals("Magnitude")))
 			{
 				bpModifiers.add(0x800);
+				description.setTerrain(terrain);
 			}
 		}
 		
@@ -627,6 +693,7 @@ public class CalculateDamage
 					|| (terrain.equals("Grassy") && moveType.equals("Grass")))
 			{
 				bpModifiers.add(0x1800);
+				description.setTerrain(terrain);
 			}
 		}
 		
@@ -641,9 +708,8 @@ public class CalculateDamage
 		return (int) Math.max(1, pokeRound(startingBP * chainMods(bpModifiers) / 0x1000));
 	}
 	
-	public int calculateFinalAttack()
+	public int calculateFinalAttack(int baseAttack)
 	{
-		int baseAttack = attackerOffenseStat;
 		if (debugMode)
 		{
 			System.out.println("Attack prior to modifiers is: " + baseAttack);
@@ -658,11 +724,17 @@ public class CalculateDamage
 			}
 			baseAttack = applyStatChange(baseAttack, attackerOffenseChange);
 		}
+		else if (attackerOffenseChange != 0)
+		{
+			description.setDefenderAbility(defenderAbility);
+		}
+		
 		
 		//Hustle is not chained like the other modifiers, instead applied directly.
 		if (attackerAbility.equals("Hustle") && usesPhysicalAttack)
 		{
 			baseAttack = pokeRound(baseAttack * 3 / 2);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		ArrayList<Integer> attackModifiers = new ArrayList<Integer>();
@@ -671,102 +743,120 @@ public class CalculateDamage
 		if (attackerAbility.equals("Slow Start") && usesPhysicalAttack || (!usesPhysicalAttack && isZ))
 		{
 			attackModifiers.add(0x800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
-		if (attackerAbility.equals("Defeatist") && attacker.getCurrentHP() <= attacker.getStat(HP).calculateStat() / 2.0)
+		if (attackerAbility.equals("Defeatist") && attackerCurrentHP <= attackerHPStat / 2.0)
 		{
 			attackModifiers.add(0x800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		//Technically Flower Gift can also be an ally's ability
 		if (attackerAbility.equals("Flower Gift") && weather.equals("Sun") && usesPhysicalAttack)
 		{
 			attackModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Guts") && !attackerStatus.equals("Healthy") && usesPhysicalAttack)
 		{
 			attackModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		//Torrent/Swarm/Overgrow/Blaze
-		if (attacker.getCurrentHP() <= attacker.getStat(HP).calculateStat() / 3.0 &&
+		if (attackerCurrentHP <= attackerHPStat / 3.0 &&
 				(attackerAbility.equals("Blaze") && moveType.equals("Fire")) || 
 				(attackerAbility.equals("Torrent") && moveType.equals("Water")) || 
 				(attackerAbility.equals("Overgrow") && moveType.equals("Grass")) || 
 				(attackerAbility.equals("Swarm") && moveType.equals("Bug")))
 		{
 			attackModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		//TODO Flash Fire needs a trigger to activate
 		if (attackerAbility.equals("Flash Fire") && moveType.equals("Fire"))
 		{
 			//attackModifiers.add(0x1800);
+			//description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Solar Power") && weather.equals("Sun") && !usesPhysicalAttack)
 		{
 			attackModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		//Plus/Minus default to being on if the ability is selected
 		if ((attackerAbility.equals("Plus") || attackerAbility.equals("Minus")) && !usesPhysicalAttack)
 		{
 			attackModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Steelworker") && moveType.equals("Steel"))
 		{
 			attackModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if ((attackerAbility.equals("Huge Power") || attackerAbility.equals("Pure Power")) && usesPhysicalAttack)
 		{
 			attackModifiers.add(0x2000);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		//Offensive Water Bubble
 		if (attackerAbility.equals("Water Bubble") && moveType.equals("Water"))
 		{
 			attackModifiers.add(0x2000);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		//TODO flag for Stakeout double condition
 		if (attackerAbility.equals("Stakeout"))
 		{
 			//attackModifiers.add(0x2000);
+			//description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (defenderAbility.equals("Thick Fat") && (moveType.equals("Fire") || moveType.equals("Ice")))
 		{
 			attackModifiers.add(0x800);
+			description.setDefenderAbility(defenderAbility);
 		}
 		
 		//Defensive Water Bubble
 		if (defenderAbility.equals("Water Bubble") && moveType.equals("Fire"))
 		{
 			attackModifiers.add(0x800);
+			description.setDefenderAbility(defenderAbility);
 		}
 		
 		if ((attackerItem.getName().equals("Choice Band") && usesPhysicalAttack|| (attackerItem.getName().equals("Choice Specs") && !usesPhysicalAttack)))
 		{
 			attackModifiers.add(0x1800);
+			description.setAttackerItem(attackerItem.getName());
 		}
 		
 		if (attackerItem.getName().equals("Thick Club") && Arrays.asList("Marowak", "Marowak-Alola", "Marowak-Alola-Totem", "Cubone").contains(attackerName) && usesPhysicalAttack)
 		{
 			attackModifiers.add(0x2000);
+			description.setAttackerItem(attackerItem.getName());
 		}
 		
 		if (attackerItem.getName().equals("Deep Sea Tooth") && attackerName.equals("Clamperl") && !usesPhysicalAttack)
 		{
 			attackModifiers.add(0x2000);
+			description.setAttackerItem(attackerItem.getName());
 		}
 		
 		if (attackerItem.getName().equals("Light Ball") && attackerName.equals("Pikachu"))
 		{
 			attackModifiers.add(0x2000);
+			description.setAttackerItem(attackerItem.getName());
 		}
 
 		if (debugMode)
@@ -778,9 +868,8 @@ public class CalculateDamage
 		return (int) Math.max(1, pokeRound(baseAttack * chainMods(attackModifiers) / 0x1000));
 	}
 
-	public int calculateFinalDefense()
+	public int calculateFinalDefense(int baseDefense)
 	{
-		int baseDefense = defenderDefenseStat;
 		if (debugMode)
 		{
 			System.out.println("Defense prior to modifiers is: " + baseDefense);
@@ -795,11 +884,16 @@ public class CalculateDamage
 			}		
 			baseDefense = applyStatChange(baseDefense, defenderDefenseChange);
 		}
+		else if (attackerAbility.equals("Unaware") && defenderDefenseChange != 0)
+		{
+			description.setAttackerAbility(attackerAbility);
+		}
 		
 		//Sandstorm is applied prior to the other defense modifiers
 		if (weather.equals("Sand") && (defenderTypeLeft.equals("Rock") || defenderTypeRight.equals("Rock")) && !hitsPhysical)
 		{
 			baseDefense = pokeRound(baseDefense * 3 / 2);
+			description.setWeather(weather);
 		}
 		
 		ArrayList<Integer> defenseModifiers = new ArrayList<Integer>();
@@ -808,43 +902,51 @@ public class CalculateDamage
 		if (defenderAbility.equals("Flower Gift") && weather.equals("Sun") && !hitsPhysical)
 		{
 			defenseModifiers.add(0x1800);
+			description.setDefenderAbility(defenderAbility);
 		}		
 		
 		if (defenderAbility.equals("Marvel Scale") && !defenderStatus.equals("Healthy") && hitsPhysical)
 		{
 			defenseModifiers.add(0x1800);
+			description.setDefenderAbility(defenderAbility);
 		}
 		
 		if (defenderAbility.equals("Grass Pelt") && terrain.equals("Grassy") && hitsPhysical)
 		{
 			defenseModifiers.add(0x1800);
+			description.setDefenderAbility(defenderAbility);
 		}
 		
 		if (defenderAbility.equals("Fur Coat") && hitsPhysical)
 		{
 			defenseModifiers.add(0x2000);
+			description.setDefenderAbility(defenderAbility);
 		}
 		
 		//Assumes Eviolite holder meets the correct conditions
 		if (defenderItem.getName().equals("Eviolite"))
 		{
 			defenseModifiers.add(0x1800);
+			description.setDefenderItem(defenderItem.getName());
 		}
 		
 		if (defenderItem.getName().equals("Assault Vest") && !hitsPhysical)
 		{
 			defenseModifiers.add(0x1800);
+			description.setDefenderItem(defenderItem.getName());
 		}
 		
 		//BW documentation says 0x1800 but everywhere else says 0x2000
 		if (defenderItem.getName().equals("Deep Sea Scale") && defenderName.equals("Clamperl") && !hitsPhysical)
 		{
 			defenseModifiers.add(0x2000);
+			description.setDefenderItem(defenderItem.getName());
 		}
 		
 		if (defenderItem.getName().equals("Metal Powder") && defenderName.equals("Ditto") && hitsPhysical)
 		{
 			defenseModifiers.add(0x2000);
+			description.setDefenderItem(defenderItem.getName());
 		}
 		
 		if (debugMode)
@@ -856,9 +958,9 @@ public class CalculateDamage
 		return (int) Math.max(1, pokeRound(baseDefense * chainMods(defenseModifiers) / 0x1000));
 	}
 
-	public int[] mainCalculation()
+	public int[] mainCalculation(int finalBasePower, int finalAttack, int finalDefense)
 	{
-		double baseDamage = (int) Math.floor((2 * attacker.getStat(HP).getLevel() / 5) + 2);
+		double baseDamage = (int) Math.floor((2.0 * attackerLevel / 5.0) + 2);
 		baseDamage = (int) Math.floor((baseDamage * finalBasePower * finalAttack) / finalDefense);
 		baseDamage = (int) (Math.floor(baseDamage / 50)) + 2;
 
@@ -884,6 +986,7 @@ public class CalculateDamage
 					"Skull Bush", "Sky Attack", "Sky Drop", "Solar Beam", "Solar Blade").contains(move.getName()))
 			{
 				//Parental Bond logic
+				//description.setAttackerAbility(attackerAbility);
 			}
 		}
 
@@ -891,16 +994,19 @@ public class CalculateDamage
 		if ((weather.equals("Sun") && moveType.equals("Fire")) ||(weather.equals("Rain") && moveType.equals("Water")))
 		{
 			damagePreRolls = pokeRound((damagePreRolls * 0x1800) / 0x1000);
+			description.setWeather(weather);
 		}
 		else if ((weather.equals("Sun") && moveType.equals("Water")) ||(weather.equals("Rain") && moveType.equals("Fire")))
 		{
 			damagePreRolls = pokeRound((damagePreRolls * 0x800) / 0x1000);
+			description.setWeather(weather);
 		}
 
 		//Critical hit
 		if (isCrit)
 		{
 			damagePreRolls = (int) Math.floor((damagePreRolls * 0x1800) / 0x1000);
+			description.setCrit(true);
 		}
 		//Random factor; from now on, all modifiers are applied to each roll separately.
 		for (int i = 0; i < 16; i++)
@@ -921,6 +1027,7 @@ public class CalculateDamage
 			if (attackerAbility.equals("Adaptability"))
 			{
 				stabMod = 0x2000;
+				description.setAttackerAbility(attackerAbility);
 			}
 			for (int i = 0; i < 16; i++)
 			{
@@ -941,6 +1048,7 @@ public class CalculateDamage
 			{
 				damageRolls[i] = (int) Math.floor((damagePreRolls * 0x800) / 0x1000);
 			}
+			description.setBurnt(true);
 		}
 		/*****Final modifiers*****
 		*Final modifiers are specifically chained together. Using OZY's order rather than PS/BW research. */
@@ -958,65 +1066,78 @@ public class CalculateDamage
 			{
 				finalModifiers.add(0x800);
 			}
+			description.setReflect(isReflect);
+			description.setLightScreen(isLightScreen);
 		}
 		
 		if (attackerAbility.equals("Neuroforce") && typeMod > 1)
 		{
 			finalModifiers.add(0x1400);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Sniper") && isCrit)
 		{
 			finalModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
 		}
 		
 		if (attackerAbility.equals("Tinted Lens") && typeMod < 1)
 		{
 			finalModifiers.add(0x2000);
+			description.setAttackerAbility(attackerAbility);
 		}
 
 		//Multiscale / Shadow Shield requires the target is at full HP.
 		if ((defenderAbility.equals("Multiscale") || defenderAbility.equals("Shadow Shield")) && defenderCurrentHP == defenderHPStat)
 		{
 			finalModifiers.add(0x800);
+			description.setDefenderAbility(defenderAbility);
 		}
 		
 		if (defenderAbility.equals("Fluffy") && move.getMakesContact())
 		{
 			finalModifiers.add(0x800);
+			description.setDefenderAbility(defenderAbility);
 		}
 
 		if (isFriendGuard)
 		{
 			finalModifiers.add(0xC00);
+			description.setFriendGuard(true);
 		}
 
 		if ((defenderAbility.equals("Solid Rock") || defenderAbility.equals("Filter") || defenderAbility.equals("Prism Armor")) && typeMod > 1)
 		{
 			finalModifiers.add(0xC00);
+			description.setDefenderAbility(defenderAbility);
 		}
 
 		//Metronome
 		if (attackerItem.getName().equals("Metronome"))
 		{
 			//Atm do nothing because it requires a specific turn count passed in.
+			//description.setAttackerItem(attackerItem.getName());
 		}
 		
 		if (defenderAbility.equals("Fluffy") && moveType.equals("Fire"))
 		{
 			finalModifiers.add(0x2000);
+			description.setDefenderAbility(defenderAbility);
 		}
 
 		//Expert Belt
 		if (attackerItem.getName().equals("Expert Belt") && typeMod > 1)
 		{
 			finalModifiers.add(0x1333);
+			description.setAttackerItem(attackerItem.getName());
 		}
 
 		//Life Orb
 		if (attackerItem.getName().equals("Life Orb"))
 		{
 			finalModifiers.add(0x14CC);
+			description.setAttackerItem(attackerItem.getName());
 		}
 
 		//Calls a couple functions to check if it is a resist Berry, and what type it is.
@@ -1025,6 +1146,7 @@ public class CalculateDamage
 			if (defenderItem.getTypeAssociated().equals(moveType) && (typeMod > 1 || moveType.equals("Normal")))
 			{
 				finalModifiers.add(0x800);
+				description.setDefenderItem(defenderItem.getName());
 			}
 		}
 
@@ -1037,13 +1159,13 @@ public class CalculateDamage
 			damageRolls[i] = pokeRound((damageRolls[i] * finalMod) / 0x1000);
 		}
 
-		//PS and OZY has Z-moves quartered post-final modifiers.
 		if (isZ && isProtect)
 		{
 			for (int i = 0; i < 16; i++)
 			{
 				damageRolls[i] = pokeRound((damageRolls[i] * 0x400) / 0x1000);
 			}
+			description.setProtect(true);
 		}
 		
 		//Check for 1 damage and 16-bit cutoffs
@@ -1197,188 +1319,18 @@ public class CalculateDamage
 		return baseSpeed;
 	}
 
-	/********* FUNCTIONS FOR WRITING OUTPUT ************
-	 * */
-	public void writeDamageOutput()
-	{
-		String offense = "";
-		String defense = "";
-		if (moveCategory.equals("Physical"))
-		{
-			offense = "Atk";
-			defense = "Def";
-		}
-		else if (moveCategory.equals("Special"))
-		{
-			offense = "SpA";
-			defense = "SpD";
-		}
-		else if (moveCategory.equals("Psyshock effect"))
-		{
-			offense = "SpA";
-			defense = "Def";
-		}
-
-		damageOutputShort = calculatePercentDamage(true);
-		damageOutput += attackerOffenseStatEVs + attackerNature() + " " + offense + " ";
-		damageOutput += attackerName + " " + move.getName() + " vs. ";
-		damageOutput += defender.getStat(HP).getEVs() + " HP / " + defenderDefenseStatEVs + defenderNature() + " " + defense + " ";
-		damageOutput += defenderName + ": " + damageRolls[0] + "-" + damageRolls[15] + " ";
-		damageOutput += calculatePercentDamage(false) + " -- " + getXHKO();
-	}
-	
-	public String getXHKO()
-	{
-		String result = "";
-		
-		int smallestXHKO = (int) Math.ceil((double) defenderCurrentHP / damageRolls[15]);
-		int largestXHKO = (int) Math.ceil((double) defenderCurrentHP / damageRolls[0]);
-		
-		if (smallestXHKO == largestXHKO)
-		{
-			if (largestXHKO == 1)
-			{
-				result = "guaranteed OHKO";
-			}
-			else
-			{
-				result = "guaranteed " + largestXHKO + "HKO";
-			}
-		}
-		else
-		{
-			if (smallestXHKO < 6) //Don't bother checking % to 6HKO, etc
-			{
-				int damageRollDuplicates[][] = new int[smallestXHKO][16];
-				for (int i = 0; i < smallestXHKO; i++)
-				{
-					damageRollDuplicates[i] = damageRolls; //make X copies for the XHKO chance.
-				}
-				KOChanceLogic xhkoChance = new KOChanceLogic(defenderCurrentHP, damageRollDuplicates);
-				if (smallestXHKO == 1)
-				{
-					result = xhkoChance.getPercentToKO() + "% chance to " + "OHKO ";
-				}
-				else
-				{
-					result = xhkoChance.getPercentToKO(2) + "% chance to " + smallestXHKO + "HKO ";
-				}
-				result += "(" + xhkoChance.getSimplifiedFractionToKO() + ")";
-			}
-			else
-			{
-				result = "(" + smallestXHKO + "-" + largestXHKO + "HKO)";
-			}
-		}
-
-		return result;
-	}
-
-	public void writeDamageOutput(String message)
-	{
-		damageOutputShort += "(0-0%)";
-		damageOutput += attackerName + " " + move.getName() + " vs. ";
-		damageOutput += defenderName + ": 0 - 0 " + damageOutputShort +  " -- " + message;
-	}
-
-	public String calculatePercentDamage(boolean isShortMessage)
-	{
-		String damageOutputShort;
-		
-		double minRollPercent = ((double) damageRolls[0] / (double) defenderCurrentHP) * 100;
-		double maxRollPercent = ((double) damageRolls[15] / (double) defenderCurrentHP) * 100;
-
-		if (isShortMessage)
-		{
-			if (minRollPercent >= 100.0)
-			{
-				damageOutputShort = "(OHKO)";
-			}
-			else
-			{
-				damageOutputShort = "(" + String.format("%.1f", minRollPercent) + " - ";
-				damageOutputShort += String.format("%.1f", maxRollPercent) + "%)";
-			}
-		}
-		else
-		{
-			damageOutputShort = "(" + String.format("%.2f", minRollPercent) + " - ";
-			damageOutputShort += String.format("%.2f", maxRollPercent) + "%)";
-		}
-		
-		return damageOutputShort;
-	}
-
-	public String attackerNature()
-	{
-		String isPlusOrMinus = "";
-		int natureNum = natures.get(attackerNature);
-		if (usesPhysicalAttack)
-		{
-			if (Arrays.asList(0, 3, 13, 17).contains(natureNum))
-			{
-				isPlusOrMinus = "+";
-			}
-			else if (Arrays.asList(2, 4, 15, 24).contains(natureNum))
-			{
-				isPlusOrMinus = "-";
-			}
-		}
-		else if (!usesPhysicalAttack)
-		{
-			if (Arrays.asList(14, 15, 18, 20).contains(natureNum))
-			{
-				isPlusOrMinus = "+";
-			}
-			else if (Arrays.asList(0, 5, 10, 11).contains(natureNum))
-			{
-				isPlusOrMinus = "-";
-			}
-		}
-		return isPlusOrMinus;
-	}
-
-	public String defenderNature()
-	{
-		String isPlusOrMinus = "";
-		int natureNum = natures.get(defenderNature);
-		if (hitsPhysical)
-		{
-			if (Arrays.asList(2, 10, 12, 21).contains(natureNum))
-			{
-				isPlusOrMinus = "+";
-			}
-			else if (Arrays.asList(7, 9, 13, 14).contains(natureNum))
-			{
-				isPlusOrMinus = "-";
-			}
-		}
-		else if (!hitsPhysical)
-		{
-			if (Arrays.asList(4, 5, 7, 22).contains(natureNum))
-			{
-				isPlusOrMinus = "-";
-			}
-			else if (Arrays.asList(12, 16, 17, 20).contains(natureNum))
-			{
-				isPlusOrMinus = "-";
-			}
-		}
-		return isPlusOrMinus;
-	}
-
 	public int[] getDamageRolls()
 	{
-		return this.damageRolls;
+		return damageRolls;
 	}
 
 	public String getDamageOutput()
 	{
-		return this.damageOutput;
+		return damageOutput;
 	}
 
 	public String getDamageOutputShort()
 	{
-		return this.damageOutputShort;
+		return damageOutputShort;
 	}
 }
