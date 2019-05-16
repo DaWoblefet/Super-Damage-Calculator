@@ -10,6 +10,7 @@ public class DamageDescriptionBuilder
 	private String attackerNature;
 	private String attackerItem;
 	private String attackerAbility;
+	private boolean isZ;
 	private boolean isBurnt;
 	private boolean isHelpingHand;
 	private boolean isBattery;	
@@ -44,15 +45,14 @@ public class DamageDescriptionBuilder
 	private boolean isFriendGuard;
 	private boolean isProtect;
 	
-	private int[] damageRolls;
+	private int[] damageRolls = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //initialize to zero
 	private int precision = 2;
 	
-	public DamageDescriptionBuilder(String attackerName, String defenderName, String move, int[] zeroDamageArray)
+	public DamageDescriptionBuilder(String attackerName, String defenderName, String move)
 	{
 		this.attackerName = attackerName;
 		this.defenderName = defenderName;
 		this.move = move;
-		this.damageRolls = zeroDamageArray;
 	}
 	
 	public String getNoDamageDescription(String description)
@@ -121,6 +121,7 @@ public class DamageDescriptionBuilder
 		if (isBattery) {result += "Battery ";}
 		
 		//Move data
+		if (isZ) {result += "Z-";}
 		result += move + " ";
 		if (moveBP > 0) {result += "(" + moveBP + " BP) ";}
 		if (knockOff) {result += "(1.5x BP) ";}
@@ -183,7 +184,7 @@ public class DamageDescriptionBuilder
 		result += !isParentalBond ? ")" : "; 2nd Hit: ";
 		if (isParentalBond)
 		{
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < 15; i++)
 			{
 				result += pBondDamageRolls[i] + ", ";
 			}
@@ -196,9 +197,20 @@ public class DamageDescriptionBuilder
 	public String getXHKO()
 	{
 		String result;
+		int smallestXHKO;
+		int largestXHKO;
 		
-		int smallestXHKO = (int) Math.ceil((double) defenderCurrentHP / damageRolls[15]);
-		int largestXHKO = (int) Math.ceil((double) defenderCurrentHP / damageRolls[0]);
+		
+		if (!isParentalBond)
+		{
+			smallestXHKO = (int) Math.ceil((double) defenderCurrentHP / damageRolls[15]);
+			largestXHKO = (int) Math.ceil((double) defenderCurrentHP / damageRolls[0]);
+		}
+		else
+		{
+			smallestXHKO = (int) Math.ceil((double) defenderCurrentHP / (damageRolls[15] + pBondDamageRolls[15]));
+			largestXHKO = (int) Math.ceil((double) defenderCurrentHP / (damageRolls[0] + pBondDamageRolls[0]));
+		}
 		
 		if (smallestXHKO == largestXHKO)
 		{
@@ -213,7 +225,7 @@ public class DamageDescriptionBuilder
 		}
 		else
 		{
-			if (smallestXHKO < 6) //Don't bother checking % to 6HKO, etc
+			if (smallestXHKO < 6 && !isParentalBond) //Don't bother checking % to 6HKO, etc
 			{
 				int damageRollDuplicates[][] = new int[smallestXHKO][16];
 				for (int i = 0; i < smallestXHKO; i++)
@@ -223,7 +235,28 @@ public class DamageDescriptionBuilder
 				KOChanceLogic xhkoChance = new KOChanceLogic(defenderCurrentHP, damageRollDuplicates);
 				if (smallestXHKO == 1)
 				{
-					result = xhkoChance.getPercentToKO() + "% chance to " + "OHKO ";
+					result = xhkoChance.getPercentToKO(precision) + "% chance to " + "OHKO ";
+				}
+				else
+				{
+					result = xhkoChance.getPercentToKO(precision) + "% chance to " + smallestXHKO + "HKO ";
+				}
+				result += "(" + xhkoChance.getSimplifiedFractionToKO() + ")";
+			}
+			else if (isParentalBond && smallestXHKO < 4) //only check for 3HKOs with Parental Bond
+			{
+				int damageRollDuplicates[][] = new int[smallestXHKO * 2][16];
+				for (int i = 0; i < smallestXHKO * 2; i++)
+				{
+					damageRollDuplicates[i] = damageRolls;
+					i++;
+					damageRollDuplicates[i] = pBondDamageRolls;
+				}
+				
+				KOChanceLogic xhkoChance = new KOChanceLogic(defenderCurrentHP, damageRollDuplicates);
+				if (smallestXHKO == 1)
+				{
+					result = xhkoChance.getPercentToKO(precision) + "% chance to " + "OHKO ";
 				}
 				else
 				{
@@ -533,5 +566,13 @@ public class DamageDescriptionBuilder
 
 	public void setpBondDamageRolls(int[] pBondDamageRolls) {
 		this.pBondDamageRolls = pBondDamageRolls;
+	}
+
+	public boolean isZ() {
+		return isZ;
+	}
+
+	public void setZ(boolean isZ) {
+		this.isZ = isZ;
 	}
 }
