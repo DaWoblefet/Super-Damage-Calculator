@@ -386,6 +386,7 @@ public class PokemonSide
 
 		//Stat calculation done dynamically
 		level.textProperty().addListener((observable) -> {
+			if (isToggleMon) {return;}
 			try //Make sure input is an integer.
 			{
 				Integer.parseInt(level.getText());
@@ -901,7 +902,7 @@ public class PokemonSide
 		item.setValue(teamData[currentPokemon].getItem().getName());
 		status.setValue(teamData[currentPokemon].getStatus());
 
-		level.setText(Integer.toString(teamData[currentPokemon].getStat(1).getLevel()));
+		level.setText(Integer.toString(teamData[currentPokemon].getStat(HP).getLevel()));
 		for (int k = 0; k < 6; k++)
 		{
 			baseField[k].setText(Integer.toString(teamData[currentPokemon].getBaseStat(k)));
@@ -942,6 +943,7 @@ public class PokemonSide
 		
 		for (int k = 0; k < 4; k++)
 		{
+			teamData[currentPokemon].setMove(teamData[currentPokemon].getMove(k).cloneMove(), k);
 			movesComboBox[k].setValue(teamData[currentPokemon].getMove(k).getName());
 			basePower[k].setText(Integer.toString(teamData[currentPokemon].getMove(k).getBP()));
 			type[k].setValue(teamData[currentPokemon].getMove(k).getType());
@@ -949,6 +951,7 @@ public class PokemonSide
 			crit[k].setSelected(teamData[currentPokemon].getMove(k).isCritChecked());
 			zOption[k].setSelected(teamData[currentPokemon].getMove(k).isZChecked());
 		}
+		
 		isToggleMon = false;
 		triggerCalcs();
 	}
