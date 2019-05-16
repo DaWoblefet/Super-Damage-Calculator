@@ -18,7 +18,7 @@ public class CalculateDamage
 	private HashMap<String, Move> movedex = new Movedex().getMovedex();
 	private HashMap<String, Integer> types = new Type().types;
 	private double typechart[][] = new Type().typeChart;
-	private boolean debugMode = false;
+	private boolean debugMode = true;
 
 	private int attackerLevel;
 	private int attackerHPStat;
@@ -83,11 +83,11 @@ public class CalculateDamage
 	public CalculateDamage(Move move, Pokemon attacker, Pokemon defender, FieldOptions fieldOptions, boolean isLeft)
 	{
 		this.move = move;
-		moveBP = move.getBP();
 		moveType = move.getType();
 		moveCategory = move.getCategory();
 		isCrit = move.isCritChecked();
 		isZ = move.isZChecked();
+		moveBP = isZ ? move.getZBP() : move.getBP();
 		
 		//Photon Geyser is conditionally a physical/special move based on which offense stat is higher
 		if (move.getName().equals("Photon Geyser") || move.getName().equals("Light That Burns the Sky"))
@@ -151,7 +151,7 @@ public class CalculateDamage
 		defenderItem = defender.getItem();
 		defenderStatus = defender.getStatus();
 		
-		description = new DamageDescriptionBuilder(attackerName, defenderName, move.getName(), zeroDamageArray);
+		description = new DamageDescriptionBuilder(attackerName, defenderName, move.getName());
 		
 		//Mold Breaker checks. Shadow Shield/Prism Armor/Full Metal Body immune to Mold Breaker
 		if (!Arrays.asList("Shadow Shield", "Prism Armor", "Full Metal Body").contains(defenderAbility))
@@ -225,9 +225,10 @@ public class CalculateDamage
 				if (attackerAbility.equals("Parental Bond") && !(move.isSpread() && !format.equals("Singles")) && !isZ && !move.isMultiHit() && !move.isTwoHit())
 				{
 					//Additionally, Parental Bond doesn't work on any of the following moves:
-					if (!Arrays.asList("Fling", "Self-Destruct", "Explosion", "Final Gambit", "Uproar", "Rollout", "Ice Ball", "Endeavor", 
-							"Bounce", "Dig", "Dive", "Fly", "Freeze Shock", "Ice Burn", "Phantom Force", "Razor Wind", "Shadow Force", 
-							"Skull Bush", "Sky Attack", "Sky Drop", "Solar Beam", "Solar Blade").contains(move.getName()))
+					if (!Arrays.asList("Fling", "Self-Destruct", "Explosion", "Final Gambit", "Uproar", "Rollout",
+							"Ice Ball", "Endeavor", "Bounce", "Dig", "Dive", "Fly", "Freeze Shock", "Ice Burn",
+							"Phantom Force", "Razor Wind", "Shadow Force", "Skull Bush", "Sky Attack",
+							"Sky Drop", "Solar Beam", "Solar Blade").contains(move.getName()))
 					{
 						isBabyHit = true;
 						
@@ -251,6 +252,7 @@ public class CalculateDamage
 					}
 				}
 				
+				description.setZ(isZ);
 				description.setAttackerEVs(attacker.getStat(whichAtk).getEVs());
 				description.setAttackerNature(attacker.getNature());
 				description.setMoveCategory(moveCategory);
@@ -451,6 +453,7 @@ public class CalculateDamage
 			default:
 				break;		
 		}
+		if (isZ) {description.setMoveBP(initialBP);}
 		
 		return initialBP;
 	}
@@ -780,7 +783,7 @@ public class CalculateDamage
 		ArrayList<Integer> attackModifiers = new ArrayList<Integer>();
 		
 		//Slow Start halves damage for all physical attacks and special Z-moves
-		if (attackerAbility.equals("Slow Start") && usesPhysicalAttack || (!usesPhysicalAttack && isZ))
+		if (attackerAbility.equals("Slow Start") && (usesPhysicalAttack || (!usesPhysicalAttack && isZ)))
 		{
 			attackModifiers.add(0x800);
 			description.setAttackerAbility(attackerAbility);
