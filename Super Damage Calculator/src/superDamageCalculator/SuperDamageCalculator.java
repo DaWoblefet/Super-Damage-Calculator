@@ -5,7 +5,6 @@ package superDamageCalculator;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,24 +36,19 @@ public class SuperDamageCalculator extends Application
 	//Initializing the HashMaps for use
 	private Pokedex pokedex = new Pokedex();
 	
-	private PokemonSide leftMon = new PokemonSide();
-	private PokemonSide rightMon = new PokemonSide();
+	private PokemonSide[] pokemonSides = new PokemonSide[2];
+	private SideFieldOptions[] sideFieldOptions = new SideFieldOptions[2];
+	private FieldOptions fieldOptions;
+	private final int leftMon = 0;
+	private final int rightMon = 1;
 
-	private BorderPane pokemonLeft = leftMon.getPokemonSide();
-	private BorderPane pokemonRight = rightMon.getPokemonSide();
 
 	private Label mainDamageResultLabel;
 	private Label mainDamageRollsLabel;
 
-	private SideFieldOptions leftSideFieldOptions;
-	private SideFieldOptions rightSideFieldOptions;
-	private FieldOptions fieldOptions;
-
 	private final Clipboard clipboard = Clipboard.getSystemClipboard();
 	private final ClipboardContent content = new ClipboardContent();
 	private final String currentVersion = "0.5.1";
-	private String latestVersion;
-	private boolean newerVersionExists;
 
 	@Override
 	public void start(Stage primaryStage)
@@ -62,333 +56,268 @@ public class SuperDamageCalculator extends Application
 		long startTime = System.currentTimeMillis();
 		Thread.setDefaultUncaughtExceptionHandler(SuperDamageCalculator::showError);
 		Font.loadFont(getClass().getResourceAsStream("/resources/segoeui.ttf"), 16);
-		latestVersion = checkForUpdates();
-		newerVersionExists = !latestVersion.equals(currentVersion);
+		String latestVersion = checkForUpdates();
+		boolean newerVersionExists = !latestVersion.equals(currentVersion);
 
-		BorderPane mainPane = new BorderPane();
-		BorderPane subPane = new BorderPane();
-		mainPane.setStyle("-fx-background-color: #f3f3f3;");
-
-		MenuBar menubar = new MenuBar();
-		Menu menuFile = new Menu("File");
-
-		MenuItem psImport = new MenuItem("Import from Showdown");
-		psImport.setOnAction(e -> openPSImport());
+		/*** Declarations of GUI elements ***/		
 		
+		//Top Menu
+		Menu menuFile = new Menu("File");
+		MenuItem psImport = new MenuItem("Import from Showdown");
 		MenuItem koChanceWidget = new MenuItem("KO Chance Calculator");
-		koChanceWidget.setOnAction(e -> openKOChanceCalculator());
-
 		MenuItem additionalOptions = new MenuItem("Additional Options");
-		additionalOptions.setOnAction(e -> openAdditionalOptions());
-
 		MenuItem menuExit = new MenuItem("Exit");
-		menuExit.setOnAction(e -> {System.exit(0);});
-		//menuFile.getItems().addAll(additionalOptions, psImport, menuExit); //There are no additional options atm.
-		menuFile.getItems().addAll(psImport, koChanceWidget, menuExit);
-
+		
 		Menu menuLinks = new Menu("Links");
 		MenuItem ttHome = new MenuItem("Trainer Tower");
-		ttHome.setOnAction(e -> openLink("https://www.trainertower.com"));
 		MenuItem psVGC = new MenuItem("Pokemon Showdown VGC room");
-		psVGC.setOnAction(e -> openLink("https://play.pokemonshowdown.com/vgc"));
 		MenuItem speedTiers = new MenuItem("Speed Tiers");
-		speedTiers.setOnAction(e -> openLink("https://victoryroad.es/en/speed-tiers-vgc19-ultra/"));
 		MenuItem survivalCalc = new MenuItem("Survival Calc");
-		survivalCalc.setOnAction(e -> openLink("https://www.trainertower.com/survivalcalc/"));
-		menuLinks.getItems().addAll(ttHome, psVGC, speedTiers, survivalCalc);
 
 		Menu menuAbout = new Menu("About");
-
 		MenuItem credits = new MenuItem("Credits");
-		credits.setOnAction(e -> openCredits());
-		menuAbout.getItems().addAll(credits);
-
-
-		menubar.getMenus().addAll(menuFile, menuLinks, menuAbout);
-
-		/****** BEGIN TOP *******/
-		BorderPane center = new BorderPane();
-		BorderPane damages = new BorderPane();
-		GridPane damageCalcs = new GridPane();
-		HBox rollsAndCopy = new HBox();
 		
+		pokemonSides[leftMon] = new PokemonSide();
+		pokemonSides[rightMon] = new PokemonSide();
+		
+		//Main damage display
 		mainDamageResultLabel = new Label("This is where the calc would go.");
-		mainDamageResultLabel.setId("damage-label");
-		damageCalcs.addRow(0, mainDamageResultLabel);
+		mainDamageResultLabel.setId("damage-result-label");
 
-		mainDamageRollsLabel = new Label(leftMon.getDamageRolls(leftMon.getCurrentMoveslot()));
-		mainDamageRollsLabel.setFont(new Font("Times New Roman", 14));
+		mainDamageRollsLabel = new Label(pokemonSides[leftMon].getDamageRolls(pokemonSides[leftMon].getCurrentMoveslot()));
+		mainDamageRollsLabel.setId("damage-rolls-label");
+		
 		Button copyCalc = new Button("Copy Calc");
 		Button copyRolls = new Button("Copy Rolls");
 		Button copyCalcAndRolls = new Button("Copy Calc + Damage Rolls");
+		Button updateButton = new Button("New Update Available! Version " + latestVersion);
+		updateButton.setId("update-button");
 		
-		rollsAndCopy.getChildren().addAll(mainDamageRollsLabel, copyCalc, copyRolls, copyCalcAndRolls);
-		rollsAndCopy.setSpacing(5);
-		rollsAndCopy.setAlignment(Pos.CENTER_LEFT);
-		damageCalcs.addRow(1, rollsAndCopy);
+		sideFieldOptions[leftMon] = new SideFieldOptions(true);
+		sideFieldOptions[rightMon] = new SideFieldOptions(false);
+		fieldOptions = new FieldOptions(sideFieldOptions[leftMon], sideFieldOptions[rightMon]);
 		
-		if (newerVersionExists)
-		{
-			Button updateButton = new Button("New Update Available! Version " + latestVersion);
-			updateButton.setId("update-button");
-			updateButton.setOnAction(e -> openLink("https://github.com/DaWoblefet/Super-Damage-Calculator/releases"));
-			damages.setRight(updateButton);
-			BorderPane.setMargin(updateButton, new Insets(3,0,0,0));
-		}
-		damages.setLeft(damageCalcs);
-		damages.setPadding(new Insets(2,5,0,5));
-
-		copyCalc.setOnAction(e ->
-		{
-			content.putString(mainDamageResultLabel.getText());
-			clipboard.setContent(content);
-		});
-		
-		copyRolls.setOnAction(e ->
-		{
-			content.putString(mainDamageRollsLabel.getText());
-			clipboard.setContent(content);
-		});
-
-		copyCalcAndRolls.setOnAction(e ->
-		{
-			content.putString(mainDamageResultLabel.getText() + "\n" + mainDamageRollsLabel.getText());
-			clipboard.setContent(content);
-		});
-
-		//Coordinates the ListView with the main damage output.
-		leftMon.getTopMoves().setOnMouseClicked(e ->
-		{
-			leftMon.setCurrentMoveslot(leftMon.getTopMoves().getSelectionModel().getSelectedIndices().get(0));
-			mainDamageResultLabel.setText(leftMon.getDamageOutput(leftMon.getCurrentMoveslot()));
-			mainDamageRollsLabel.setText(leftMon.getDamageRolls(leftMon.getCurrentMoveslot()));
-		});
-
-		rightMon.getTopMoves().setOnMouseClicked(e ->
-		{
-			rightMon.setCurrentMoveslot(rightMon.getTopMoves().getSelectionModel().getSelectedIndices().get(0));
-			mainDamageResultLabel.setText(rightMon.getDamageOutput(rightMon.getCurrentMoveslot()));
-			mainDamageRollsLabel.setText(rightMon.getDamageRolls(rightMon.getCurrentMoveslot()));
-		});
-		/****** END TOP *******/
-
-		/****** BEGIN CENTER *******/
-		leftSideFieldOptions = new SideFieldOptions(true);
-		leftSideFieldOptions.getGeomancyButton().setOnAction(e ->
-		{
-			if (leftSideFieldOptions.getGeomancyButton().isSelected())
-			{
-				for (int i = 0; i < 3; i++)
-				{
-					leftMon.getStatChanges(i).setValue("--");
-					leftMon.getStatChanges(i + 3).setValue("+2");
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					leftMon.getStatChanges(i).setValue("--");
-				}
-			}
-		});
-		leftSideFieldOptions.getPlusOneAllButton().setOnAction(e ->
-		{
-			if (leftSideFieldOptions.getPlusOneAllButton().isSelected())
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					leftMon.getStatChanges(i).setValue("+1");
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					leftMon.getStatChanges(i).setValue("--");
-				}
-			}
-		});
-		leftSideFieldOptions.getPlusTwoAllButton().setOnAction(e ->
-		{
-			if (leftSideFieldOptions.getPlusTwoAllButton().isSelected())
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					leftMon.getStatChanges(i).setValue("+2");
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					leftMon.getStatChanges(i).setValue("--");
-				}
-			}
-		});
-		leftSideFieldOptions.getSoakButton().setOnAction(e ->
-		{
-			if (leftSideFieldOptions.getSoakButton().isSelected())
-			{
-				leftMon.getTypeLeft().setValue("Water");
-				leftMon.getTypeRight().setValue("(none)");
-			}
-			else
-			{
-				Pokemon tempMon = pokedex.get(leftMon.getTeamData(leftMon.getCurrentPokemon()).getName());
-				leftMon.getTypeLeft().setValue(tempMon.getType(0));
-				leftMon.getTypeRight().setValue(tempMon.getType(1));
-			}
-		});
-		
-		
-		rightSideFieldOptions = new SideFieldOptions(false);
-		rightSideFieldOptions.getGeomancyButton().setOnAction(e ->
-		{
-			if (rightSideFieldOptions.getGeomancyButton().isSelected())
-			{
-				for (int i = 0; i < 3; i++)
-				{
-					rightMon.getStatChanges(i).setValue("--");
-					rightMon.getStatChanges(i + 3).setValue("+2");
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					rightMon.getStatChanges(i).setValue("--");
-				}
-			}
-		});
-		rightSideFieldOptions.getPlusOneAllButton().setOnAction(e ->
-		{
-			if (rightSideFieldOptions.getPlusOneAllButton().isSelected())
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					rightMon.getStatChanges(i).setValue("+1");
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					rightMon.getStatChanges(i).setValue("--");
-				}
-			}
-		});
-		rightSideFieldOptions.getPlusTwoAllButton().setOnAction(e ->
-		{
-			if (rightSideFieldOptions.getPlusTwoAllButton().isSelected())
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					rightMon.getStatChanges(i).setValue("+2");
-				}
-			}
-			else
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					rightMon.getStatChanges(i).setValue("--");
-				}
-			}
-		});
-		rightSideFieldOptions.getSoakButton().setOnAction(e ->
-		{
-			if (rightSideFieldOptions.getSoakButton().isSelected())
-			{
-				rightMon.getTypeLeft().setValue("Water");
-				rightMon.getTypeRight().setValue("(none)");
-			}
-			else
-			{
-				Pokemon tempMon = pokedex.get(rightMon.getTeamData(rightMon.getCurrentPokemon()).getName());
-				rightMon.getTypeLeft().setValue(tempMon.getType(0));
-				rightMon.getTypeRight().setValue(tempMon.getType(1));
-			}
-		});
-		
-		fieldOptions = new FieldOptions(leftSideFieldOptions, rightSideFieldOptions);
-		
-		fieldOptions.getLevelFiveButton().setOnAction(e -> setDefaultLevels(5));
-		fieldOptions.getLevelFiftyButton().setOnAction(e -> setDefaultLevels(50));
-		fieldOptions.getLevelHundredButton().setOnAction(e -> setDefaultLevels(100));
-
 		ImageView wobbuffet = new ImageView(new Image(getClass().getResourceAsStream("/resources/wobbuffet-large.png")));
 		wobbuffet.setPreserveRatio(true);
 		wobbuffet.setFitHeight(125);
 		wobbuffet.setTranslateY(-100);
 		
-		wobbuffet.setOnMouseClicked(e -> {openLink("https://www.youtube.com/watch?v=JMX00jdY5AU");});
+		/*** Structure of GUI elements ***/
+		BorderPane mainPane = new BorderPane(); //What will be set on the scene
+		mainPane.setId("main-pane");
 		
+		MenuBar menubar = new MenuBar(); //Top menubar with a few functions
+		//menuFile.getItems().addAll(additionalOptions, psImport, koChanceWidget, menuExit); //There are no additional options atm.
+		menuFile.getItems().addAll(psImport, koChanceWidget, menuExit);
+		menuLinks.getItems().addAll(ttHome, psVGC, speedTiers, survivalCalc);
+		menuAbout.getItems().addAll(credits);
+		menubar.getMenus().addAll(menuFile, menuLinks, menuAbout);
+		mainPane.setTop(menubar);
+
+		BorderPane subPane = new BorderPane(); //Everything but the menu bar
+		subPane.setLeft(pokemonSides[leftMon].getPokemonSide());
+		subPane.setRight(pokemonSides[rightMon].getPokemonSide());
+		
+		GridPane damageCalcs = new GridPane(); //Covers the main damage result and the rolls for that damage result
+		damageCalcs.addRow(0, mainDamageResultLabel);
+		
+		HBox rollsAndCopy = new HBox(); //The rolls for that damage result
+		rollsAndCopy.getChildren().addAll(mainDamageRollsLabel, copyCalc, copyRolls, copyCalcAndRolls);
+		rollsAndCopy.setId("rolls-and-copy");
+		damageCalcs.addRow(1, rollsAndCopy);
+		
+		if (newerVersionExists) //Add an additional button to notify the user that an update exists
+		{
+			BorderPane damages = new BorderPane();
+			damages.setLeft(damageCalcs);
+			damages.setRight(updateButton);
+			damages.setPadding(new Insets(2,5,0,5));
+			BorderPane.setMargin(updateButton, new Insets(3,0,0,0));
+			subPane.setTop(damages);
+		}
+		else
+		{
+			damageCalcs.setPadding(new Insets(2,5,0,5));
+			subPane.setTop(damageCalcs);
+		}
+		
+		BorderPane center = new BorderPane(); //The field options (both general and specific)
 		center.setTop(fieldOptions.getFieldOptions());
+		
 		BorderPane sideOptions = new BorderPane();
-		sideOptions.setLeft(leftSideFieldOptions.getOptions());
-		sideOptions.setRight(rightSideFieldOptions.getOptions());
+		sideOptions.setLeft(sideFieldOptions[leftMon].getOptions());
+		sideOptions.setRight(sideFieldOptions[rightMon].getOptions());
 		sideOptions.setCenter(wobbuffet);
 		BorderPane.setMargin(wobbuffet, new Insets(0, -100, 0, -100));
 		center.setCenter(sideOptions);
-
-		/****** END CENTER *******/
-		
-		/****** DYNAMIC UPDATES FOR DAMAGE CALCULATION/ABILITIES *******/
-		leftMon.getTriggerCalcs().addListener((observable) ->
-		{
-			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
-			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
-		});
-		rightMon.getTriggerCalcs().addListener((observable) ->
-		{
-			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
-			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
-		});
-		
-		leftMon.getTriggerAbilities().addListener((observable) ->
-		{
-			fieldOptions.setActiveAbilities(leftMon.getAbility(), rightMon.getAbility());
-		});
-		
-		rightMon.getTriggerAbilities().addListener((observable) ->
-		{
-			fieldOptions.setActiveAbilities(rightMon.getAbility(), leftMon.getAbility());
-		});
-		
-		fieldOptions.getTriggerCalcs().addListener((observable) ->
-		{
-			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
-			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
-		});
-		
-		leftSideFieldOptions.getTriggerCalcs().addListener((observable) ->
-		{
-			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
-			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
-		});
-		
-		rightSideFieldOptions.getTriggerCalcs().addListener((observable) ->
-		{
-			updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
-			updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
-		});
-		/****** END DYNAMIC UPDATES FOR DAMAGE CALCULATION/ABILITIES *******/
-		
-		subPane.setTop(damages);
-		subPane.setLeft(pokemonLeft);
-		subPane.setRight(pokemonRight);
 		subPane.setCenter(center);
-
-		mainPane.setTop(menubar);
+		
 		mainPane.setCenter(subPane);
 		
+		/*** SetOnActions for GUI elements ***/
+		
+		//File -> Options
+		psImport.setOnAction(e -> openPSImport());
+		koChanceWidget.setOnAction(e -> openKOChanceCalculator());
+		additionalOptions.setOnAction(e -> openAdditionalOptions());
+		menuExit.setOnAction(e -> {System.exit(0);});
+		
+		//Links -> Options
+		ttHome.setOnAction(e -> openLink("https://www.trainertower.com"));
+		psVGC.setOnAction(e -> openLink("https://play.pokemonshowdown.com/vgc"));
+		speedTiers.setOnAction(e -> openLink("https://victoryroad.es/en/speed-tiers-vgc19-ultra/"));
+		survivalCalc.setOnAction(e -> openLink("https://www.trainertower.com/survivalcalc/"));
+		
+		//About -> Options
+		credits.setOnAction(e -> openCredits());
+		
+		//Copying the damage rolls information
+		copyCalc.setOnAction(e ->
+		{
+			content.putString(mainDamageResultLabel.getText());
+			clipboard.setContent(content);
+		});
+		copyRolls.setOnAction(e ->
+		{
+			content.putString(mainDamageRollsLabel.getText());
+			clipboard.setContent(content);
+		});
+		copyCalcAndRolls.setOnAction(e ->
+		{
+			content.putString(mainDamageResultLabel.getText() + "\n" + mainDamageRollsLabel.getText());
+			clipboard.setContent(content);
+		});
+		updateButton.setOnAction(e -> openLink("https://github.com/DaWoblefet/Super-Damage-Calculator/releases"));
+		
+		for (int i = 0; i < pokemonSides.length; i++)
+		{
+			final int j = i;
+			
+			//Coordinates the Moves ListView with the main damage output.
+			pokemonSides[i].getTopMoves().setOnMouseClicked(e ->
+			{
+				pokemonSides[j].setCurrentMoveslot(pokemonSides[j].getTopMoves().getSelectionModel().getSelectedIndices().get(0));
+				mainDamageResultLabel.setText(pokemonSides[j].getDamageOutput(pokemonSides[j].getCurrentMoveslot()));
+				mainDamageRollsLabel.setText(pokemonSides[j].getDamageRolls(pokemonSides[j].getCurrentMoveslot()));
+			});
+			
+			//Dynamic damage calculation
+			pokemonSides[i].getTriggerCalcs().addListener((observable) ->
+			{
+				updateDamageCalcs(pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon], true);
+				updateDamageCalcs(pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon], false);
+			});
+			
+			//Dynamic ability updates
+			pokemonSides[i].getTriggerAbilities().addListener((observable) ->
+			{
+				fieldOptions.setActiveAbilities(pokemonSides[leftMon].getAbility(), pokemonSides[rightMon].getAbility(), j);
+			});
+			
+			//Dynamic damage calculation based on the sideFieldOptions
+			sideFieldOptions[i].getTriggerCalcs().addListener((observable) ->
+			{
+				updateDamageCalcs(pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon], true);
+				updateDamageCalcs(pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon], false);
+			});
+			
+			//Geomancy
+			sideFieldOptions[i].getGeomancyButton().setOnAction(e ->
+			{
+				if (sideFieldOptions[j].getGeomancyButton().isSelected())
+				{
+					for (int k = 0; k < 3; k++)
+					{
+						pokemonSides[j].getStatChanges(k).setValue("--");
+						pokemonSides[j].getStatChanges(k + 3).setValue("+2");
+					}
+				}
+				else
+				{
+					for (int k = 0; k < 6; k++)
+					{
+						pokemonSides[j].getStatChanges(k).setValue("--");
+					}
+				}
+			});
+			
+			//+1 all stats
+			sideFieldOptions[i].getPlusOneAllButton().setOnAction(e ->
+			{
+				if (sideFieldOptions[j].getPlusOneAllButton().isSelected())
+				{
+					for (int k = 0; k < 6; k++)
+					{
+						pokemonSides[j].getStatChanges(k).setValue("+1");
+					}
+				}
+				else
+				{
+					for (int k = 0; k < 6; k++)
+					{
+						pokemonSides[j].getStatChanges(k).setValue("--");
+					}
+				}
+			});
+			
+			//+2 all stats
+			sideFieldOptions[i].getPlusTwoAllButton().setOnAction(e ->
+			{
+				if (sideFieldOptions[j].getPlusTwoAllButton().isSelected())
+				{
+					for (int k = 0; k < 6; k++)
+					{
+						pokemonSides[j].getStatChanges(k).setValue("+2");
+					}
+				}
+				else
+				{
+					for (int k = 0; k < 6; k++)
+					{
+						pokemonSides[j].getStatChanges(k).setValue("--");
+					}
+				}
+			});
+			
+			//Soak
+			sideFieldOptions[i].getSoakButton().setOnAction(e ->
+			{
+				if (sideFieldOptions[j].getSoakButton().isSelected())
+				{
+					pokemonSides[j].getTypeLeft().setValue("Water");
+					pokemonSides[j].getTypeRight().setValue("(none)");
+				}
+				else
+				{
+					Pokemon tempMon = pokedex.get(pokemonSides[j].getTeamData(pokemonSides[j].getCurrentPokemon()).getName());
+					pokemonSides[j].getTypeLeft().setValue(tempMon.getType(0));
+					pokemonSides[j].getTypeRight().setValue(tempMon.getType(1));
+				}
+			});
+		}
+		
+		//Dynamic damage calculation based on field options
+		fieldOptions.getTriggerCalcs().addListener((observable) ->
+		{
+			updateDamageCalcs(pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon], true);
+			updateDamageCalcs(pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon], false);
+		});
+		
+		//Default levels 
+		fieldOptions.getLevelFiveButton().setOnAction(e -> setDefaultLevels(5));
+		fieldOptions.getLevelFiftyButton().setOnAction(e -> setDefaultLevels(50));
+		fieldOptions.getLevelHundredButton().setOnAction(e -> setDefaultLevels(100));
+		
+		//Fun link for clicking Wobbuffet
+		wobbuffet.setOnMouseClicked(e -> {openLink("https://www.youtube.com/watch?v=JMX00jdY5AU");});
+		
 		//Run damage calculation initially before launching
-		updateDamageCalcs(leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon, true);
-		updateDamageCalcs(rightMon.getTeamData(rightMon.getCurrentPokemon()), leftMon.getTeamData(leftMon.getCurrentPokemon()), rightMon, false);
-
+		updateDamageCalcs(pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon], true);
+		updateDamageCalcs(pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon], false);
+	
+		//Final touches
 		Scene scene = new Scene(mainPane, 1200, 680);
 		scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
-		//mainDamageResultLabel.prefWidthProperty().bind(scene.widthProperty());
 		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
 		primaryStage.getIcons().add(icon);
 		primaryStage.setTitle("Super Damage Calculator");
@@ -398,7 +327,7 @@ public class SuperDamageCalculator extends Application
 		System.out.println("Startup time: " + (endTime - startTime));
 	}
 
-	/* Launches the URL in the user's default web browser.*/
+	//Launches the URL in the user's default web browser.
 	public void openLink(String url)
 	{
 		try
@@ -447,8 +376,8 @@ public class SuperDamageCalculator extends Application
 		BorderPane importButtons = new BorderPane();
 		importButtons.setLeft(leftImportButton);
 		importButtons.setRight(rightImportButton);
-		leftImportButton.setOnAction(e -> leftMon.setImportedData(stage, PSText.getText()));
-		rightImportButton.setOnAction(e -> rightMon.setImportedData(stage, PSText.getText()));
+		leftImportButton.setOnAction(e -> pokemonSides[leftMon].setImportedData(stage, PSText.getText()));
+		rightImportButton.setOnAction(e -> pokemonSides[rightMon].setImportedData(stage, PSText.getText()));
 
 		borderpane.setCenter(importButtons);
 		vbox.getChildren().addAll(PSText, borderpane);
@@ -497,10 +426,10 @@ public class SuperDamageCalculator extends Application
 	//Assigns a default Level to all Pokemon which can be overriden manually.
 	public void setDefaultLevels(int level)
 	{
-		leftMon.setLevel(level);
-		rightMon.setLevel(level);
-		leftMon.setDefaultLevel(level);
-		rightMon.setDefaultLevel(level);
+		pokemonSides[leftMon].setLevel(level);
+		pokemonSides[rightMon].setLevel(level);
+		pokemonSides[leftMon].setDefaultLevel(level);
+		pokemonSides[rightMon].setDefaultLevel(level);
 	}
 	
 	//Passes in the Pokemon for damage calculation, then updates the GUI.
@@ -515,36 +444,10 @@ public class SuperDamageCalculator extends Application
 			attackerUI.getTopMoveNames().set(i, attackerUI.getDamageOutputShort(i));
 		}
 		
-		mainDamageResultLabel.setText(leftMon.getDamageOutput(leftMon.getCurrentMoveslot()));
-		String rollsText = leftMon.getDamageRolls(leftMon.getCurrentMoveslot());
+		mainDamageResultLabel.setText(pokemonSides[leftMon].getDamageOutput(pokemonSides[leftMon].getCurrentMoveslot()));
+		String rollsText = pokemonSides[leftMon].getDamageRolls(pokemonSides[leftMon].getCurrentMoveslot());
 		mainDamageRollsLabel.setText(rollsText);
 	}
-	
-	//Displays a popup with some exception that gets called for beta testing.
-	private static void showError(Thread t, Throwable e)
-	{
-		Exception ex = new Exception(e);
-		ex.printStackTrace();
-        String exceptionTrace = ex.getMessage() + "\n";
-        StackTraceElement[] stackTrace = e.getStackTrace();
-        
-        for (int i = 0; i < stackTrace.length; i++)
-        {
-        	exceptionTrace += stackTrace[i].toString() + "\n";
-        }
-        
-        Stage stage = new Stage();
-		TextArea exceptionText = new TextArea("An uncaught exception has occurred. Please copy/paste this log and report it to DaWoblefet. Things should /probably/ still work.\n\n" + exceptionTrace);
-		exceptionText.setEditable(false);
-		exceptionText.setWrapText(true);
-		exceptionText.setPrefRowCount(19);
-
-		Scene scene = new Scene(exceptionText, 405, 325);
-		stage.setScene(scene);
-		stage.setTitle("Uncaught Exception");
-		stage.show();
-    }
-	
 	
 	//Makes a connection using the Github API and just searches directly for the tag in the retrieved JSON.
 	public String checkForUpdates()
@@ -574,6 +477,31 @@ public class SuperDamageCalculator extends Application
 		
 		return tag;
 	}
+	
+	//Displays a popup with some exception that gets called for beta testing.
+	private static void showError(Thread t, Throwable e)
+	{
+		Exception ex = new Exception(e);
+		ex.printStackTrace();
+        String exceptionTrace = ex.getMessage() + "\n";
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        
+        for (int i = 0; i < stackTrace.length; i++)
+        {
+        	exceptionTrace += stackTrace[i].toString() + "\n";
+        }
+        
+        Stage stage = new Stage();
+		TextArea exceptionText = new TextArea("An uncaught exception has occurred. Please copy/paste this log and report it to DaWoblefet. Things should /probably/ still work.\n\n" + exceptionTrace);
+		exceptionText.setEditable(false);
+		exceptionText.setWrapText(true);
+		exceptionText.setPrefRowCount(19);
+
+		Scene scene = new Scene(exceptionText, 405, 325);
+		stage.setScene(scene);
+		stage.setTitle("Uncaught Exception");
+		stage.show();
+    }
 
 	public static void main(String args[])
 	{

@@ -127,9 +127,20 @@ public class FieldOptions
  		auras.getSelectionModel().select(0);
 	}
 	
-	public void setActiveAbilities(String activeAbilityNew, String activeAbilityOld)
+	public void setActiveAbilities(String activeAbilityLeft, String activeAbilityRight, int priority)
 	{
-		String[] abilities = {activeAbilityOld, activeAbilityNew};
+		String[] abilities = new String[2];
+		
+		if (priority == 0)
+		{
+			abilities[0] = activeAbilityLeft;
+			abilities[1] = activeAbilityRight;
+		}
+		else
+		{
+			abilities[0] = activeAbilityRight;
+			abilities[1] = activeAbilityLeft;
+		}
 		
 		//Setting defaults
 		terrain = "None";

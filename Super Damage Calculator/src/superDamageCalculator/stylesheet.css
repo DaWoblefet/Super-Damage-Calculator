@@ -4,11 +4,24 @@
 	-fx-font-size: 12;
 }
 
-#damage-label
+#mainPane
+{
+	-fx-background-color: #f3f3f3;
+}
+
+#damage-result-label
 {
 	-fx-font-family: "Times New Roman";
 	-fx-font-size: 20;
 	-fx-alignment: "top-left";
+	-fx-wrap-text: false;
+	-fx-text-overrun: "ellipsis";
+}
+
+#damage-rolls-label
+{
+	-fx-font-family: "Times New Roman";
+	-fx-font-size: 14;
 	-fx-wrap-text: false;
 	-fx-text-overrun: "ellipsis";
 }
@@ -19,6 +32,12 @@
 	-fx-font-size: 12.5;
 	-fx-max-width: 280;
 	-fx-max-height: 94;
+}
+
+#rolls-and-copy
+{
+	-fx-spacing: 5;
+	-fx-alignment: "center-left";
 }
 
 #update-button
