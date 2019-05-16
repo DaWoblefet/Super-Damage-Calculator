@@ -901,6 +901,7 @@ public class PokemonSide
 		item.setValue(teamData[currentPokemon].getItem().getName());
 		status.setValue(teamData[currentPokemon].getStatus());
 
+		level.setText(Integer.toString(teamData[currentPokemon].getStat(1).getLevel()));
 		for (int k = 0; k < 6; k++)
 		{
 			baseField[k].setText(Integer.toString(teamData[currentPokemon].getBaseStat(k)));
@@ -909,7 +910,7 @@ public class PokemonSide
 			statChanges[k].setValue(teamData[currentPokemon].getStat(k).getBoostLevel());
 		}
 		nature.setValue(teamData[currentPokemon].getNature());
-		level.setText(Integer.toString(teamData[currentPokemon].getStat(1).getLevel()));
+	
 		
 		if (teamData[currentPokemon].getCurrentHP() != 0) //if current HP is 0, then load the max HP stat
 		{
