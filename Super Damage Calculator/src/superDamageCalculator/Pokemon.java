@@ -293,91 +293,138 @@ public class Pokemon
 	@Override
     public String toString()
     {
-		String showdownExport = "";
+		String showdownExport = name;
 		if (!item.getName().equals("(none)"))
 		{
-			showdownExport += name + " @ " + item + "\n";
+			showdownExport += " @ " + item;
 		}
-		else
+		showdownExport += "\nAbility: " + ability + "\n";
+		
+		int level = stats[HP].getLevel();
+		if (level != 100)
 		{
-			showdownExport += name + "\n";
+			showdownExport += "Level: " + stats[HP].getLevel() + "\n";
 		}
-		showdownExport += "Ability: " + ability + "\n";
-		showdownExport += "Level: " + stats[0].getLevel() + "\n";
-		showdownExport += "EVs: ";
-		for (int i = 0; i < 6; i++)
+		
+		boolean first = true;
+		boolean hasEVs = false;
+		for (int i = 0; i < stats.length; i++)
 		{
-			int currentEVs = stats[i].getEVs();
-			if (currentEVs != 0)
+			if (stats[i].getEVs() > 0)
 			{
+				hasEVs = true;
+				break;
+			}
+		}
+		if (hasEVs)
+		{
+			for (int i = 0; i < 6; i++)
+			{
+				int currentEVs = stats[i].getEVs();
+				if (currentEVs == 0) continue;
+				if (first)
+				{
+					showdownExport += "EVs: ";
+					first = false;
+				}
+				else
+				{
+					showdownExport += " / ";
+				}
 				showdownExport += currentEVs;
 				switch (i)
 				{
 					case 0:
-						showdownExport += " HP / ";
+						showdownExport += " HP";
 						break;
 					case 1:
-						showdownExport += " Atk / ";
+						showdownExport += " Atk";
 						break;
 					case 2:
-						showdownExport += " Def / ";
+						showdownExport += " Def";
 						break;
 					case 3:
-						showdownExport += " SpA / ";
+						showdownExport += " SpA";
 						break;
 					case 4:
-						showdownExport += " SpD / ";
+						showdownExport += " SpD";
 						break;
 					case 5:
-						showdownExport += " Spe / ";
+						showdownExport += " Spe";
 						break;
 				}
 			}
 		}
-
-		showdownExport += "\n" + nature + " Nature";
-		if (stats[0].getIVs() != 31 || stats[1].getIVs() != 31 || stats[2].getIVs() != 31 || stats[3].getIVs() != 31 || stats[4].getIVs() != 31 || stats[5].getIVs() != 31)
+		if (!first)
 		{
-			showdownExport += "\nIVs: ";
+			showdownExport += "\n";
+		}
+
+		showdownExport += nature + " Nature\n";
+		
+		first = true;
+		boolean hasIVs = false;
+		for (int i = 0; i < stats.length; i++)
+		{
+			if (stats[i].getIVs() != 31)
+			{
+				hasIVs = true;
+				break;
+			}
+		}
+		if (hasIVs)
+		{
 			for (int i = 0; i < 6; i++)
 			{
 				int currentIVs = stats[i].getIVs();
-				if (currentIVs != 31)
+				if (currentIVs == 31) continue;
+				if (first)
 				{
-					showdownExport += currentIVs;
-					switch (i)
-					{
-						case 0:
-							showdownExport += " HP / ";
-							break;
-						case 1:
-							showdownExport += " Atk / ";
-							break;
-						case 2:
-							showdownExport += " Def / ";
-							break;
-						case 3:
-							showdownExport += " SpA / ";
-							break;
-						case 4:
-							showdownExport += " SpD / ";
-							break;
-						case 5:
-							showdownExport += " Spe / ";
-							break;
-					}
+					showdownExport += "IVs: ";
+					first = false;
+				}
+				else
+				{
+					showdownExport += " / ";
+				}
+				showdownExport += currentIVs;
+				switch (i)
+				{
+					case 0:
+						showdownExport += " HP";
+						break;
+					case 1:
+						showdownExport += " Atk";
+						break;
+					case 2:
+						showdownExport += " Def";
+						break;
+					case 3:
+						showdownExport += " SpA";
+						break;
+					case 4:
+						showdownExport += " SpD";
+						break;
+					case 5:
+						showdownExport += " Spe";
+						break;
 				}
 			}
 		}
-
+		if (!first)
+		{
+			showdownExport += "\n";
+		}
 
 		for (int i = 0; i < moves.length; i++)
 		{
-			showdownExport += "\n- " + moves[i].getName();
+			if (!moves[i].getName().equals("(none)"))
+			{
+				showdownExport += "- " + moves[i].getName() + "\n";
+			}
 		}
 
-
-		return showdownExport;
+		return showdownExport.trim();
 	}
 }
 

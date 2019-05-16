@@ -18,11 +18,11 @@ public class ShowdownImport
 	{
 		this.importString = importString;
 
-		this.isTeam = checkIsTeam(this.importString);
-
-		if (this.isTeam)
+		isTeam = checkIsTeam(this.importString);
+		individualPokemon = this.importString.split("\\n\\n"); //Split on two newLine characters
+		
+		if (isTeam)
 		{
-			individualPokemon = this.importString.split("\\n\\n"); //Split on two newLine characters
 			for (int i = 0; i < individualPokemon.length; i++)
 			{
 				team[i] = makePokemon(i);
@@ -206,7 +206,7 @@ public class ShowdownImport
 		}
 
 		// Tests if output was correct by printing the newly created Pokemon back.
-		//System.out.println(pokemon);
+		//System.out.println(pokemon + "\n");
 
 		return pokemon;
 	}
