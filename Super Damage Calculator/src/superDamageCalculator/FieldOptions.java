@@ -133,13 +133,13 @@ public class FieldOptions
 		
 		if (priority == 0)
 		{
-			abilities[0] = activeAbilityLeft;
-			abilities[1] = activeAbilityRight;
+			abilities[0] = activeAbilityRight;
+			abilities[1] = activeAbilityLeft;
 		}
 		else
 		{
-			abilities[0] = activeAbilityRight;
-			abilities[1] = activeAbilityLeft;
+			abilities[0] = activeAbilityLeft;
+			abilities[1] = activeAbilityRight;
 		}
 		
 		//Setting defaults
