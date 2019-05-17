@@ -157,14 +157,11 @@ public class PokemonSide
 		//Level
 		Label levelLabel = new Label("Level");
 		level = new TextField(Integer.toString(defaultLevel));
-		level.getStyleClass().add("stat-textfield");
-		GridPane.setMargin(levelLabel, new Insets(0,5,0,0));
+		level.setId("level");
 		
 		//Formes
 		formeLabel = new Label("Forme");
 		forme = new ComboBox<String>();
-		HBox formeHBox = new HBox(formeLabel, forme);
-		formeHBox.setId("forme");
 		
 		//Top stat labels
 		Label baseLabel = new Label("Base");
@@ -311,7 +308,14 @@ public class PokemonSide
 		//Type, level, formes structure
 		GridPane TLFStructure = new GridPane();
 		TLFStructure.addRow(0, typeLabel, typeLeft, typeRight);
-		TLFStructure.addRow(1, levelLabel, level, formeHBox);
+		
+		GridPane formeLevel = new GridPane();
+		HBox levelHBox = new HBox(levelLabel, level);
+		HBox formeHBox = new HBox(formeLabel, forme);
+		levelHBox.getStyleClass().add("forme-level");
+		formeHBox.getStyleClass().add("forme-level");
+		formeLevel.addRow(0, levelHBox, formeHBox);
+		GridPane.setMargin(formeHBox, new Insets(0,0,0,5));
 		
 		//Stats structure
 		statsStructure = new GridPane();
@@ -348,7 +352,7 @@ public class PokemonSide
 		mon.setAlignment(Pos.CENTER);
 		
 		VBox structure = new VBox();
-		structure.getChildren().addAll(TLFStructure, statsStructure, NAISstructure, percentHP, moveStructure);
+		structure.getChildren().addAll(TLFStructure, formeLevel, statsStructure, NAISstructure, percentHP, moveStructure);
 		structure.setPadding(new Insets(0,5,5,5));
 		
 		GridPane topPane = new GridPane();

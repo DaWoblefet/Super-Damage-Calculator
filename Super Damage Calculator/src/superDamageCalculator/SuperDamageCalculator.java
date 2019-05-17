@@ -321,13 +321,17 @@ public class SuperDamageCalculator extends Application
 		updateDamageCalcs();
 		
 		//Final touches
-		Scene scene = new Scene(mainPane, 1200, 680);
+		Scene scene = new Scene(mainPane, 1200, 660);
+		
 		scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
 		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
 		primaryStage.getIcons().add(icon);
 		primaryStage.setTitle("Super Damage Calculator");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
+		//System.out.println(scene.getHeight());
+		//System.out.println(scene.getWidth());
 		long endTime = System.currentTimeMillis();
 		System.out.println("Startup time: " + (endTime - startTime));
 	}

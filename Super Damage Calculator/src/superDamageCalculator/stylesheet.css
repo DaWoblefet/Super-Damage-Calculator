@@ -79,7 +79,12 @@
 	-fx-max-width: 165;
 }
 
-#forme
+#level
+{
+	-fx-max-width: 45;
+}
+
+.forme-level
 {
 	-fx-alignment: center;
 	-fx-spacing: 5;
