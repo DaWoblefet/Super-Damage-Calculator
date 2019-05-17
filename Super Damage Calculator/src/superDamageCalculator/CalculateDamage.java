@@ -175,7 +175,7 @@ public class CalculateDamage
 			}
 		}
 		
-		if (move.getName().equals("Foul Play"))
+		if (move.getName().equals("Foul Play") && !isZ)
 		{
 			attackerOffenseStat = defender.getStat(ATK).calculateStat();
 			attackerOffenseChange = parseChangeValue(defender.getStat(ATK).getBoostLevel());
