@@ -947,6 +947,7 @@ public class PokemonSide
 		{
 			currentHP.setText(Integer.toString(teamData[currentPokemon].getCurrentHP()));
 		}
+		totalHPLabel.setText("/" + Integer.toString(teamData[currentPokemon].getStat(HP).calculateStat()) + " (");
 		
 		for (int k = 0; k < 4; k++)
 		{
