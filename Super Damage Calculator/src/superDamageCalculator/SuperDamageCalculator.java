@@ -4,6 +4,7 @@
 package superDamageCalculator;
 
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -41,7 +42,8 @@ public class SuperDamageCalculator extends Application
 	private FieldOptions fieldOptions;
 	private final int leftMon = 0;
 	private final int rightMon = 1;
-
+	
+	private InvalidationListener damageCalcListener;
 
 	private Label mainDamageResultLabel;
 	private Label mainDamageRollsLabel;
@@ -154,7 +156,7 @@ public class SuperDamageCalculator extends Application
 		
 		mainPane.setCenter(subPane);
 		
-		/*** SetOnActions for GUI elements ***/
+		/*** SetOnAction()s for GUI elements ***/
 		
 		//File -> Options
 		psImport.setOnAction(e -> openPSImport());
@@ -189,6 +191,9 @@ public class SuperDamageCalculator extends Application
 		});
 		updateButton.setOnAction(e -> openLink("https://github.com/DaWoblefet/Super-Damage-Calculator/releases"));
 		
+		//Damage calculation listener.
+		damageCalcListener = observable -> {updateDamageCalcs();};
+		
 		for (int i = 0; i < pokemonSides.length; i++)
 		{
 			final int j = i;
@@ -201,12 +206,8 @@ public class SuperDamageCalculator extends Application
 				mainDamageRollsLabel.setText(pokemonSides[j].getDamageRolls(pokemonSides[j].getCurrentMoveslot()));
 			});
 			
-			//Dynamic damage calculation
-			pokemonSides[i].getTriggerCalcs().addListener((observable) ->
-			{
-				updateDamageCalcs(pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon], true);
-				updateDamageCalcs(pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon], false);
-			});
+			//Dynamic damage calculation. I turn this listener on and off occasionally to optimize how many times the function is called.
+			pokemonSides[i].getTriggerCalcs().addListener(damageCalcListener);
 			
 			//Dynamic ability updates
 			pokemonSides[i].getTriggerAbilities().addListener((observable) ->
@@ -215,19 +216,17 @@ public class SuperDamageCalculator extends Application
 			});
 			
 			//Dynamic damage calculation based on the sideFieldOptions
-			sideFieldOptions[i].getTriggerCalcs().addListener((observable) ->
-			{
-				updateDamageCalcs(pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon], true);
-				updateDamageCalcs(pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon], false);
-			});
+			sideFieldOptions[i].getTriggerCalcs().addListener(damageCalcListener);
 			
 			//Geomancy
 			sideFieldOptions[i].getGeomancyButton().setOnAction(e ->
 			{
+				pokemonSides[j].getTriggerCalcs().removeListener(damageCalcListener);
 				if (sideFieldOptions[j].getGeomancyButton().isSelected())
-				{
+				{			
 					for (int k = 0; k < 3; k++)
 					{
+						pokemonSides[j].getTriggerCalcs().removeListener(damageCalcListener);
 						pokemonSides[j].getStatChanges(k).setValue("--");
 						pokemonSides[j].getStatChanges(k + 3).setValue("+2");
 					}
@@ -239,30 +238,36 @@ public class SuperDamageCalculator extends Application
 						pokemonSides[j].getStatChanges(k).setValue("--");
 					}
 				}
+				updateDamageCalcs();
+				pokemonSides[j].getTriggerCalcs().addListener(damageCalcListener);
 			});
 			
 			//+1 all stats
 			sideFieldOptions[i].getPlusOneAllButton().setOnAction(e ->
 			{
+				pokemonSides[j].getTriggerCalcs().removeListener(damageCalcListener);
 				if (sideFieldOptions[j].getPlusOneAllButton().isSelected())
 				{
 					for (int k = 0; k < 6; k++)
 					{
-						pokemonSides[j].getStatChanges(k).setValue("+1");
+						pokemonSides[j].getStatChanges(k).setValue("+1");	
 					}
 				}
 				else
 				{
 					for (int k = 0; k < 6; k++)
-					{
-						pokemonSides[j].getStatChanges(k).setValue("--");
+					{	
+						pokemonSides[j].getStatChanges(k).setValue("--");	
 					}
 				}
+				updateDamageCalcs();
+				pokemonSides[j].getTriggerCalcs().addListener(damageCalcListener);
 			});
 			
 			//+2 all stats
 			sideFieldOptions[i].getPlusTwoAllButton().setOnAction(e ->
 			{
+				pokemonSides[j].getTriggerCalcs().removeListener(damageCalcListener);
 				if (sideFieldOptions[j].getPlusTwoAllButton().isSelected())
 				{
 					for (int k = 0; k < 6; k++)
@@ -273,17 +278,20 @@ public class SuperDamageCalculator extends Application
 				else
 				{
 					for (int k = 0; k < 6; k++)
-					{
-						pokemonSides[j].getStatChanges(k).setValue("--");
+					{	
+						pokemonSides[j].getStatChanges(k).setValue("--");		
 					}
 				}
+				updateDamageCalcs();
+				pokemonSides[j].getTriggerCalcs().addListener(damageCalcListener);
 			});
 			
 			//Soak
 			sideFieldOptions[i].getSoakButton().setOnAction(e ->
 			{
+				pokemonSides[j].getTriggerCalcs().removeListener(damageCalcListener);
 				if (sideFieldOptions[j].getSoakButton().isSelected())
-				{
+				{	
 					pokemonSides[j].getTypeLeft().setValue("Water");
 					pokemonSides[j].getTypeRight().setValue("(none)");
 				}
@@ -291,17 +299,15 @@ public class SuperDamageCalculator extends Application
 				{
 					Pokemon tempMon = pokedex.get(pokemonSides[j].getTeamData(pokemonSides[j].getCurrentPokemon()).getName());
 					pokemonSides[j].getTypeLeft().setValue(tempMon.getType(0));
-					pokemonSides[j].getTypeRight().setValue(tempMon.getType(1));
+					pokemonSides[j].getTypeRight().setValue(tempMon.getType(1));			
 				}
+				updateDamageCalcs();
+				pokemonSides[j].getTriggerCalcs().addListener(damageCalcListener);
 			});
 		}
 		
 		//Dynamic damage calculation based on field options
-		fieldOptions.getTriggerCalcs().addListener((observable) ->
-		{
-			updateDamageCalcs(pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon], true);
-			updateDamageCalcs(pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon], false);
-		});
+		fieldOptions.getTriggerCalcs().addListener(damageCalcListener);
 		
 		//Default levels 
 		fieldOptions.getLevelFiveButton().setOnAction(e -> setDefaultLevels(5));
@@ -312,9 +318,8 @@ public class SuperDamageCalculator extends Application
 		wobbuffet.setOnMouseClicked(e -> {openLink("https://www.youtube.com/watch?v=JMX00jdY5AU");});
 		
 		//Run damage calculation initially before launching
-		updateDamageCalcs(pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon], true);
-		updateDamageCalcs(pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon()), pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon()), pokemonSides[rightMon], false);
-	
+		updateDamageCalcs();
+		
 		//Final touches
 		Scene scene = new Scene(mainPane, 1200, 680);
 		scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
@@ -426,22 +431,42 @@ public class SuperDamageCalculator extends Application
 	//Assigns a default Level to all Pokemon which can be overriden manually.
 	public void setDefaultLevels(int level)
 	{
-		pokemonSides[leftMon].setLevel(level);
-		pokemonSides[rightMon].setLevel(level);
-		pokemonSides[leftMon].setDefaultLevel(level);
-		pokemonSides[rightMon].setDefaultLevel(level);
+		for (int i = 0; i < pokemonSides.length; i++)
+		{
+			pokemonSides[i].getTriggerCalcs().removeListener(damageCalcListener);
+			pokemonSides[i].setLevel(level);
+			pokemonSides[i].setDefaultLevel(level);
+			pokemonSides[i].getTriggerCalcs().addListener(damageCalcListener);
+		}	
+		updateDamageCalcs();
 	}
 	
 	//Passes in the Pokemon for damage calculation, then updates the GUI.
-	public void updateDamageCalcs(Pokemon attacker, Pokemon defender, PokemonSide attackerUI, boolean isLeft)
+	public void updateDamageCalcs()
 	{
+		System.out.println("Doing another set of damage calculations.");
+		
+		Pokemon leftPokemon = pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon());
+		Pokemon rightPokemon = pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon());
+		
+		//Attacker left Pokemon vs Defender right Pokemon
 		for (int i = 0; i < 4; i++)
 		{
-			CalculateDamage damagecalc = new CalculateDamage(attacker.getMove(i), attacker, defender, fieldOptions, isLeft);
-			attackerUI.setDamageOutput(damagecalc.getDamageOutput(), i);
-			attackerUI.setDamageOutputShort(damagecalc.getDamageOutputShort(), i);
-			attackerUI.setDamageRolls(damagecalc.getDamageRolls(), i);
-			attackerUI.getTopMoveNames().set(i, attackerUI.getDamageOutputShort(i));
+			CalculateDamage damagecalc = new CalculateDamage(leftPokemon.getMove(i), leftPokemon, rightPokemon, fieldOptions, true);
+			pokemonSides[leftMon].setDamageOutput(damagecalc.getDamageOutput(), i);
+			pokemonSides[leftMon].setDamageOutputShort(damagecalc.getDamageOutputShort(), i);
+			pokemonSides[leftMon].setDamageRolls(damagecalc.getDamageRolls(), i);
+			pokemonSides[leftMon].getTopMoveNames().set(i, pokemonSides[leftMon].getDamageOutputShort(i));
+		}
+		
+		//Attacker right Pokemon vs Defender left Pokemon
+		for (int i = 0; i < 4; i++)
+		{
+			CalculateDamage damagecalc = new CalculateDamage(rightPokemon.getMove(i), rightPokemon, leftPokemon, fieldOptions, true);
+			pokemonSides[rightMon].setDamageOutput(damagecalc.getDamageOutput(), i);
+			pokemonSides[rightMon].setDamageOutputShort(damagecalc.getDamageOutputShort(), i);
+			pokemonSides[rightMon].setDamageRolls(damagecalc.getDamageRolls(), i);
+			pokemonSides[rightMon].getTopMoveNames().set(i, pokemonSides[rightMon].getDamageOutputShort(i));
 		}
 		
 		mainDamageResultLabel.setText(pokemonSides[leftMon].getDamageOutput(pokemonSides[leftMon].getCurrentMoveslot()));

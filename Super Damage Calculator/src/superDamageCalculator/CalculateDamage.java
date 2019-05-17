@@ -18,7 +18,7 @@ public class CalculateDamage
 	private HashMap<String, Move> movedex = new Movedex().getMovedex();
 	private HashMap<String, Integer> types = new Type().types;
 	private double typechart[][] = new Type().typeChart;
-	private boolean debugMode = true;
+	private boolean debugMode = false;
 
 	private int attackerLevel;
 	private int attackerHPStat;

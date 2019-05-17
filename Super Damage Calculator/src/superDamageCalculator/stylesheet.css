@@ -72,3 +72,57 @@
 {
     -fx-padding: 0px;
 }
+
+
+#chooseMon
+{
+	-fx-max-width: 165;
+}
+
+#forme
+{
+	-fx-alignment: center;
+	-fx-spacing: 5;
+	-fx-padding: 0,0,0,5;
+}
+
+.stat-textfield
+{
+	-fx-max-width: 35;
+}
+
+#stat-changes
+{
+	-fx-max-width: 60;
+}
+
+#ability
+{
+	-fx-max-width: 138;
+}
+
+#item
+{
+	-fx-max-width: 130;
+}
+
+.currentHP
+{
+	-fx-max-width: 33;
+	-fx-max-height: 10;
+	-fx-font-family: "Segoe UI";
+	-fx-font-size: 11;
+	-fx-translate-y: -4;
+}
+
+#moves
+{
+	-fx-max-width: 120;
+}
+
+#category
+{
+	-fx-max-width: 100;
+}
+
+
