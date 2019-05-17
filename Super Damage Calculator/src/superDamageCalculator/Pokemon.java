@@ -96,7 +96,6 @@ public class Pokemon
 	
 	public void switchForme(Pokemon newForme)
 	{
-
 		this.setTypes(newForme.getType(0), newForme.getType(1));
 		this.setAbility(newForme.getAbility());
 		for (int i = 0; i < newForme.baseStats.length; i++)
@@ -273,21 +272,19 @@ public class Pokemon
 	//Used to "clone" a Pokemon off the hashmap so one doesn't interfere with another.
 	public Pokemon clonePokemon()
 	{
-		Pokemon pokemon = new Pokemon(this.name);
-		pokemon.setName(this.name);
-		pokemon.setTypes(this.types[0], this.types[1]);
-		pokemon.setAbility(this.ability);
-		for (int i = 0; i < this.baseStats.length; i++)
-		{
-			pokemon.setBaseStat(this.baseStats[i], i);
-		}
-		pokemon.setWeight(this.weightInKg);
-		for (int i = 0; i < this.formes.size(); i++)
+		Pokemon pokemon = new Pokemon(name);
+		pokemon.setName(name);
+		pokemon.setTypes(types[0], types[1]);
+		pokemon.setAbility(ability);
+		pokemon.setAllBaseStats(baseStats[HP], baseStats[ATK], baseStats[DEF],
+								baseStats[SATK], baseStats[SDEF], baseStats[SPE]);
+		pokemon.setWeight(weightInKg);
+		for (int i = 0; i < formes.size(); i++)
 		{
 			pokemon.addForme(formes.get(i));
 		}
-		
-		return pokemon;
+
+		return pokemon;		
 	}
 
 	@Override
