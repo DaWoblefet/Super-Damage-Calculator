@@ -148,6 +148,10 @@ public class ShowdownImport
 		{
 			if (lines[i].indexOf(" Nature") != -1) //If the line is Nature
 			{
+				if (lines[i].startsWith("- Nature")) //Nature's Madness/Nature Power edge cases
+				{
+					break;
+				}
 				natureText = lines[i].substring(0, lines[i].indexOf(' '));
 				nature = natures.get(natureText);
 				pokemon.setNature(natureText);
