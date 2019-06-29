@@ -91,7 +91,6 @@ public class PokemonSide
 	private Label totalEVsRemainingLabel;
 
 	private Move[] moveData = new Move[4];
-	private int currentMoveslot;
 	private ArrayList<ComboBox<String>> movesComboBox = new ArrayList<ComboBox<String>>();
 	private TextField[] basePower = new TextField[4];
 	private ArrayList<ComboBox<String>> type = new ArrayList<ComboBox<String>>();
@@ -999,8 +998,13 @@ public class PokemonSide
 				teamSprites[i].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[i].getName() + ".png")));
 			}
 			currentPokemon = 0;
-			loadPokemonDisplay();
 		}
+		else
+		{
+			teamData[currentPokemon] = psImport.getPokemon(0);
+			teamSprites[currentPokemon].setImage(new Image(getClass().getResourceAsStream("/resources/Sprites/" + teamData[currentPokemon].getName() + ".png")));
+		}
+		loadPokemonDisplay();
 		stage.close();
 	}
 	
@@ -1082,16 +1086,6 @@ public class PokemonSide
 	public String getAbility()
 	{
 		return ability.getValue();
-	}
-
-	public int getCurrentMoveslot()
-	{
-		return currentMoveslot;
-	}
-
-	public void setCurrentMoveslot(int currentMoveslot)
-	{
-		this.currentMoveslot = currentMoveslot;
 	}
 	
 	public String getMoveName (int slot)

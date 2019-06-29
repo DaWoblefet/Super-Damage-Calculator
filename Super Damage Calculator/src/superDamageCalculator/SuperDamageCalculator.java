@@ -43,6 +43,9 @@ public class SuperDamageCalculator extends Application
 	private final int leftMon = 0;
 	private final int rightMon = 1;
 	
+	//Left Pokemon moveslots 0-3, right Pokemon 4-7.
+	private int currentMoveslot = 0;
+	
 	private InvalidationListener damageCalcListener;
 
 	private Label mainDamageResultLabel;
@@ -86,7 +89,7 @@ public class SuperDamageCalculator extends Application
 		mainDamageResultLabel = new Label("This is where the calc would go.");
 		mainDamageResultLabel.setId("damage-result-label");
 
-		mainDamageRollsLabel = new Label(pokemonSides[leftMon].getDamageRolls(pokemonSides[leftMon].getCurrentMoveslot()));
+		mainDamageRollsLabel = new Label(pokemonSides[leftMon].getDamageRolls(currentMoveslot));
 		mainDamageRollsLabel.setId("damage-rolls-label");
 		
 		Button copyCalc = new Button("Copy Calc");
@@ -201,9 +204,10 @@ public class SuperDamageCalculator extends Application
 			//Coordinates the Moves ListView with the main damage output.
 			pokemonSides[i].getTopMoves().setOnMouseClicked(e ->
 			{
-				pokemonSides[j].setCurrentMoveslot(pokemonSides[j].getTopMoves().getSelectionModel().getSelectedIndices().get(0));
-				mainDamageResultLabel.setText(pokemonSides[j].getDamageOutput(pokemonSides[j].getCurrentMoveslot()));
-				mainDamageRollsLabel.setText(pokemonSides[j].getDamageRolls(pokemonSides[j].getCurrentMoveslot()));
+				currentMoveslot = pokemonSides[j].getTopMoves().getSelectionModel().getSelectedIndices().get(0);
+				mainDamageResultLabel.setText(pokemonSides[j].getDamageOutput(currentMoveslot));
+				mainDamageRollsLabel.setText(pokemonSides[j].getDamageRolls(currentMoveslot));
+				if (j > 0) {currentMoveslot += j * 4;}
 			});
 			
 			//Dynamic damage calculation. I turn this listener on and off occasionally to optimize how many times the function is called.
@@ -473,8 +477,17 @@ public class SuperDamageCalculator extends Application
 			pokemonSides[rightMon].getTopMoveNames().set(i, pokemonSides[rightMon].getDamageOutputShort(i));
 		}
 		
-		mainDamageResultLabel.setText(pokemonSides[leftMon].getDamageOutput(pokemonSides[leftMon].getCurrentMoveslot()));
-		String rollsText = pokemonSides[leftMon].getDamageRolls(pokemonSides[leftMon].getCurrentMoveslot());
+		String rollsText;
+		if (currentMoveslot < 4) //Left Pokemon's moves was most recently selected
+		{
+			mainDamageResultLabel.setText(pokemonSides[leftMon].getDamageOutput(currentMoveslot));
+			rollsText = pokemonSides[leftMon].getDamageRolls(currentMoveslot);
+		}
+		else //It was the right mon
+		{
+			mainDamageResultLabel.setText(pokemonSides[rightMon].getDamageOutput(currentMoveslot - 4));
+			rollsText = pokemonSides[rightMon].getDamageRolls(currentMoveslot - 4);
+		}
 		mainDamageRollsLabel.setText(rollsText);
 	}
 	
