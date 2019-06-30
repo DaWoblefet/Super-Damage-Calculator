@@ -110,6 +110,7 @@ public class PokemonSide
 	
 	private SimpleBooleanProperty triggerCalcs = new SimpleBooleanProperty(false);
 	private SimpleBooleanProperty triggerAbilities = new SimpleBooleanProperty(false);
+	private SimpleBooleanProperty triggerFieldOptionsReset = new SimpleBooleanProperty(false);
 	
 	public PokemonSide()
 	{
@@ -415,6 +416,7 @@ public class PokemonSide
 			{
 				movesComboBox.get(i).setValue("(none)");
 			}
+			triggerFieldOptionsReset();
 			triggerCalcs();
 		});
 		chooseMon.getEditor().focusedProperty().addListener((observable) -> {Platform.runLater(chooseMon.getEditor()::selectAll);});
@@ -850,6 +852,11 @@ public class PokemonSide
 	{
 		triggerAbilities.setValue(!triggerAbilities.getValue());
 	}
+	
+	public void triggerFieldOptionsReset()
+	{
+		triggerFieldOptionsReset.setValue(!triggerFieldOptionsReset.getValue());
+	}
 
 	public void updateStats()
 	{
@@ -961,6 +968,7 @@ public class PokemonSide
 		
 		isToggleMon = false;
 		updateStats();
+		triggerFieldOptionsReset();
 		triggerCalcs();
 	}
 	
@@ -1036,6 +1044,11 @@ public class PokemonSide
 	public SimpleBooleanProperty getTriggerAbilities()
 	{
 		return triggerAbilities;
+	}
+	
+	public SimpleBooleanProperty getTriggerFieldOptionsReset()
+	{
+		return triggerFieldOptionsReset;
 	}
 	
 	public BorderPane getPokemonSide()

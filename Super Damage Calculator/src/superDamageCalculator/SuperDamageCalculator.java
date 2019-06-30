@@ -219,6 +219,11 @@ public class SuperDamageCalculator extends Application
 				fieldOptions.setActiveAbilities(pokemonSides[leftMon].getAbility(), pokemonSides[rightMon].getAbility(), j);
 			});
 			
+			pokemonSides[i].getTriggerFieldOptionsReset().addListener((observable) ->
+			{
+				fieldOptions.getSideFieldOptions(j == 0 ? true : false).resetFieldOptions();
+			}); 
+			
 			//Dynamic damage calculation based on the sideFieldOptions
 			sideFieldOptions[i].getTriggerCalcs().addListener(damageCalcListener);
 			

@@ -30,13 +30,6 @@ public class SideFieldOptions
 	private ToggleButton soak;
 	
 	private boolean isLeftSide; //if false, it is the right side
-	private boolean isHelpingHand;
-	private boolean isProtect;
-	private boolean isReflect;
-	private boolean isLightScreen;
-	private boolean isAuroraVeil;
-	private boolean isFriendGuard;
-	private boolean isBattery;
 	
 	private SimpleBooleanProperty triggerCalcs = new SimpleBooleanProperty(false);
 	
@@ -47,59 +40,33 @@ public class SideFieldOptions
 		options = new GridPane();
 
  		protect = new ToggleButton("Protect");
- 		protect.setOnAction(e -> 
- 		{
- 			isProtect = protect.isSelected();
- 			triggerCalcs();
- 		});
+ 		protect.setOnAction(e -> {triggerCalcs();});
  		options.addRow(0, protect);
 
 		HBox screens = new HBox();
  		reflect = new ToggleButton("Reflect");
- 		reflect.setOnAction(e -> 
- 		{
- 			isReflect = reflect.isSelected();
- 			triggerCalcs();
- 		});
+ 		reflect.setOnAction(e -> {triggerCalcs();});
+ 		
  		lightScreen = new ToggleButton("Light Screen");
- 		lightScreen.setOnAction(e -> 
- 		{
- 			isLightScreen = lightScreen.isSelected();
- 			triggerCalcs();
- 		});
+ 		lightScreen.setOnAction(e -> {triggerCalcs();});
+ 		
  		screens.getChildren().addAll(reflect, lightScreen);
  		options.addRow(1, screens);
 
  		auroraVeil = new ToggleButton("Aurora Veil");
- 		auroraVeil.setOnAction(e -> 
- 		{
- 			isAuroraVeil = auroraVeil.isSelected();
- 			triggerCalcs();
- 		});
+ 		auroraVeil.setOnAction(e -> {triggerCalcs();});
  		options.addRow(2, auroraVeil);
 
  		helpingHand = new ToggleButton("Helping Hand");
- 		helpingHand.setOnAction(e -> 
- 		{
- 			isHelpingHand = helpingHand.isSelected();
- 			triggerCalcs();
- 		});
+ 		helpingHand.setOnAction(e -> {triggerCalcs();});
  		options.addRow(3, helpingHand);
 
  		friendGuard = new ToggleButton("Friend Guard");
- 		friendGuard.setOnAction(e -> 
- 		{
- 			isFriendGuard = friendGuard.isSelected();
- 			triggerCalcs();
- 		});
+ 		friendGuard.setOnAction(e -> {triggerCalcs();});
  		options.addRow(4, friendGuard);
  		
  		battery = new ToggleButton("Battery");
- 		battery.setOnAction(e -> 
- 		{
- 			isBattery = battery.isSelected();
- 			triggerCalcs();
- 		});
+ 		battery.setOnAction(e -> {triggerCalcs();});
  		options.addRow(5, battery);		
 
 		ToggleGroup boosts = new ToggleGroup();
@@ -139,6 +106,21 @@ public class SideFieldOptions
 		}
 	}
 	
+	public void resetFieldOptions()
+	{
+		protect.setSelected(false);
+		reflect.setSelected(false);
+		lightScreen.setSelected(false);
+		auroraVeil.setSelected(false);
+		helpingHand.setSelected(false);
+		friendGuard.setSelected(false);
+		battery.setSelected(false);
+		geomancy.setSelected(false);
+		plusOneAll.setSelected(false);
+		plusTwoAll.setSelected(false);
+		soak.setSelected(false);
+	}
+	
 	//Flips a boolean to trigger event handlers elsewhere
 	public void triggerCalcs()
 	{
@@ -162,37 +144,37 @@ public class SideFieldOptions
 	
 	public boolean isHelpingHand()
 	{
-		return isHelpingHand;
+		return helpingHand.isSelected();
 	}
 
 	public boolean isProtect()
 	{
-		return isProtect;
+		return protect.isSelected();
 	}
 
 	public boolean isReflect()
 	{
-		return isReflect;
+		return reflect.isSelected();
 	}
 
 	public boolean isLightScreen()
 	{
-		return isLightScreen;
+		return lightScreen.isSelected();
 	}
 
 	public boolean isAuroraVeil()
 	{
-		return isAuroraVeil;
+		return auroraVeil.isSelected();
 	}
 
 	public boolean isFriendGuard()
 	{
-		return isFriendGuard;
+		return friendGuard.isSelected();
 	}
 	
 	public boolean isBattery()
 	{
-		return isBattery;
+		return battery.isSelected();
 	}
 	
 	public ToggleButton getSoakButton()
