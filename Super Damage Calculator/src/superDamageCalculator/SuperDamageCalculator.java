@@ -205,6 +205,7 @@ public class SuperDamageCalculator extends Application
 			pokemonSides[i].getTopMoves().setOnMouseClicked(e ->
 			{
 				currentMoveslot = pokemonSides[j].getTopMoves().getSelectionModel().getSelectedIndices().get(0);
+				if (currentMoveslot < 0 || currentMoveslot > 3) {return;} //In some niche cases, a click will register as out of bounds of the array.
 				mainDamageResultLabel.setText(pokemonSides[j].getDamageOutput(currentMoveslot));
 				mainDamageRollsLabel.setText(pokemonSides[j].getDamageRolls(currentMoveslot));
 				if (j > 0) {currentMoveslot += j * 4;} //Stores right moveslots as 4-7.
@@ -457,7 +458,7 @@ public class SuperDamageCalculator extends Application
 	//Passes in the Pokemon for damage calculation, then updates the GUI.
 	public void updateDamageCalcs()
 	{
-		//System.out.println("Doing another set of damage calculations.");
+		System.out.println("Doing another set of damage calculations.");
 		
 		Pokemon leftPokemon = pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon());
 		Pokemon rightPokemon = pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon());
