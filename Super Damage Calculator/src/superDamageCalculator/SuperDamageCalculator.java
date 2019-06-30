@@ -207,7 +207,7 @@ public class SuperDamageCalculator extends Application
 				currentMoveslot = pokemonSides[j].getTopMoves().getSelectionModel().getSelectedIndices().get(0);
 				mainDamageResultLabel.setText(pokemonSides[j].getDamageOutput(currentMoveslot));
 				mainDamageRollsLabel.setText(pokemonSides[j].getDamageRolls(currentMoveslot));
-				if (j > 0) {currentMoveslot += j * 4;}
+				if (j > 0) {currentMoveslot += j * 4;} //Stores right moveslots as 4-7.
 			});
 			
 			//Dynamic damage calculation. I turn this listener on and off occasionally to optimize how many times the function is called.
@@ -452,7 +452,7 @@ public class SuperDamageCalculator extends Application
 	//Passes in the Pokemon for damage calculation, then updates the GUI.
 	public void updateDamageCalcs()
 	{
-		System.out.println("Doing another set of damage calculations.");
+		//System.out.println("Doing another set of damage calculations.");
 		
 		Pokemon leftPokemon = pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon());
 		Pokemon rightPokemon = pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon());
@@ -470,7 +470,7 @@ public class SuperDamageCalculator extends Application
 		//Attacker right Pokemon vs Defender left Pokemon
 		for (int i = 0; i < 4; i++)
 		{
-			CalculateDamage damagecalc = new CalculateDamage(rightPokemon.getMove(i), rightPokemon, leftPokemon, fieldOptions, true);
+			CalculateDamage damagecalc = new CalculateDamage(rightPokemon.getMove(i), rightPokemon, leftPokemon, fieldOptions, false);
 			pokemonSides[rightMon].setDamageOutput(damagecalc.getDamageOutput(), i);
 			pokemonSides[rightMon].setDamageOutputShort(damagecalc.getDamageOutputShort(), i);
 			pokemonSides[rightMon].setDamageRolls(damagecalc.getDamageRolls(), i);
