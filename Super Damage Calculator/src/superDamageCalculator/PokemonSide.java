@@ -48,7 +48,7 @@ public class PokemonSide
 	private HashMap<String, Integer> abilities = new Abilitydex().abilities;
 	private HashMap<String, Integer> types = new Type().types;
 
-	private BorderPane pokemonSide = new BorderPane();;
+	private BorderPane pokemonSide = new BorderPane();
 
 	private Pokemon[] teamData = new Pokemon[6];
 	private String defaultPokemon = "Abomasnow";
@@ -541,6 +541,9 @@ public class PokemonSide
 		
 		ability.setOnAction(e ->
 		{
+			//Sometimes when a user types too quickly, they load in an illegal item.
+			if (abilities.get(ability.getValue()) == null) {return;}
+			
 			teamData[currentPokemon].setAbility(ability.getValue());
 			triggerAbilities();
 			triggerCalcs();
@@ -550,6 +553,9 @@ public class PokemonSide
 		
 		item.setOnAction(e ->
 		{
+			//Sometimes when a user types too quickly, they load in an illegal item.
+			if (items.get(item.getValue()) == null) {return;}
+			
 			teamData[currentPokemon].setItem(item.getValue());
 			triggerCalcs();
 		});
@@ -767,6 +773,10 @@ public class PokemonSide
 			movesComboBox.get(i).setOnAction(e ->
 			{
 				if (isToggleMon) {return;}
+				
+				//Sometimes when a user types too quickly, they load in an illegal move.
+				if (movedex.get(movesComboBox.get(j).getValue()) == null) {return;}
+				
 				moveData[j] = movedex.get((String) movesComboBox.get(j).getValue()).cloneMove();
 				teamData[currentPokemon].setMove(moveData[j], j);
 				currentlyMove = true;
@@ -789,6 +799,17 @@ public class PokemonSide
 			basePower[i].textProperty().addListener((observable, oldValue, newValue) ->
 			{
 				if (currentlyMove) {return;}
+				
+				try //Make sure input is an integer.
+				{
+					Integer.parseInt(newValue);
+				}
+				catch (NumberFormatException ex)
+				{
+					basePower[j].setText("0");
+					newValue = "0";
+				}
+				
 				teamData[currentPokemon].getMove(j).setBP(Integer.parseInt(newValue));
 				triggerCalcs();
 			});
