@@ -109,11 +109,13 @@ public class SideFieldOptions
 		geomancy.setToggleGroup(boosts);
 		options.addRow(6, geomancy);
 		
- 		plusOneAll = new ToggleButton("+1 All Stats");
+		ImageView porygonz = new ImageView(new Image(getClass().getResourceAsStream("/resources/Sprites/Porygon-Z.png"), 20, 20, true, true));	
+		plusOneAll = new ToggleButton("+1 All Stats", porygonz);
  		plusOneAll.setToggleGroup(boosts);
  		options.addRow(7, plusOneAll);
 
- 		plusTwoAll = new ToggleButton("+2 All Stats");
+ 		ImageView eevee = new ImageView(new Image(getClass().getResourceAsStream("/resources/Sprites/Eevee.png"), 20, 20, true, true));	
+ 		plusTwoAll = new ToggleButton("+2 All Stats", eevee);
  		plusTwoAll.setToggleGroup(boosts);
  		options.addRow(8, plusTwoAll);
 
