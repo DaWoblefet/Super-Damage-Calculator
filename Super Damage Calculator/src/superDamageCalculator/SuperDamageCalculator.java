@@ -24,7 +24,9 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
 import java.awt.Desktop;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -359,9 +361,13 @@ public class SuperDamageCalculator extends Application
 		{
 			Desktop.getDesktop().browse(new URI(url));
 		}
-		catch (Exception e)
+		catch (URISyntaxException ex)
 		{
-			System.out.println(e);
+			ex.printStackTrace();
+		}
+		catch (IOException ex)
+		{
+			ex.printStackTrace();
 		}
 	}
 
@@ -430,7 +436,7 @@ public class SuperDamageCalculator extends Application
 		}
 		catch (Exception ex)
 		{
-			System.out.println(ex);
+			ex.printStackTrace();
 		}
 
 
@@ -488,9 +494,7 @@ public class SuperDamageCalculator extends Application
 	
 	//Passes in the Pokemon for damage calculation, then updates the GUI.
 	public void updateDamageCalcs()
-	{
-		System.out.println("Doing another set of damage calculations.");
-		
+	{	
 		Pokemon leftPokemon = pokemonSides[leftMon].getTeamData(pokemonSides[leftMon].getCurrentPokemon());
 		Pokemon rightPokemon = pokemonSides[rightMon].getTeamData(pokemonSides[rightMon].getCurrentPokemon());
 		

@@ -112,6 +112,8 @@ public class PokemonSide
 	private SimpleBooleanProperty triggerAbilities = new SimpleBooleanProperty(false);
 	private SimpleBooleanProperty triggerFieldOptionsReset = new SimpleBooleanProperty(false);
 	
+	private boolean skipTrigger = false;
+	
 	public PokemonSide()
 	{
 		//Initialize the 6 Pokemon
@@ -374,6 +376,7 @@ public class PokemonSide
 			//Sometimes when a user types too quickly, they load in an illegal Pokemon.
 			if (pokedex.get(chooseMon.getValue()) == null) {return;}
 			
+			skipTrigger = true;
 			teamData[currentPokemon] = pokedex.get(chooseMon.getValue()).clonePokemon();
 			loadSprites(teamData[currentPokemon].getName());
 			
@@ -416,8 +419,8 @@ public class PokemonSide
 			{
 				movesComboBox.get(i).setValue("(none)");
 			}
-			triggerFieldOptionsReset();
-			triggerCalcs();
+			skipTrigger = false;
+			triggerFieldOptionsReset(); //Also implicitly calls triggerCalcs()
 		});
 		chooseMon.getEditor().focusedProperty().addListener((observable) -> {Platform.runLater(chooseMon.getEditor()::selectAll);});
 
@@ -480,10 +483,13 @@ public class PokemonSide
 			typeLeft.setValue(teamData[currentPokemon].getType(0));
 			typeRight.setValue(teamData[currentPokemon].getType(1));
 			ability.setValue(teamData[currentPokemon].getAbility());
+			
+			skipTrigger = true;
 			for (int i = 0; i < 6; i++)
 			{
 				baseField[i].setText(Integer.toString(teamData[currentPokemon].getBaseStat(i)));
 			}
+			skipTrigger = false;
 			triggerCalcs();
 		});
 		nature.setOnAction(e ->
@@ -787,7 +793,6 @@ public class PokemonSide
 				zOption[j].setSelected(false);
 				topMoveNames.set(j, damageOutputShort[j]);
 				currentlyMove = false;
-				System.out.println("Triggered calcs from choosing new move");
 				triggerCalcs();
 			});
 			
@@ -833,7 +838,6 @@ public class PokemonSide
 			{
 				if (currentlyMove) {return;}
 				teamData[currentPokemon].getMove(j).setCritChecked(crit[j].isSelected());
-				System.out.println("Triggered calcs from crit");
 				triggerCalcs();
 			});
 			
@@ -866,7 +870,7 @@ public class PokemonSide
 	//Flips a boolean to trigger event handlers elsewhere
 	public void triggerCalcs()
 	{
-		triggerCalcs.setValue(!triggerCalcs.getValue());
+		if (!skipTrigger) {triggerCalcs.setValue(!triggerCalcs.getValue());}
 	}
 	
 	public void triggerAbilities()
@@ -892,7 +896,6 @@ public class PokemonSide
 			teamData[currentPokemon].setStat(currentEVs, currentIVs, currentBaseStat, currentLevel, currentNature, boostLevel, i);
 			calculatedStats[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).calculateStat()));
 		}
-		System.out.println("Triggered calcs from inside update stats");
 		triggerCalcs();
 	}
 
@@ -906,7 +909,6 @@ public class PokemonSide
 		String boostLevel = (String) statChanges.get(i).getValue();
 		teamData[currentPokemon].setStat(currentEVs, currentIVs, currentBaseStat, currentLevel, currentNature, boostLevel, i);
 		calculatedStats[i].setText(Integer.toString(teamData[currentPokemon].getStat(i).calculateStat()));
-		System.out.println("Triggered calcs from inside update stats (specifically " + i + ")");
 		triggerCalcs();
 	}
 	
@@ -927,6 +929,7 @@ public class PokemonSide
 	public void loadPokemonDisplay()
 	{
 		isToggleMon = true;
+		skipTrigger = true;
 		chooseMon.setValue(teamData[currentPokemon].getName());
 		
 		typeLeft.setValue(teamData[currentPokemon].getType(0));
@@ -989,6 +992,7 @@ public class PokemonSide
 		
 		isToggleMon = false;
 		updateStats();
+		skipTrigger = false;
 		triggerFieldOptionsReset();
 		triggerCalcs();
 	}
