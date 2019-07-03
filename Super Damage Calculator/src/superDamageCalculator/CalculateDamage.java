@@ -64,6 +64,7 @@ public class CalculateDamage
 	private boolean isProtect;
 	private boolean isReflect;
 	private boolean isLightScreen;
+	private boolean isAuroraVeil;
 	private boolean isFriendGuard;
 	private boolean isBattery;
 
@@ -193,6 +194,7 @@ public class CalculateDamage
 		{
 			isReflect = true;
 			isLightScreen = true;
+			isAuroraVeil = true;
 		}
 		isFriendGuard = fieldOptions.getSideFieldOptions(!isLeft).isFriendGuard();
 		isBattery = fieldOptions.getSideFieldOptions(isLeft).isBattery();
@@ -1108,7 +1110,7 @@ public class CalculateDamage
 		ArrayList<Integer> finalModifiers = new ArrayList<Integer>();
 
 		//NOTE: OZY and PS calc say 0xAAC in Gen 6 and later for doubles screens rather than 0xA8F.
-		if ((isReflect && usesPhysicalAttack) || (isLightScreen && !usesPhysicalAttack && !isCrit))
+		if ((isReflect && usesPhysicalAttack) || (isLightScreen && !usesPhysicalAttack) && !isCrit)
 		{
 			if (format.equals("Doubles"))
 			{
@@ -1118,8 +1120,9 @@ public class CalculateDamage
 			{
 				finalModifiers.add(0x800);
 			}
-			description.setReflect(isReflect);
-			description.setLightScreen(isLightScreen);
+			
+			String screen = isAuroraVeil ? "Aurora Veil" : usesPhysicalAttack ? "Reflect" : "Light Screen";
+			description.setScreen(screen);
 		}
 		
 		if (attackerAbility.equals("Neuroforce") && typeMod > 1)

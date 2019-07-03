@@ -38,9 +38,8 @@ public class DamageDescriptionBuilder
 	private String weather;
 	private String terrain;
 	private String aura;
-
-	private boolean isReflect;
-	private boolean isLightScreen;
+	private String screen;
+	
 	private boolean isCrit;
 	private boolean isFriendGuard;
 	private boolean isProtect;
@@ -145,8 +144,7 @@ public class DamageDescriptionBuilder
 		result += defenderName + " ";
 		if (weather != null) {result += "in " + weather + " ";}
 		if (terrain != null) {result += "in " + terrain + " Terrain ";}
-		if (isReflect) {result += "through Reflect ";}
-		if (isLightScreen) {result += "through Light Screen ";}
+		if (screen != null) {result += "through " + screen + " ";}
 		if (isCrit) {result += "with a critical hit ";}
 		if (isFriendGuard) {result += "through Friend Guard ";}
 		if (isProtect) {result += "through Protect ";}
@@ -503,12 +501,8 @@ public class DamageDescriptionBuilder
 		this.terrain = terrain;
 	}
 
-	public void setReflect(boolean isReflect) {
-		this.isReflect = isReflect;
-	}
-
-	public void setLightScreen(boolean isLightScreen) {
-		this.isLightScreen = isLightScreen;
+	public void setScreen(String screen) {
+		this.screen = screen;
 	}
 
 	public void setCrit(boolean isCrit) {
