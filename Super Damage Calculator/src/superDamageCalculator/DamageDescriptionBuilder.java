@@ -144,7 +144,7 @@ public class DamageDescriptionBuilder
 		if (defenderAbility != null) {result += defenderAbility + " ";}
 		result += defenderName + " ";
 		if (weather != null) {result += "in " + weather + " ";}
-		if (terrain != null) {result += "in " + terrain + "Terrain ";}
+		if (terrain != null) {result += "in " + terrain + " Terrain ";}
 		if (isReflect) {result += "through Reflect ";}
 		if (isLightScreen) {result += "through Light Screen ";}
 		if (isCrit) {result += "with a critical hit ";}
