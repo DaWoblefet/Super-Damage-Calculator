@@ -8,7 +8,6 @@ import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -19,7 +18,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.layout.HBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -48,8 +46,8 @@ public class SuperDamageCalculator extends Application
 	
 	private InvalidationListener damageCalcListener;
 
-	private Label mainDamageResultLabel;
-	private Label mainDamageRollsLabel;
+	private Text mainDamageResult;
+	private Text mainDamageRolls;
 
 	private final Clipboard clipboard = Clipboard.getSystemClipboard();
 	private final ClipboardContent content = new ClipboardContent();
@@ -86,11 +84,11 @@ public class SuperDamageCalculator extends Application
 		pokemonSides[rightMon] = new PokemonSide();
 		
 		//Main damage display
-		mainDamageResultLabel = new Label("This is where the calc would go.");
-		mainDamageResultLabel.setId("damage-result-label");
-
-		mainDamageRollsLabel = new Label(pokemonSides[leftMon].getDamageRolls(currentMoveslot));
-		mainDamageRollsLabel.setId("damage-rolls-label");
+		mainDamageResult = new Text("This is where the calc would go.");
+		mainDamageResult.setId("damage-result");
+		
+		mainDamageRolls = new Text(pokemonSides[leftMon].getDamageRolls(currentMoveslot));
+		mainDamageRolls.setId("damage-rolls");
 		
 		Button copyCalc = new Button("Copy Calc");
 		Button copyRolls = new Button("Copy Rolls");
@@ -124,12 +122,12 @@ public class SuperDamageCalculator extends Application
 		subPane.setRight(pokemonSides[rightMon].getPokemonSide());
 		
 		GridPane damageCalcs = new GridPane(); //Covers the main damage result and the rolls for that damage result
-		damageCalcs.addRow(0, mainDamageResultLabel);
+		damageCalcs.addRow(0, mainDamageResult);
 		
-		HBox rollsAndCopy = new HBox(); //The rolls for that damage result
-		rollsAndCopy.getChildren().addAll(mainDamageRollsLabel, copyCalc, copyRolls, copyCalcAndRolls);
+		GridPane rollsAndCopy = new GridPane(); //The rolls for that damage result
+		rollsAndCopy.addRow(0, mainDamageRolls, copyCalc, copyRolls, copyCalcAndRolls);
 		rollsAndCopy.setId("rolls-and-copy");
-		damageCalcs.addRow(1, rollsAndCopy);
+		damageCalcs.addRow(1, rollsAndCopy);	
 		
 		if (newerVersionExists) //Add an additional button to notify the user that an update exists
 		{
@@ -179,20 +177,20 @@ public class SuperDamageCalculator extends Application
 		//Copying the damage rolls information
 		copyCalc.setOnAction(e ->
 		{
-			content.putString(mainDamageResultLabel.getText());
+			content.putString(mainDamageResult.getText());
 			clipboard.setContent(content);
 		});
 		copyRolls.setOnAction(e ->
 		{
-			content.putString(mainDamageRollsLabel.getText());
+			content.putString(mainDamageRolls.getText());
 			clipboard.setContent(content);
 		});
 		copyCalcAndRolls.setOnAction(e ->
 		{
-			content.putString(mainDamageResultLabel.getText() + "\n" + mainDamageRollsLabel.getText());
+			content.putString(mainDamageResult.getText() + "\n" + mainDamageRolls.getText());
 			clipboard.setContent(content);
 		});
-		updateButton.setOnAction(e -> openLink("https://github.com/DaWoblefet/Super-Damage-Calculator/releases"));
+		updateButton.setOnAction(e -> openLink("https://github.com/DaWoblefet/Super-Damage-Calculator/releases"));		
 		
 		//Damage calculation listener.
 		damageCalcListener = observable -> {updateDamageCalcs();};
@@ -206,8 +204,8 @@ public class SuperDamageCalculator extends Application
 			{
 				currentMoveslot = pokemonSides[j].getTopMoves().getSelectionModel().getSelectedIndices().get(0);
 				if (currentMoveslot < 0 || currentMoveslot > 3) {return;} //In some niche cases, a click will register as out of bounds of the array.
-				mainDamageResultLabel.setText(pokemonSides[j].getDamageOutput(currentMoveslot));
-				mainDamageRollsLabel.setText(pokemonSides[j].getDamageRolls(currentMoveslot));
+				mainDamageResult.setText(pokemonSides[j].getDamageOutput(currentMoveslot));
+				mainDamageRolls.setText(pokemonSides[j].getDamageRolls(currentMoveslot));
 				if (j > 0) {currentMoveslot += j * 4;} //Stores right moveslots as 4-7.
 			});
 			
@@ -333,6 +331,16 @@ public class SuperDamageCalculator extends Application
 		//Final touches
 		Scene scene = new Scene(mainPane, 1200, 660);
 		
+		//Listeners for allowing damage calculation to automatically resize to the user's screen
+		mainDamageResult.textProperty().addListener((observable) ->
+		{
+			resizeText(mainDamageResult, 20, scene.getWidth() - 5);		
+		});	
+		mainDamageRolls.textProperty().addListener((observable) ->
+		{
+			resizeText(mainDamageRolls, 14, scene.getWidth() - (copyCalc.getWidth() + copyRolls.getWidth() + copyCalcAndRolls.getWidth() + rollsAndCopy.getHgap() * 4));
+		});
+		
 		scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
 		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
 		primaryStage.getIcons().add(icon);
@@ -340,8 +348,6 @@ public class SuperDamageCalculator extends Application
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		//System.out.println(scene.getHeight());
-		//System.out.println(scene.getWidth());
 		long endTime = System.currentTimeMillis();
 		System.out.println("Startup time: " + (endTime - startTime));
 	}
@@ -441,6 +447,31 @@ public class SuperDamageCalculator extends Application
 		stage.setTitle("Credits");
 		stage.show();
 	}
+	
+	//Dynamically resizes damage output font so it will all display on the screen
+	public void resizeText(Text text, double initialFontSize, double maxWidth)
+	{
+		//Initialize font
+		text.setFont(Font.font(text.getFont().getName(), initialFontSize));
+		
+		//Following idea from computeTextWidth() function here: http://hg.openjdk.java.net/openjfx/8/master/rt/file/893db73acfb5/javafx-ui-controls/src/com/sun/javafx/scene/control/skin/Utils.java
+		Text helper = text;
+		helper.setWrappingWidth(0);
+        double width = helper.prefWidth(-1);
+        helper.setWrappingWidth((int)Math.ceil(width));
+		double textWidth = Math.ceil(helper.getLayoutBounds().getWidth());
+		
+		//Decrement font size in increments of 0.5 until it fits on the screen.
+		while (textWidth >= maxWidth)
+		{
+			helper.setFont(Font.font(helper.getFont().getName(),helper.getFont().getSize() - 0.5));
+			helper.setWrappingWidth(0);
+	        width = helper.prefWidth(-1);
+	        helper.setWrappingWidth((int)Math.ceil(width));
+			textWidth = Math.ceil(helper.getLayoutBounds().getWidth());
+		}
+		text.setFont(helper.getFont());
+	}
 
 	//Assigns a default Level to all Pokemon which can be overriden manually.
 	public void setDefaultLevels(int level)
@@ -486,15 +517,15 @@ public class SuperDamageCalculator extends Application
 		String rollsText;
 		if (currentMoveslot < 4) //Left Pokemon's moves was most recently selected
 		{
-			mainDamageResultLabel.setText(pokemonSides[leftMon].getDamageOutput(currentMoveslot));
+			mainDamageResult.setText(pokemonSides[leftMon].getDamageOutput(currentMoveslot));
 			rollsText = pokemonSides[leftMon].getDamageRolls(currentMoveslot);
 		}
 		else //It was the right mon
 		{
-			mainDamageResultLabel.setText(pokemonSides[rightMon].getDamageOutput(currentMoveslot - 4));
+			mainDamageResult.setText(pokemonSides[rightMon].getDamageOutput(currentMoveslot - 4));
 			rollsText = pokemonSides[rightMon].getDamageRolls(currentMoveslot - 4);
 		}
-		mainDamageRollsLabel.setText(rollsText);
+		mainDamageRolls.setText(rollsText);
 	}
 	
 	//Makes a connection using the Github API and just searches directly for the tag in the retrieved JSON.

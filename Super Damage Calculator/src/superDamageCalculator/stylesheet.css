@@ -9,21 +9,21 @@
 	-fx-background-color: #f3f3f3;
 }
 
-#damage-result-label
+#damage-result
 {
 	-fx-font-family: "Times New Roman";
 	-fx-font-size: 20;
 	-fx-alignment: "top-left";
 	-fx-wrap-text: false;
-	-fx-text-overrun: "ellipsis";
+	-fx-font-smoothing-type: lcd;
 }
 
-#damage-rolls-label
+#damage-rolls
 {
 	-fx-font-family: "Times New Roman";
 	-fx-font-size: 14;
 	-fx-wrap-text: false;
-	-fx-text-overrun: "ellipsis";
+	-fx-font-smoothing-type: lcd;
 }
 
 #move-cells
@@ -36,7 +36,7 @@
 
 #rolls-and-copy
 {
-	-fx-spacing: 5;
+	-fx-hgap: 5;
 	-fx-alignment: "center-left";
 }
 
