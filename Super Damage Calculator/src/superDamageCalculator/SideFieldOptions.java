@@ -72,8 +72,9 @@ public class SideFieldOptions
 		ToggleGroup boosts = new ToggleGroup();
 		
 		ImageView xerneas = new ImageView(new Image(getClass().getResourceAsStream("/resources/Sprites/Xerneas.png"), 20, 20, true, true));
-		geomancy = new ToggleButton("Geomancy", xerneas);
+		geomancy = new ToggleButton(" Geomancy", xerneas);
 		geomancy.setToggleGroup(boosts);
+		geomancy.setPrefWidth(101);
 		options.addRow(6, geomancy);
 		
 		ImageView porygonz = new ImageView(new Image(getClass().getResourceAsStream("/resources/Sprites/Porygon-Z.png"), 20, 20, true, true));	
