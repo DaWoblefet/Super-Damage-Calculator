@@ -14,8 +14,11 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -66,6 +69,32 @@ public class DamageOptimizationTabs
 		Label hpLabel = new Label("HP Stat: ");
 		TextField hpTF = new TextField("0");
 		hpTF.setPrefWidth(40);
+		
+		hpTF.setOnMouseClicked(e -> {hpTF.selectAll();});
+		hpTF.setOnDragOver(e -> {e.acceptTransferModes(TransferMode.MOVE);});
+		hpTF.setOnDragDropped(e -> 
+		{
+			Dragboard db = e.getDragboard();
+			boolean success = false;
+			if (db.hasString())
+			{
+				hpTF.setText(db.getString());
+				success = true;
+			}
+			e.setDropCompleted(success);
+		});
+		hpTF.setOnDragEntered(e ->
+		{
+			if (e.getDragboard().hasString())
+			{
+				hpTF.getStyleClass().add("focused-TF");
+			}
+		});
+		hpTF.setOnDragExited(e ->
+		{
+			hpTF.getStyleClass().remove("focused-TF");
+		});
+		
 		hpInput.addRow(0, hpLabel, hpTF);
 		top.setLeft(hpInput);
 
@@ -91,6 +120,31 @@ public class DamageOptimizationTabs
 			rollLabels.get(i).setMinWidth(ROLLS_LABEL_WIDTH);
 			rollTFs.add(new TextField("(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)"));
 			rollTFs.get(i).setPrefWidth(ROLLS_TF_WIDTH);
+			
+			final int j = i;
+			rollTFs.get(i).setOnDragOver(e -> {e.acceptTransferModes(TransferMode.MOVE);});
+			rollTFs.get(i).setOnDragDropped(e -> 
+			{
+				Dragboard db = e.getDragboard();
+				boolean success = false;
+				if (db.hasString())
+				{
+					rollTFs.get(j).setText(db.getString());
+					success = true;
+				}
+				e.setDropCompleted(success);
+			});
+			rollTFs.get(i).setOnDragEntered(e ->
+			{
+				if (e.getDragboard().hasString())
+				{
+					rollTFs.get(j).getStyleClass().add("focused-TF");
+				}
+			});
+			rollTFs.get(i).setOnDragExited(e ->
+			{
+				rollTFs.get(j).getStyleClass().remove("focused-TF");
+			});
 
 			GridPane.setConstraints(rollLabels.get(i), 0, i);
 			GridPane.setConstraints(rollTFs.get(i), 1, i);
@@ -148,6 +202,31 @@ public class DamageOptimizationTabs
 			int index = rollTFs.size() - 1;
 			rollTFs.get(index).setPrefWidth(ROLLS_TF_WIDTH);
 			rollLabels.get(index).setMinWidth(ROLLS_LABEL_WIDTH);
+			
+			final int j = index;
+			rollTFs.get(index).setOnDragOver(e2 -> {e2.acceptTransferModes(TransferMode.MOVE);});
+			rollTFs.get(index).setOnDragDropped(e2 -> 
+			{
+				Dragboard db = e2.getDragboard();
+				boolean success = false;
+				if (db.hasString())
+				{
+					rollTFs.get(j).setText(db.getString());
+					success = true;
+				}
+				e2.setDropCompleted(success);
+			});
+			rollTFs.get(index).setOnDragEntered(e2 ->
+			{
+				if (e2.getDragboard().hasString())
+				{
+					rollTFs.get(j).getStyleClass().add("focused-TF");
+				}
+			});
+			rollTFs.get(index).setOnDragExited(e2 ->
+			{
+				rollTFs.get(j).getStyleClass().remove("focused-TF");
+			});
 			
 			GridPane.setConstraints(rollLabels.get(index), 0, index);
 			GridPane.setConstraints(rollTFs.get(index), 1, index);
@@ -246,7 +325,7 @@ public class DamageOptimizationTabs
 		String helpTextRaw = "";
 		try
 		{
-			Scanner input = new Scanner((getClass().getResourceAsStream("/resources/kochancecalchelptext.txt")));
+			Scanner input = new Scanner((getClass().getResourceAsStream("/resources/kochancecalchelptextdot.txt")));
 			while (input.hasNextLine())
 			{
 				helpTextRaw += input.nextLine() + "\n";
@@ -263,6 +342,8 @@ public class DamageOptimizationTabs
 		helpText.setPrefRowCount(19);
 
 		Scene scene = new Scene(helpText, 500, 300);
+		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
+		stage.getIcons().add(icon);
 		stage.setScene(scene);
 		stage.setTitle("Help");
 		stage.show();

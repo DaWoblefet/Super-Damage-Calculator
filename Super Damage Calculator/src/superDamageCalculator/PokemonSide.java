@@ -14,7 +14,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -111,6 +116,8 @@ public class PokemonSide
 	private SimpleBooleanProperty triggerCalcs = new SimpleBooleanProperty(false);
 	private SimpleBooleanProperty triggerAbilities = new SimpleBooleanProperty(false);
 	private SimpleBooleanProperty triggerFieldOptionsReset = new SimpleBooleanProperty(false);
+	
+	private final ClipboardContent content = new ClipboardContent();
 	
 	private boolean skipTrigger = false;
 	
@@ -572,6 +579,16 @@ public class PokemonSide
 		{
 			teamData[currentPokemon].setStatus(status.getValue());
 			triggerCalcs();
+		});
+		
+		//Drag-and-drop with HP stat
+		calculatedStats[HP].setOnDragDetected(e -> 
+		{
+			Dragboard db = calculatedStats[HP].startDragAndDrop(TransferMode.ANY);
+			db.setDragView(new Text(calculatedStats[HP].getText()).snapshot(null, null), e.getX(), e.getY());
+			
+			content.putString(calculatedStats[HP].getText());
+			db.setContent(content);
 		});
 
 		//Stats and their properties

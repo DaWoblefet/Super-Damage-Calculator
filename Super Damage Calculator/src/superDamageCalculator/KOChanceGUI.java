@@ -223,6 +223,8 @@ public class KOChanceGUI extends Application
 		helpText.setPrefRowCount(19);
 
 		Scene scene = new Scene(helpText, 500, 300);
+		Image icon = new Image(getClass().getResourceAsStream("/resources/woblescientist.png"));
+		stage.getIcons().add(icon);
 		stage.setScene(scene);
 		stage.setTitle("Help");
 		stage.show();

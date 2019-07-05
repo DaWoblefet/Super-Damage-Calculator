@@ -1,0 +1,12 @@
+KO Chance Calculator, with special thanks to Stats for algorithm design.
+
+This widget is used to calculate the chance of a combination attack KOing a Pokemon.
+
+Steps:
+1) Input the HP stat of the target Pokemon. You can also drag-and-drop your Pokemon's actual HP.
+2) Drag-and-drop or copy-and-paste the damage rolls from the attacks you care about.
+2b) If needed, use the "+" or "-" buttons to add or remove additional sets of damage rolls.
+3) Press Calculate.
+4) Toggle between the output using the drop downs for % of the time, raw fraction, and reduced fraction.
+
+NOTE: if you add a lot of damage rolls (like more than 5), the program may lag and run more slowly, but it's working.

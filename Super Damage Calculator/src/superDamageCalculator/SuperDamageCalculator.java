@@ -23,6 +23,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -196,6 +198,16 @@ public class SuperDamageCalculator extends Application
 		});
 		updateButton.setOnAction(e -> openLink("https://github.com/DaWoblefet/Super-Damage-Calculator/releases"));		
 		
+		//Drag-and-drop for damage rolls
+		mainDamageRolls.setOnDragDetected(e -> 
+		{
+			Dragboard db = mainDamageRolls.startDragAndDrop(TransferMode.ANY);
+			db.setDragView(new Text(mainDamageRolls.getText()).snapshot(null, null), e.getX(), e.getY());
+			
+			content.putString(mainDamageRolls.getText());
+			db.setContent(content);
+		});
+		
 		//Damage calculation listener.
 		damageCalcListener = observable -> {updateDamageCalcs();};
 		
@@ -317,7 +329,7 @@ public class SuperDamageCalculator extends Application
 				pokemonSides[j].getTriggerCalcs().addListener(damageCalcListener);
 			});
 		}
-		
+			
 		//Dynamic damage calculation based on field options
 		fieldOptions.getTriggerCalcs().addListener(damageCalcListener);
 		
