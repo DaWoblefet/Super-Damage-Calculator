@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.image.Image;
@@ -202,7 +204,9 @@ public class SuperDamageCalculator extends Application
 		mainDamageRolls.setOnDragDetected(e -> 
 		{
 			Dragboard db = mainDamageRolls.startDragAndDrop(TransferMode.ANY);
-			db.setDragView(new Text(mainDamageRolls.getText()).snapshot(null, null), e.getX(), e.getY());
+			SnapshotParameters params = new SnapshotParameters();
+			params.setFill(Color.WHITE);
+			db.setDragView(new Text(mainDamageRolls.getText()).snapshot(params, null));
 			
 			content.putString(mainDamageRolls.getText());
 			db.setContent(content);
@@ -223,6 +227,19 @@ public class SuperDamageCalculator extends Application
 				mainDamageResult.setText(pokemonSides[j].getDamageOutput(currentMoveslot));
 				mainDamageRolls.setText(pokemonSides[j].getDamageRolls(currentMoveslot));
 				if (j > 0) {currentMoveslot += j * 4;} //Stores right moveslots as 4-7.
+			});
+			
+			pokemonSides[i].getTopMoves().setOnDragDetected(e -> 
+			{
+				Dragboard db = mainDamageRolls.startDragAndDrop(TransferMode.ANY);
+				String currentRolls = pokemonSides[j].getDamageRolls(pokemonSides[j].getTopMoves().getSelectionModel().getSelectedIndex());
+				
+				SnapshotParameters params = new SnapshotParameters();
+				params.setFill(Color.LIGHTSTEELBLUE);
+				db.setDragView(new Text(currentRolls).snapshot(params, null));
+				
+				content.putString(currentRolls);
+				db.setContent(content);
 			});
 			
 			//Dynamic damage calculation. I turn this listener on and off occasionally to optimize how many times the function is called.
