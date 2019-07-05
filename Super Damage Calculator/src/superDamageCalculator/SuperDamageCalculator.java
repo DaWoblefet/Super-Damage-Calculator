@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
@@ -105,7 +106,6 @@ public class SuperDamageCalculator extends Application
 		ImageView wobbuffet = new ImageView(new Image(getClass().getResourceAsStream("/resources/wobbuffet-large.png")));
 		wobbuffet.setPreserveRatio(true);
 		wobbuffet.setFitHeight(125);
-		wobbuffet.setTranslateY(-100);
 		
 		/*** Structure of GUI elements ***/
 		BorderPane mainPane = new BorderPane(); //What will be set on the scene
@@ -153,7 +153,9 @@ public class SuperDamageCalculator extends Application
 		sideOptions.setLeft(sideFieldOptions[leftMon].getOptions());
 		sideOptions.setRight(sideFieldOptions[rightMon].getOptions());
 		sideOptions.setCenter(wobbuffet);
-		BorderPane.setMargin(wobbuffet, new Insets(0, -100, 0, -100));
+		TabPane damageOptimizationTabs = new DamageOptimizationTabs().getTabFunctions();
+		sideOptions.setBottom(damageOptimizationTabs);
+		
 		center.setCenter(sideOptions);
 		subPane.setCenter(center);
 		
