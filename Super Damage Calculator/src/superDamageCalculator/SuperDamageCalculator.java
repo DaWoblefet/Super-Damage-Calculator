@@ -58,7 +58,7 @@ public class SuperDamageCalculator extends Application
 
 	private final Clipboard clipboard = Clipboard.getSystemClipboard();
 	private final ClipboardContent content = new ClipboardContent();
-	private final String currentVersion = "0.5.1";
+	private final String currentVersion = "0.6";
 
 	@Override
 	public void start(Stage primaryStage)
@@ -86,6 +86,7 @@ public class SuperDamageCalculator extends Application
 
 		Menu menuAbout = new Menu("About");
 		MenuItem credits = new MenuItem("Credits");
+		MenuItem version = new MenuItem("Version " + currentVersion);
 		
 		pokemonSides[leftMon] = new PokemonSide();
 		pokemonSides[rightMon] = new PokemonSide();
@@ -119,7 +120,7 @@ public class SuperDamageCalculator extends Application
 		//menuFile.getItems().addAll(additionalOptions, psImport, koChanceWidget, menuExit); //There are no additional options atm.
 		menuFile.getItems().addAll(psImport, koChanceWidget, menuExit);
 		menuLinks.getItems().addAll(ttHome, psVGC, speedTiers, survivalCalc);
-		menuAbout.getItems().addAll(credits);
+		menuAbout.getItems().addAll(credits, version);
 		menubar.getMenus().addAll(menuFile, menuLinks, menuAbout);
 		mainPane.setTop(menubar);
 
