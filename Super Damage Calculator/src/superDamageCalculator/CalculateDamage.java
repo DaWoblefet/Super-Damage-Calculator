@@ -24,8 +24,7 @@ public class CalculateDamage
 	private int attackerHPStat;
 	private int attackerCurrentHP;
 	private String attackerName;
-	private String attackerTypeLeft;
-	private String attackerTypeRight;
+	private String[] attackerTypes = new String[2]; //0 = left; 1 = right
 	private int attackerOffenseStat;
 	private int attackerSpeedStat;
 	private int attackerOffenseChange;
@@ -44,8 +43,7 @@ public class CalculateDamage
 	private boolean isZ;
 
 	private String defenderName;
-	private String defenderTypeLeft;
-	private String defenderTypeRight;
+	private String[] defenderTypes = new String[2]; //0 = left; 1 = right
 	private int defenderHPStat;
 	private int defenderCurrentHP;
 	private int defenderDefenseStat;
@@ -127,8 +125,8 @@ public class CalculateDamage
 		
 		attackerName = attacker.getCurrentForme();
 		attackerLevel = attacker.getStat(HP).getLevel();
-		attackerTypeLeft = attacker.getType(0);
-		attackerTypeRight = attacker.getType(1);
+		attackerTypes[0] = attacker.getType(0);
+		attackerTypes[1] = attacker.getType(1);
 		attackerHPStat = attacker.getStat(HP).calculateStat();
 		attackerCurrentHP = attacker.getCurrentHP() != 0 ? attacker.getCurrentHP() : attackerHPStat; //If currentHP is 0, ignore it
 		attackerOffenseStat = attacker.getStat(whichAtk).calculateStat();
@@ -140,8 +138,8 @@ public class CalculateDamage
 		attackerStatus = attacker.getStatus();
 
 		defenderName = defender.getCurrentForme();
-		defenderTypeLeft = defender.getType(0);
-		defenderTypeRight = defender.getType(1);
+		defenderTypes[0] = defender.getType(0);
+		defenderTypes[1] = defender.getType(1);
 		defenderHPStat = defender.getStat(HP).calculateStat();
 		defenderCurrentHP = defender.getCurrentHP() != 0 ? defender.getCurrentHP() : defenderHPStat; //If currentHP is 0, ignore it
 		defenderDefenseStat = defender.getStat(whichDef).calculateStat();
@@ -203,7 +201,7 @@ public class CalculateDamage
 		
 		if (moveCategory.equals("Status") || typeMod == 0)
 		{
-			if (moveType.equals("Electric") && (defenderTypeLeft.equals("Ground") || defenderTypeRight.equals("Ground")))
+			if (moveType.equals("Electric") && (Arrays.asList(defenderTypes).contains("Ground")))
 			{
 				damageOutput = description.getNoDamageDescription("try using Soak first");
 			}
@@ -715,7 +713,7 @@ public class CalculateDamage
 		//bpModifiers.add(0x2000);
 		
 		//Grassy/Misty Terrain (negative). Check for grounded-state first.
-		if (!(defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying") || defenderAbility.equals("Levitate") || defenderItem.getName().equals("Air Balloon")))
+		if (!(Arrays.asList(defenderTypes).contains("Flying") || defenderAbility.equals("Levitate") || defenderItem.getName().equals("Air Balloon")))
 		{
 			if (terrain.equals("Misty") && moveType.equals("Dragon"))
 			{
@@ -730,7 +728,7 @@ public class CalculateDamage
 		}
 		
 		//Electric/Psychic/Grassy Terrain (positive). Check for grounded-state first.
-		if (!(attackerTypeLeft.equals("Flying") || attackerTypeRight.equals("Flying") || attackerAbility.equals("Levitate") || attackerItem.getName().equals("Air Balloon")))
+		if (!(Arrays.asList(attackerTypes).contains("Flying") || attackerAbility.equals("Levitate") || attackerItem.getName().equals("Air Balloon")))
 		{
 			if ((terrain.equals("Electric") && moveType.equals("Electric"))
 					|| (terrain.equals("Psychic") && moveType.equals("Psychic"))
@@ -936,7 +934,7 @@ public class CalculateDamage
 		}
 		
 		//Sandstorm is applied prior to the other defense modifiers
-		if (weather.equals("Sand") && (defenderTypeLeft.equals("Rock") || defenderTypeRight.equals("Rock")) && !hitsPhysical)
+		if (weather.equals("Sand") && (Arrays.asList(defenderTypes).contains("Rock")) && !hitsPhysical)
 		{
 			baseDefense = pokeRound(baseDefense * 3 / 2);
 			description.setWeather(weather);
@@ -1061,7 +1059,7 @@ public class CalculateDamage
 		}
 
 		//Automatically account for STAB if the ability is Protean
-		if (moveType.equals(attackerTypeLeft) || (moveType.equals(attackerTypeRight) || attackerAbility.equals("Protean")))
+		if (Arrays.asList(attackerTypes).contains(moveType) || attackerAbility.equals("Protean"))
 		{
 			int stabMod = 0x1800;
 			if (attackerAbility.equals("Adaptability"))
@@ -1266,39 +1264,36 @@ public class CalculateDamage
 	{
 		double modifier;
 		
-		if (attackerAbility.equals("Scrappy") && defenderTypeLeft.equals("Ghost"))
+		if (attackerAbility.equals("Scrappy") && Arrays.asList(defenderTypes).contains("Ghost") && (moveType.equals("Normal") || moveType.equals("Fighting")))
 		{
-			modifier = typechart[types.get(moveType)][types.get(defenderTypeRight)];
+			String notGhost = defenderTypes[0].equals("Ghost") ? defenderTypes[0] : defenderTypes[1];
+			modifier = typechart[types.get(moveType)][types.get(notGhost)]; //Scrappy vs Ghost is 1x, so just get the other type matchup
 			description.setAttackerAbility(attackerAbility);
 		}
-		else if (attackerAbility.equals("Scrappy") && defenderTypeRight.equals("Ghost"))
-		{
-			modifier = typechart[types.get(moveType)][types.get(defenderTypeLeft)];
-			description.setAttackerAbility(attackerAbility);
-		}
-		else if (move.getName().equals("Thousand Arrows") && moveType.equals("Ground") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")))
+		//Thousand Arrows must be Ground-type to have its unique modifier override effect apply
+		else if (move.getName().equals("Thousand Arrows") && moveType.equals("Ground") && Arrays.asList(defenderTypes).contains("Flying"))
 		{
 			modifier = 1;
 		}
-		else if (move.getName().equals("Freeze-Dry") && (defenderTypeLeft.equals("Water") || defenderTypeRight.equals("Water")))
+		else if (move.getName().equals("Freeze-Dry") && Arrays.asList(defenderTypes).contains("Water"))
 		{
 			modifier = 4; //cheating a bit; 4x0.5 = 2 to balance out
-			modifier *= typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];
+			modifier *= typechart[types.get(moveType)][types.get(defenderTypes[0])] * typechart[types.get(moveType)][types.get(defenderTypes[1])];
 		}
 		else if (move.getName().equals("Flying Press"))
 		{
-			modifier = typechart[types.get("Fighting")][types.get(defenderTypeLeft)]
-					* typechart[types.get("Flying")][types.get(defenderTypeLeft)]
-					* typechart[types.get("Fighting")][types.get(defenderTypeRight)]
-					* typechart[types.get("Flying")][types.get(defenderTypeRight)];
+			modifier = typechart[types.get("Fighting")][types.get(defenderTypes[0])]
+					* typechart[types.get("Flying")][types.get(defenderTypes[0])]
+					* typechart[types.get("Fighting")][types.get(defenderTypes[1])]
+					* typechart[types.get("Flying")][types.get(defenderTypes[1])];
 		}
 		else //Normal case
 		{
-			modifier = typechart[types.get(moveType)][types.get(defenderTypeLeft)] * typechart[types.get(moveType)][types.get(defenderTypeRight)];
+			modifier = typechart[types.get(moveType)][types.get(defenderTypes[0])] * typechart[types.get(moveType)][types.get(defenderTypes[1])];
 		}
 		
 		//Strong Winds completely changes the type mod for things like Neuroforce, etc.
-		if (weather.equals("Strong Winds") && (defenderTypeLeft.equals("Flying") || defenderTypeRight.equals("Flying")) && typechart[types.get(moveType)][types.get("Flying")] > 1)
+		if (weather.equals("Strong Winds") && Arrays.asList(defenderTypes).contains("Flying") && typechart[types.get(moveType)][types.get("Flying")] > 1)
 		{
 			modifier *= 0.5;
 			description.setWeather(weather);
