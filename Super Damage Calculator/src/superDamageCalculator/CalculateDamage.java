@@ -1315,6 +1315,16 @@ public class CalculateDamage
 					* typechart[types.get("Fighting")][types.get(defenderTypes[1])]
 					* typechart[types.get("Flying")][types.get(defenderTypes[1])];
 		}
+		else if (defenderItem.getName().equals("Ring Target"))
+		{
+			double typeModOne = typechart[types.get(moveType)][types.get(defenderTypes[0])];
+			double typeModTwo = typechart[types.get(moveType)][types.get(defenderTypes[1])];
+			
+			//If the type matchup was 0, make it 1 because of Ring Target
+			if (typeModOne == 0) {typeModOne = 1;}
+			if (typeModTwo == 0) {typeModTwo = 1;}
+			modifier = typeModOne * typeModTwo;
+		}
 		else //Normal case
 		{
 			modifier = typechart[types.get(moveType)][types.get(defenderTypes[0])] * typechart[types.get(moveType)][types.get(defenderTypes[1])];
