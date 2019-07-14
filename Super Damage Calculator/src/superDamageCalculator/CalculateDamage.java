@@ -286,14 +286,14 @@ public class CalculateDamage
 				if (userSpeed == 0) {initialBP = 1;}
 				else //Gyro Ball must have min 1 BP and max 150 BP
 				{
-					initialBP = Math.max(1, Math.min(150, (int) Math.floor((25 * (double) targetSpeed) / userSpeed)));
+					initialBP = Math.max(1, Math.min(150, (int) (25 * (double) targetSpeed) / userSpeed));
 				}
 				description.setMoveBP(initialBP);
 				break;	
 			case "Electro Ball":
 				userSpeed = calculateSpeed(attackerSpeedStat, attackerSpeedChange, attackerItem, attackerAbility, attackerStatus);
 				targetSpeed = calculateSpeed(defenderSpeedStat, defenderSpeedChange, defenderItem, defenderAbility, defenderStatus);
-				int relativeSpeed = (int) Math.floor((double) userSpeed / targetSpeed);
+				int relativeSpeed = (int) ((double) userSpeed / targetSpeed);
 				if (targetSpeed == 0) {initialBP = 40;}
 				else
 				{
@@ -303,14 +303,14 @@ public class CalculateDamage
 				break;
 			case "Water Spout":
 			case "Eruption":
-				initialBP = Math.max(1, (int) Math.floor((150.0 * attackerCurrentHP / attackerHPStat)));
+				initialBP = Math.max(1, (int) (150.0 * attackerCurrentHP / attackerHPStat));
 				description.setMoveBP(initialBP);
 				break;
 			case "Heavy Slam":
 			case "Heat Crash":
 				double userWeight = calculateWeight(attackerName, attackerAbility, attackerItem);
 				targetWeight = calculateWeight(defenderName, defenderAbility, defenderItem);
-				int relativeWeight = (int) Math.floor(userWeight / targetWeight);
+				int relativeWeight = (int) (userWeight / targetWeight);
 				initialBP = relativeWeight >= 5 ? 120 : relativeWeight >= 4 ? 100 : relativeWeight >= 3 ? 80 : relativeWeight >= 2 ? 60 : 40; 
 				description.setMoveBP(initialBP);
 				break;
@@ -408,13 +408,13 @@ public class CalculateDamage
 			case "Wring Out":
 			case "Crush Grip":
 				//Taken from https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js
-				int fancyCalculation = (int) Math.floor(Math.floor((120 * (100 * Math.floor((defenderCurrentHP * 4096.0 / defenderHPStat)) + 2048 - 1) / 4096) / 100));	
+				int fancyCalculation = (int) Math.floor((120 * (100 * Math.floor((defenderCurrentHP * 4096.0 / defenderHPStat)) + 2048 - 1) / 4096) / 100);	
 				initialBP = Math.max(1, fancyCalculation);
 				description.setMoveBP(initialBP);
 				break;
 			case "Flail":
 			case "Reversal":
-				int p = ((int) Math.floor(48.0 * attackerCurrentHP / attackerHPStat));
+				int p = (int) (48.0 * attackerCurrentHP / attackerHPStat);
 				initialBP = p <= 1 ? 200 : p <= 4 ? 150 : p <= 9 ? 100 : p <= 16 ? 80 : p <= 32 ? 40 : 20;
 				description.setMoveBP(initialBP);
 				break;
@@ -1004,10 +1004,10 @@ public class CalculateDamage
 
 	public long[] mainCalculation(int finalBasePower, int finalAttack, int finalDefense)
 	{
-		int levelCalculation = (int) Math.floor((2.0 * attackerLevel / 5.0) + 2);
+		int levelCalculation = (int) ((2.0 * attackerLevel / 5.0) + 2);
 		long levelBPAttack = (levelCalculation * finalBasePower * finalAttack) % SIZE_UNSIGNED_INT; //Check for 32-bit overflow
-		long baseDamage = (long) Math.floor(levelBPAttack / (double) finalDefense);
-		baseDamage = (long) (Math.floor(baseDamage / 50.0)) + 2;
+		long baseDamage = (long) (levelBPAttack / (double) finalDefense);
+		baseDamage = (long) ((baseDamage / 50.0) + 2);
 
 		if (debugMode)
 		{
@@ -1020,26 +1020,22 @@ public class CalculateDamage
 		if (format.equals("Doubles") && move.isSpread() && !isZ)
 		{
 			damagePreRolls = applyMod(damagePreRolls, 0xC00);
-			//damagePreRolls = pokeRound((damagePreRolls * 0xC00) / 0x1000);
 		}
 		
 		if (isBabyHit)
 		{
 			damagePreRolls = applyMod(damagePreRolls, 0x400);
-			//damagePreRolls = pokeRound((damagePreRolls * 0x400) / 0x1000);
 		}
 
 		//Weather. Note that Strong Winds is actually a modifier to type matchups, not weather. 		
 		if ((weather.equals("Sun") && moveType.equals("Fire")) ||(weather.equals("Rain") && moveType.equals("Water")))
 		{
 			damagePreRolls = applyMod(damagePreRolls, 0x1800);
-			//damagePreRolls = pokeRound((damagePreRolls * 0x1800) / 0x1000);
 			description.setWeather(weather);
 		}
 		else if ((weather.equals("Sun") && moveType.equals("Water")) ||(weather.equals("Rain") && moveType.equals("Fire")))
 		{
 			damagePreRolls = applyMod(damagePreRolls, 0x800);
-			//damagePreRolls = pokeRound((damagePreRolls * 0x800) / 0x1000);
 			description.setWeather(weather);
 		}
 		
@@ -1052,7 +1048,6 @@ public class CalculateDamage
 		if (isCrit)
 		{
 			damagePreRolls = applyMod(damagePreRolls, 0x1800);
-			//damagePreRolls = (int) Math.floor((damagePreRolls * 0x1800) / 0x1000);
 			description.setCrit(true);
 		}
 		
@@ -1063,7 +1058,7 @@ public class CalculateDamage
 		for (int i = 0; i < 16; i++)
 		{
 			tempMultiplication = (long) (damagePreRolls * (85 + i)) % SIZE_UNSIGNED_INT;
-			damageRolls[i] = (long) Math.floor(tempMultiplication / 100.0);
+			damageRolls[i] = (long) (tempMultiplication / 100.0);
 		}
 		
 		if (debugMode)
@@ -1083,7 +1078,6 @@ public class CalculateDamage
 			for (int i = 0; i < 16; i++)
 			{
 				damageRolls[i] = applyMod(damageRolls[i], stabMod);
-				//damageRolls[i] = (int) Math.floor((damageRolls[i] * stabMod) / 0x1000);
 			}
 		}
 		
@@ -1108,7 +1102,7 @@ public class CalculateDamage
 			}
 			else
 			{
-				damageRolls[i] = (long) Math.floor(damageRolls[i] * typeMod);
+				damageRolls[i] = (long) (damageRolls[i] * typeMod);
 			}
 		}
 		
@@ -1126,7 +1120,6 @@ public class CalculateDamage
 			for (int i = 0; i < 16; i++)
 			{
 				damageRolls[i] = applyMod(damageRolls[i], 0x800);
-				//damageRolls[i] = (int) Math.floor((damagePreRolls * 0x800) / 0x1000);
 			}
 			description.setBurnt(true);
 		}
@@ -1270,7 +1263,7 @@ public class CalculateDamage
 	//Game Freak rounds down on 0.5 decimals quite often.
 	public int pokeRound(double num)
 	{
-		return num % 1 > 0.5 ? (int) Math.ceil(num) : (int) Math.floor(num);
+		return num % 1 > 0.5 ? (int) Math.ceil(num) : (int) num;
 	}
 	
 	//Accounts for damage overflow in modifiers
@@ -1361,11 +1354,11 @@ public class CalculateDamage
 	{
 		if (statChange > 0)
 		{
-			stat = (int) Math.floor((stat * (2 + statChange)) / 2);
+			stat = (int) ((stat * (2 + statChange)) / 2);
 		}
 		else
 		{
-			stat = (int) Math.floor((stat * 2) / (2 - statChange));
+			stat = (int) ((stat * 2) / (2 - statChange));
 		}
 		return stat;
 	}
@@ -1440,7 +1433,7 @@ public class CalculateDamage
 		//Don't apply para if Ability was Quick Feet
 		if (status.equals("Paralyzed") && !ability.equals("Quick Feet"))
 		{
-			baseSpeed = (int) Math.floor(baseSpeed / 2);
+			baseSpeed = (int) (baseSpeed / 2);
 		}
 		
 		if (baseSpeed > 10000) {baseSpeed = 10000;}
