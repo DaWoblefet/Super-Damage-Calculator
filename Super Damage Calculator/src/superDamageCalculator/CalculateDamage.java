@@ -1310,9 +1310,9 @@ public class CalculateDamage
 		}
 		else if (move.getName().equals("Flying Press"))
 		{
-			modifier = typechart[types.get("Fighting")][types.get(defenderTypes[0])]
+			modifier = typechart[types.get(moveType)][types.get(defenderTypes[0])]
 					* typechart[types.get("Flying")][types.get(defenderTypes[0])]
-					* typechart[types.get("Fighting")][types.get(defenderTypes[1])]
+					* typechart[types.get(moveType)][types.get(defenderTypes[1])]
 					* typechart[types.get("Flying")][types.get(defenderTypes[1])];
 		}
 		else if (defenderItem.getName().equals("Ring Target"))
