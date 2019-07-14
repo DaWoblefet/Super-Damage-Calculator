@@ -18,7 +18,8 @@ public class CalculateDamage
 	private HashMap<String, Move> movedex = new Movedex().getMovedex();
 	private HashMap<String, Integer> types = new Type().types;
 	private double typechart[][] = new Type().typeChart;
-	private boolean debugMode = false;
+	private boolean debugMode = true;
+	private long SIZE_UNSIGNED_INT = (long) Math.pow(2, 32); //4294967296
 
 	private int attackerLevel;
 	private int attackerHPStat;
@@ -66,16 +67,16 @@ public class CalculateDamage
 	private boolean isFriendGuard;
 	private boolean isBattery;
 
-	private int[] damageRolls = new int[16];
+	private long[] damageRolls = new long[16];
 	private String damageOutput;
 	private String damageOutputShort;
 	private double typeMod;
 	
 	private DamageDescriptionBuilder description;
-	private int[] zeroDamageArray = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	private long[] zeroDamageArray = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	
 	private boolean isBabyHit;
-	private int[] pBondDamageRolls = zeroDamageArray;
+	private long[] pBondDamageRolls = zeroDamageArray;
 	
 
 	/* Passes in the variables affecting damage calculation, sets them, then starts damage calculation. */
@@ -744,10 +745,10 @@ public class CalculateDamage
 		
 		if (debugMode)
 		{
-			System.out.println("Base Power after modifiers: " + (int) Math.max(1, pokeRound(startingBP * chainMods(bpModifiers) / 0x1000)));
+			System.out.println("Base Power after modifiers: " + Math.max(1, applyMod(startingBP, chainMods(bpModifiers))));
 		}
 		//Base Power must be 1 at a minimum
-		return (int) Math.max(1, pokeRound(startingBP * chainMods(bpModifiers) / 0x1000));
+		return Math.max(1, (int) applyMod(startingBP, chainMods(bpModifiers)));
 	}
 	
 	public int calculateFinalAttack(int baseAttack)
@@ -904,11 +905,11 @@ public class CalculateDamage
 
 		if (debugMode)
 		{
-			System.out.println("Attack after modifiers is: " + (int) Math.max(1, pokeRound(baseAttack * chainMods(attackModifiers) / 0x1000)));
+			System.out.println("Attack after modifiers is: " + applyMod(baseAttack, chainMods(attackModifiers)));
 		}
 		
 		//Chain modifiers; attack must be 1 at a minimum.
-		return (int) Math.max(1, pokeRound(baseAttack * chainMods(attackModifiers) / 0x1000));
+		return Math.max(1, (int) applyMod(baseAttack, chainMods(attackModifiers)));
 	}
 
 	public int calculateFinalDefense(int baseDefense)
@@ -995,62 +996,74 @@ public class CalculateDamage
 		
 		if (debugMode)
 		{
-			System.out.println("Defense after modifiers: " + (int) Math.max(1, pokeRound(baseDefense * chainMods(defenseModifiers) / 0x1000)));
+			System.out.println("Defense after modifiers: " + Math.max(1, applyMod(baseDefense, chainMods(defenseModifiers))));
 		}
 		
-		//Defense must be 1 at a minimum
-		return (int) Math.max(1, pokeRound(baseDefense * chainMods(defenseModifiers) / 0x1000));
+		return Math.max(1, (int) applyMod(baseDefense, chainMods(defenseModifiers)));
 	}
 
-	public int[] mainCalculation(int finalBasePower, int finalAttack, int finalDefense)
+	public long[] mainCalculation(int finalBasePower, int finalAttack, int finalDefense)
 	{
-		double baseDamage = (int) Math.floor((2.0 * attackerLevel / 5.0) + 2);
-		baseDamage = (int) Math.floor((baseDamage * finalBasePower * finalAttack) / finalDefense);
-		baseDamage = (int) (Math.floor(baseDamage / 50)) + 2;
+		int levelCalculation = (int) Math.floor((2.0 * attackerLevel / 5.0) + 2);
+		long levelBPAttack = (levelCalculation * finalBasePower * finalAttack) % SIZE_UNSIGNED_INT; //Check for 32-bit overflow
+		long baseDamage = (long) Math.floor(levelBPAttack / (double) finalDefense);
+		baseDamage = (long) (Math.floor(baseDamage / 50.0)) + 2;
 
 		if (debugMode)
 		{
 			System.out.println("Base Damage: " + baseDamage);
 		}
 
-		double damagePreRolls = baseDamage;
+		long damagePreRolls = baseDamage;
 
 		//If spread move, 0.75x
 		if (format.equals("Doubles") && move.isSpread() && !isZ)
 		{
-			damagePreRolls = pokeRound((damagePreRolls * 0xC00) / 0x1000);
+			damagePreRolls = applyMod(damagePreRolls, 0xC00);
+			//damagePreRolls = pokeRound((damagePreRolls * 0xC00) / 0x1000);
 		}
 		
 		if (isBabyHit)
 		{
-			damagePreRolls = pokeRound((damagePreRolls * 0x400) / 0x1000);
+			damagePreRolls = applyMod(damagePreRolls, 0x400);
+			//damagePreRolls = pokeRound((damagePreRolls * 0x400) / 0x1000);
 		}
 
 		//Weather. Note that Strong Winds is actually a modifier to type matchups, not weather. 		
 		if ((weather.equals("Sun") && moveType.equals("Fire")) ||(weather.equals("Rain") && moveType.equals("Water")))
 		{
-			damagePreRolls = pokeRound((damagePreRolls * 0x1800) / 0x1000);
+			damagePreRolls = applyMod(damagePreRolls, 0x1800);
+			//damagePreRolls = pokeRound((damagePreRolls * 0x1800) / 0x1000);
 			description.setWeather(weather);
 		}
 		else if ((weather.equals("Sun") && moveType.equals("Water")) ||(weather.equals("Rain") && moveType.equals("Fire")))
 		{
-			damagePreRolls = pokeRound((damagePreRolls * 0x800) / 0x1000);
+			damagePreRolls = applyMod(damagePreRolls, 0x800);
+			//damagePreRolls = pokeRound((damagePreRolls * 0x800) / 0x1000);
 			description.setWeather(weather);
+		}
+		
+		if (debugMode)
+		{
+			System.out.println("After weather: " + damagePreRolls);
 		}
 
 		//Critical hit
 		if (isCrit)
 		{
-			damagePreRolls = (int) Math.floor((damagePreRolls * 0x1800) / 0x1000);
+			damagePreRolls = applyMod(damagePreRolls, 0x1800);
+			//damagePreRolls = (int) Math.floor((damagePreRolls * 0x1800) / 0x1000);
 			description.setCrit(true);
 		}
 		
-		int[] damageRolls = new int[16];
+		long[] damageRolls = new long[16];
 		
 		//Random factor; from now on, all modifiers are applied to each roll separately.
+		long tempMultiplication;
 		for (int i = 0; i < 16; i++)
 		{
-			damageRolls[i] = (int) Math.floor((damagePreRolls * (85 + i)) / 100);
+			tempMultiplication = (long) (damagePreRolls * (85 + i)) % SIZE_UNSIGNED_INT;
+			damageRolls[i] = (long) Math.floor(tempMultiplication / 100.0);
 		}
 		
 		if (debugMode)
@@ -1069,8 +1082,14 @@ public class CalculateDamage
 			}
 			for (int i = 0; i < 16; i++)
 			{
-				damageRolls[i] = (int) Math.floor((damageRolls[i] * stabMod) / 0x1000);
+				damageRolls[i] = applyMod(damageRolls[i], stabMod);
+				//damageRolls[i] = (int) Math.floor((damageRolls[i] * stabMod) / 0x1000);
 			}
+		}
+		
+		if (debugMode)
+		{
+			System.out.println("After STAB: " + Arrays.toString(damageRolls));
 		}
 		
 		
@@ -1083,7 +1102,14 @@ public class CalculateDamage
 		}
 		for (int i = 0; i < 16; i++)
 		{
-			damageRolls[i] = (int) Math.floor(damageRolls[i] * typeMod);
+			if (typeMod > 1) //Only necessary to check for overflow if the attack is super effective
+			{
+				damageRolls[i] = (damageRolls[i] * (long) typeMod) % SIZE_UNSIGNED_INT;
+			}
+			else
+			{
+				damageRolls[i] = (long) Math.floor(damageRolls[i] * typeMod);
+			}
 		}
 		
 		if (debugMode)
@@ -1094,11 +1120,13 @@ public class CalculateDamage
 		}
 
 		//If burned. Guts/Facade ignores the effects of burn, but the boosts are applied elsewhere.
+		//OZY says that burn is pokeRounded, in contrast to the BW documentation.
 		if (attackerStatus.equals("Burned") && !(attackerAbility.equals("Guts")) && !(move.getName().equals("Facade") && usesPhysicalAttack))
 		{
 			for (int i = 0; i < 16; i++)
 			{
-				damageRolls[i] = (int) Math.floor((damagePreRolls * 0x800) / 0x1000);
+				damageRolls[i] = applyMod(damageRolls[i], 0x800);
+				//damageRolls[i] = (int) Math.floor((damagePreRolls * 0x800) / 0x1000);
 			}
 			description.setBurnt(true);
 		}
@@ -1206,17 +1234,17 @@ public class CalculateDamage
 		//TODO Double-powered moves are yet to be implemented.
 
 		//Applying the final modifiers
-		double finalMod = chainMods(finalModifiers);
+		int finalMod = chainMods(finalModifiers);
 		for (int i = 0; i < 16; i++)
 		{
-			damageRolls[i] = pokeRound((damageRolls[i] * finalMod) / 0x1000);
+			damageRolls[i] = applyMod(damageRolls[i], finalMod);
 		}
 
 		if (isZ && isProtect)
 		{
 			for (int i = 0; i < 16; i++)
 			{
-				damageRolls[i] = pokeRound((damageRolls[i] * 0x400) / 0x1000);
+				damageRolls[i] = applyMod(damageRolls[i], 0x400);
 			}
 			description.setProtect(true);
 		}
@@ -1244,9 +1272,16 @@ public class CalculateDamage
 	{
 		return num % 1 > 0.5 ? (int) Math.ceil(num) : (int) Math.floor(num);
 	}
+	
+	//Accounts for damage overflow in modifiers
+	public long applyMod(long initialValue, int modifier)
+	{
+		long multiplicationResult = (initialValue * modifier) % SIZE_UNSIGNED_INT;
+		return (long) pokeRound((multiplicationResult) / 0x1000);
+	}
 
 	//See how to chain a modifier.
-	public double chainMods(ArrayList<Integer> mods)
+	public int chainMods(ArrayList<Integer> mods)
 	{
 	    double m = 0x1000;
 	    for (int i = 0; i < mods.size(); i++)
@@ -1257,7 +1292,7 @@ public class CalculateDamage
 	        	m = Math.round((m * mods.get(i)) / 0x1000);
 	        }
 	    }
-	    return m;
+	    return (int) m;
 	}
 	
 	public double getTypeMod()

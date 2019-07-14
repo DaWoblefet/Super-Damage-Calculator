@@ -4,14 +4,29 @@ import java.util.ArrayList;
 public class KOChanceLogic
 {
 	private int HPStat;
-	private int[][] dmgRolls;
+	private long[][] dmgRolls;
 	private int rawCount;
 	private int possibleCombinations;
+	
+	public KOChanceLogic (int HPStat, long[][] dmgRolls)
+	{
+		this.HPStat = HPStat;
+		this.dmgRolls = dmgRolls;
+		
+		this.rawCount = getKOChance();
+		this.possibleCombinations = (int) Math.pow(16, dmgRolls.length);
+	}
 	
 	public KOChanceLogic (int HPStat, int[][] dmgRolls)
 	{
 		this.HPStat = HPStat;
-		this.dmgRolls = dmgRolls;
+		for (int i = 0; i < dmgRolls.length; i++)
+		{
+			for (int j = 0; j < 16; j++)
+			{
+				this.dmgRolls[i][j] = dmgRolls[i][j];
+			}
+		}
 		
 		this.rawCount = getKOChance();
 		this.possibleCombinations = (int) Math.pow(16, dmgRolls.length);
@@ -40,7 +55,7 @@ public class KOChanceLogic
 	public int getKOChance()
 	{
 		//Turns all the sets of damage rolls into a big arraylist.
-		ArrayList<Integer> combinedRolls = new ArrayList<Integer>();
+		ArrayList<Long> combinedRolls = new ArrayList<Long>();
 
 		for (int i = 0; i < dmgRolls[0].length; i++)
 		{
@@ -52,7 +67,7 @@ public class KOChanceLogic
 	}
 	
 	//Generates all combinations of possible damage rolls recursively and compares each against an HP stat. Blame Stats if the algorithm's bad.
-	public int getKOChance(ArrayList<Integer> combinedRolls, int beginIndex)
+	public int getKOChance(ArrayList<Long> combinedRolls, int beginIndex)
 	{
 
 		if (beginIndex >= dmgRolls.length)
@@ -69,7 +84,7 @@ public class KOChanceLogic
 			return count;
 		}
 
-		ArrayList<Integer> newRolls = new ArrayList<Integer>();
+		ArrayList<Long> newRolls = new ArrayList<Long>();
 
 		for (int i = 0; i < combinedRolls.size(); i++)
 		{

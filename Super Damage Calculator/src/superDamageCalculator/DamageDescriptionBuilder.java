@@ -16,9 +16,9 @@ public class DamageDescriptionBuilder
 	private boolean isBattery;	
 	private boolean knockOff;
 	private boolean isParentalBond;
-	private int[] pBondDamageRolls;
-	private int pBondMinComboRoll;
-	private int pBondMaxComboRoll;
+	private long[] pBondDamageRolls;
+	private long pBondMinComboRoll;
+	private long pBondMaxComboRoll;
 	
 	private String move;
 	private String moveCategory;
@@ -44,7 +44,7 @@ public class DamageDescriptionBuilder
 	private boolean isFriendGuard;
 	private boolean isProtect;
 	
-	private int[] damageRolls = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //initialize to zero
+	private long[] damageRolls = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //initialize to zero
 	private int precision = 2;
 	
 	public DamageDescriptionBuilder(String attackerName, String defenderName, String move)
@@ -71,8 +71,8 @@ public class DamageDescriptionBuilder
 	{
 		String result = move + " ";
 		
-		int minDamage = damageRolls[0];
-		int maxDamage = damageRolls[15];
+		long minDamage = damageRolls[0];
+		long maxDamage = damageRolls[15];
 		
 		if (isParentalBond)
 		{
@@ -225,7 +225,7 @@ public class DamageDescriptionBuilder
 		{
 			if (smallestXHKO < 6 && !isParentalBond) //Don't bother checking % to 6HKO, etc
 			{
-				int damageRollDuplicates[][] = new int[smallestXHKO][16];
+				long damageRollDuplicates[][] = new long[smallestXHKO][16];
 				for (int i = 0; i < smallestXHKO; i++)
 				{
 					damageRollDuplicates[i] = damageRolls; //make X copies for the XHKO chance.
@@ -243,7 +243,7 @@ public class DamageDescriptionBuilder
 			}
 			else if (isParentalBond && smallestXHKO < 4) //only check for 3HKOs with Parental Bond
 			{
-				int damageRollDuplicates[][] = new int[smallestXHKO * 2][16];
+				long damageRollDuplicates[][] = new long[smallestXHKO * 2][16];
 				for (int i = 0; i < smallestXHKO * 2; i++)
 				{
 					damageRollDuplicates[i] = damageRolls;
@@ -274,8 +274,8 @@ public class DamageDescriptionBuilder
 	public String calculatePercentDamage()
 	{
 		String damageOutputShort;
-		int minDamage = damageRolls[0];
-		int maxDamage = damageRolls[15];
+		long minDamage = damageRolls[0];
+		long maxDamage = damageRolls[15];
 		
 		if (isParentalBond)
 		{
@@ -537,7 +537,7 @@ public class DamageDescriptionBuilder
 		this.defenderDefenseChange = defenderDefenseChange;
 	}
 
-	public void setDamageRolls(int[] damageRolls) {
+	public void setDamageRolls(long[] damageRolls) {
 		this.damageRolls = damageRolls;
 	}
 
@@ -558,7 +558,7 @@ public class DamageDescriptionBuilder
 	}
 
 
-	public void setpBondDamageRolls(int[] pBondDamageRolls) {
+	public void setpBondDamageRolls(long[] pBondDamageRolls) {
 		this.pBondDamageRolls = pBondDamageRolls;
 	}
 
