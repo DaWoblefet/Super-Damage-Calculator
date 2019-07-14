@@ -1294,7 +1294,7 @@ public class CalculateDamage
 		
 		if (attackerAbility.equals("Scrappy") && Arrays.asList(defenderTypes).contains("Ghost") && (moveType.equals("Normal") || moveType.equals("Fighting")))
 		{
-			String notGhost = defenderTypes[0].equals("Ghost") ? defenderTypes[0] : defenderTypes[1];
+			String notGhost = defenderTypes[0].equals("Ghost") ? defenderTypes[1] : defenderTypes[0];
 			modifier = typechart[types.get(moveType)][types.get(notGhost)]; //Scrappy vs Ghost is 1x, so just get the other type matchup
 			description.setAttackerAbility(attackerAbility);
 		}
@@ -1305,8 +1305,8 @@ public class CalculateDamage
 		}
 		else if (move.getName().equals("Freeze-Dry") && Arrays.asList(defenderTypes).contains("Water"))
 		{
-			modifier = 4; //cheating a bit; 4x0.5 = 2 to balance out
-			modifier *= typechart[types.get(moveType)][types.get(defenderTypes[0])] * typechart[types.get(moveType)][types.get(defenderTypes[1])];
+			String notWater = defenderTypes[0].equals("Water") ? defenderTypes[1] : defenderTypes[0];
+			modifier = 2 * typechart[types.get(moveType)][types.get(notWater)];
 		}
 		else if (move.getName().equals("Flying Press"))
 		{
