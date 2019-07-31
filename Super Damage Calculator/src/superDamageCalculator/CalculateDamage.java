@@ -736,8 +736,10 @@ public class CalculateDamage
 		{
 			System.out.println("Base Power after modifiers: " + Math.max(1, applyMod(startingBP, chainMods(bpModifiers))));
 		}
-		//Base Power must be 1 at a minimum
-		return Math.max(1, (int) applyMod(startingBP, chainMods(bpModifiers)));
+		//Chain modifiers; attack must be 1 at a minimum, and 65535 at a maximum (though the second check can cause 0 BP).
+		int returnMod = Math.max(1, (int) applyMod(startingBP, chainMods(bpModifiers)));
+		returnMod = returnMod > 65535 ? returnMod % 65536 : returnMod; 
+		return returnMod;
 	}
 	
 	public int calculateFinalAttack(int baseAttack)
@@ -897,8 +899,10 @@ public class CalculateDamage
 			System.out.println("Attack after modifiers is: " + applyMod(baseAttack, chainMods(attackModifiers)));
 		}
 		
-		//Chain modifiers; attack must be 1 at a minimum.
-		return Math.max(1, (int) applyMod(baseAttack, chainMods(attackModifiers)));
+		//Chain modifiers; attack must be 1 at a minimum, and 65535 at a maximum (though the second check can cause 0 Attack).
+		int returnMod = Math.max(1, (int) applyMod(baseAttack, chainMods(attackModifiers)));
+		returnMod = returnMod > 65535 ? returnMod % 65536 : returnMod; 
+		return returnMod;
 	}
 
 	public int calculateFinalDefense(int baseDefense)
@@ -988,7 +992,10 @@ public class CalculateDamage
 			System.out.println("Defense after modifiers: " + Math.max(1, applyMod(baseDefense, chainMods(defenseModifiers))));
 		}
 		
-		return Math.max(1, (int) applyMod(baseDefense, chainMods(defenseModifiers)));
+		//Chain modifiers; attack must be 1 at a minimum, and 65535 at a maximum (though the second check can cause 0 Defense).
+		int returnMod = Math.max(1, (int) applyMod(baseDefense, chainMods(defenseModifiers)));
+		returnMod = returnMod > 65535 ? returnMod % 65536 : returnMod; 
+		return returnMod;
 	}
 	
 	public int calculateFinalModifiers()
