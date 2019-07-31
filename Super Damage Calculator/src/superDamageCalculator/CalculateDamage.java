@@ -18,7 +18,7 @@ public class CalculateDamage
 	private HashMap<String, Move> movedex = new Movedex().getMovedex();
 	private HashMap<String, Integer> types = new Type().types;
 	private double typechart[][] = new Type().typeChart;
-	private boolean debugMode = true;
+	private boolean debugMode = false;
 	private long SIZE_UNSIGNED_INT = (long) Math.pow(2, 32); //4294967296
 
 	private int attackerLevel;
@@ -200,7 +200,13 @@ public class CalculateDamage
 
 		typeMod = getTypeMod();
 		
-		if (moveCategory.equals("Status") || typeMod == 0)
+		if (checkSpecialCase())
+		{
+			damageOutput = description.getLongDescription();
+			damageOutputShort = description.getShortDescription();
+			return; //logic was handled in the method
+		}
+		else if (moveCategory.equals("Status") || typeMod == 0)
 		{
 			if (moveType.equals("Electric") && (Arrays.asList(defenderTypes).contains("Ground")))
 			{
@@ -272,13 +278,13 @@ public class CalculateDamage
 	
 	public int checkForCustomBP(int initialBP)
 	{
+		boolean hasCustomBP = true;
 		switch (move.getName())
 		{
 			case "Low Kick":
 			case "Grass Knot":
 				double targetWeight = calculateWeight(defenderName, defenderAbility, defenderItem);
 				initialBP = targetWeight >= 200 ? 120 : targetWeight >= 100 ? 100 : targetWeight >= 50 ? 80 : targetWeight >= 25 ? 60 : targetWeight >= 10 ? 40 : 20;
-				description.setMoveBP(initialBP);
 				break;
 			case "Gyro Ball":
 				int userSpeed = calculateSpeed(attackerSpeedStat, attackerSpeedChange, attackerItem, attackerAbility, attackerStatus);
@@ -288,7 +294,6 @@ public class CalculateDamage
 				{
 					initialBP = Math.max(1, Math.min(150, (int) (25 * (double) targetSpeed) / userSpeed));
 				}
-				description.setMoveBP(initialBP);
 				break;	
 			case "Electro Ball":
 				userSpeed = calculateSpeed(attackerSpeedStat, attackerSpeedChange, attackerItem, attackerAbility, attackerStatus);
@@ -299,20 +304,17 @@ public class CalculateDamage
 				{
 					initialBP = relativeSpeed >= 4 ? 150 : relativeSpeed == 3 ? 120 : relativeSpeed == 2 ? 80 : relativeSpeed == 1 ? 60 : 40;
 				}
-				description.setMoveBP(initialBP);
 				break;
 			case "Water Spout":
 			case "Eruption":
 				initialBP = Math.max(1, (int) (150.0 * attackerCurrentHP / attackerHPStat));
-				description.setMoveBP(initialBP);
 				break;
 			case "Heavy Slam":
 			case "Heat Crash":
 				double userWeight = calculateWeight(attackerName, attackerAbility, attackerItem);
 				targetWeight = calculateWeight(defenderName, defenderAbility, defenderItem);
 				int relativeWeight = (int) (userWeight / targetWeight);
-				initialBP = relativeWeight >= 5 ? 120 : relativeWeight >= 4 ? 100 : relativeWeight >= 3 ? 80 : relativeWeight >= 2 ? 60 : 40; 
-				description.setMoveBP(initialBP);
+				initialBP = relativeWeight >= 5 ? 120 : relativeWeight >= 4 ? 100 : relativeWeight >= 3 ? 80 : relativeWeight >= 2 ? 60 : 40;
 				break;
 			case "Acrobatics":
 				if (attackerItem.getName().equals("(none)"))
@@ -323,7 +325,6 @@ public class CalculateDamage
 				{
 					initialBP = 55;
 				}
-				description.setMoveBP(initialBP);
 				break;
 			case "Weather Ball":
 				if (weather.equals("None") || weather.equals("Strong Winds"))
@@ -342,7 +343,6 @@ public class CalculateDamage
 					typeMod = getTypeMod();
 					initialBP = 100;
 				}
-				description.setMoveBP(initialBP);
 				break;
 			case "Nature Power":
 				switch (terrain)
@@ -368,12 +368,10 @@ public class CalculateDamage
 				moveType = move.getType();
 				moveBP = move.getBP();
 				moveCategory = "Special";
-				description.setMoveBP(initialBP);
 				typeMod = getTypeMod();
 				break;
 			case "Fling": //Could verify an item is unFlingable by checking if BP is 0
 				initialBP = attackerItem.getFlingBP();
-				description.setMoveBP(initialBP);
 				break;	
 			case "Natural Gift": //Could avoid running checks on non-Berries
 				if (attackerItem.isBerry())
@@ -382,41 +380,35 @@ public class CalculateDamage
 					moveType = attackerItem.getNaturalGiftType();
 					typeMod = getTypeMod();
 				}
-				description.setMoveBP(initialBP);
 				break;
 			case "Hex":
 				if (!defenderStatus.equals("Healthy"))
 				{
 					initialBP = 130;
 				}
-				description.setMoveBP(initialBP);
 				break;
 			case "Wake-Up Slap":
 				if (defenderStatus.equals("Asleep"))
 				{
 					initialBP = 140;
 				}
-				description.setMoveBP(initialBP);
 				break;
 			case "Smelling Salts":
 				if (defenderStatus.equals("Paralyzed"))
 				{
 					initialBP = 140;
 				}
-				description.setMoveBP(initialBP);
 				break;
 			case "Wring Out":
 			case "Crush Grip":
 				//Taken from https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js
 				int fancyCalculation = (int) Math.floor((120 * (100 * Math.floor((defenderCurrentHP * 4096.0 / defenderHPStat)) + 2048 - 1) / 4096) / 100);	
 				initialBP = Math.max(1, fancyCalculation);
-				description.setMoveBP(initialBP);
 				break;
 			case "Flail":
 			case "Reversal":
 				int p = (int) (48.0 * attackerCurrentHP / attackerHPStat);
 				initialBP = p <= 1 ? 200 : p <= 4 ? 150 : p <= 9 ? 100 : p <= 16 ? 80 : p <= 32 ? 40 : 20;
-				description.setMoveBP(initialBP);
 				break;
 			case "Water Shuriken":
 				if (attackerName.equals("Greninja-Ash") && attackerAbility.equals("Battle Bond"))
@@ -424,7 +416,6 @@ public class CalculateDamage
 					description.setAttackerAbility(attackerAbility);
 					initialBP = 20;
 				}
-				description.setMoveBP(initialBP);
 				break;
 			
 			//Higher priority to support
@@ -452,9 +443,10 @@ public class CalculateDamage
 			case "Ice Ball":
 				break;	
 			default:
+				hasCustomBP = false;
 				break;		
 		}
-		if (isZ) {description.setMoveBP(initialBP);}
+		if (hasCustomBP || isZ) {description.setMoveBP(initialBP);}
 		
 		return initialBP;
 	}
@@ -481,42 +473,39 @@ public class CalculateDamage
 		//Check for -ate abilities changing move typing.
 		if (!isZ && moveType.equals("Normal")) //Z-moves aren't affected by -ate.
 		{
+			boolean isTypeChangingAbility = true;
 			switch (attackerAbility)
 			{
 				case "Aerilate":
 					moveType = "Flying";
 					bpModifiers.add(0x1333);
-					description.setAttackerAbility(attackerAbility);
-					typeMod = getTypeMod();
 					break;
 				case "Pixilate":
 					moveType = "Fairy";
 					bpModifiers.add(0x1333);
-					description.setAttackerAbility(attackerAbility);
-					typeMod = getTypeMod();
 					break;
 				case "Refrigerate":
 					moveType = "Ice";
 					bpModifiers.add(0x1333);
-					description.setAttackerAbility(attackerAbility);
-					typeMod = getTypeMod();
 					break;
 				case "Galvanize":
 					moveType = "Electric";
 					bpModifiers.add(0x1333);
-					description.setAttackerAbility(attackerAbility);
-					typeMod = getTypeMod();
 					break;
 				case "Liquid Voice":
 					if (move.isSound())
 					{
 						moveType = "Water";
 					}
-					typeMod = getTypeMod();
-					description.setAttackerAbility(attackerAbility);
 					break;
 				default:
+					isTypeChangingAbility = false;
 					break;
+			}
+			if (isTypeChangingAbility)
+			{
+				typeMod = getTypeMod();
+				description.setAttackerAbility(attackerAbility);
 			}
 		}
 		
@@ -1001,6 +990,111 @@ public class CalculateDamage
 		
 		return Math.max(1, (int) applyMod(baseDefense, chainMods(defenseModifiers)));
 	}
+	
+	public int calculateFinalModifiers()
+	{
+		ArrayList<Integer> finalModifiers = new ArrayList<Integer>();
+
+		//NOTE: OZY and PS calc say 0xAAC in Gen 6 and later for doubles screens rather than 0xA8F.
+		if ((isReflect && usesPhysicalAttack) || (isLightScreen && !usesPhysicalAttack) && !isCrit)
+		{
+			if (format.equals("Doubles"))
+			{
+				finalModifiers.add(0xAAC);
+			}
+			else //Singles multiplier
+			{
+				finalModifiers.add(0x800);
+			}
+			
+			String screen = isAuroraVeil ? "Aurora Veil" : usesPhysicalAttack ? "Reflect" : "Light Screen";
+			description.setScreen(screen);
+		}
+		
+		if (attackerAbility.equals("Neuroforce") && typeMod > 1)
+		{
+			finalModifiers.add(0x1400);
+			description.setAttackerAbility(attackerAbility);
+		}
+		
+		if (attackerAbility.equals("Sniper") && isCrit)
+		{
+			finalModifiers.add(0x1800);
+			description.setAttackerAbility(attackerAbility);
+		}
+		
+		if (attackerAbility.equals("Tinted Lens") && typeMod < 1)
+		{
+			finalModifiers.add(0x2000);
+			description.setAttackerAbility(attackerAbility);
+		}
+
+		//Multiscale / Shadow Shield requires the target is at full HP.
+		if ((defenderAbility.equals("Multiscale") || defenderAbility.equals("Shadow Shield")) && ((defenderCurrentHP == defenderHPStat) && !isBabyHit))
+		{
+			finalModifiers.add(0x800);
+			description.setDefenderAbility(defenderAbility);
+		}
+		
+		if (defenderAbility.equals("Fluffy") && move.getMakesContact())
+		{
+			finalModifiers.add(0x800);
+			description.setDefenderAbility(defenderAbility);
+		}
+
+		if (isFriendGuard)
+		{
+			finalModifiers.add(0xC00);
+			description.setFriendGuard(true);
+		}
+
+		if ((defenderAbility.equals("Solid Rock") || defenderAbility.equals("Filter") || defenderAbility.equals("Prism Armor")) && typeMod > 1)
+		{
+			finalModifiers.add(0xC00);
+			description.setDefenderAbility(defenderAbility);
+		}
+		
+		if (defenderAbility.equals("Fluffy") && moveType.equals("Fire"))
+		{
+			finalModifiers.add(0x2000);
+			description.setDefenderAbility(defenderAbility);
+		}
+
+		//Metronome item
+		if (attackerItem.getName().equals("Metronome"))
+		{
+			//Atm do nothing because it requires a specific turn count passed in.
+			//description.setAttackerItem(attackerItem.getName());
+		}
+
+		//Expert Belt
+		if (attackerItem.getName().equals("Expert Belt") && typeMod > 1)
+		{
+			finalModifiers.add(0x1333);
+			description.setAttackerItem(attackerItem.getName());
+		}
+
+		//Life Orb
+		if (attackerItem.getName().equals("Life Orb"))
+		{
+			finalModifiers.add(0x14CC);
+			description.setAttackerItem(attackerItem.getName());
+		}
+
+		//Calls a couple functions to check if it is a resist Berry, and what type it is.
+		if (defenderItem.isResistBerry())
+		{
+			if (defenderItem.getTypeAssociated().equals(moveType) && (typeMod > 1 || moveType.equals("Normal")))
+			{
+				finalModifiers.add(0x800);
+				description.setDefenderItem(defenderItem.getName());
+			}
+		}
+
+		//TODO Double-powered moves are yet to be implemented.
+		
+		return chainMods(finalModifiers);
+	}
 
 	public long[] mainCalculation(int finalBasePower, int finalAttack, int finalDefense)
 	{
@@ -1123,111 +1217,9 @@ public class CalculateDamage
 			}
 			description.setBurnt(true);
 		}
-		/*****Final modifiers*****
-		*Final modifiers are specifically chained together. Using OZY's order rather than PS/BW research. */
-
-		ArrayList<Integer> finalModifiers = new ArrayList<Integer>();
-
-		//NOTE: OZY and PS calc say 0xAAC in Gen 6 and later for doubles screens rather than 0xA8F.
-		if ((isReflect && usesPhysicalAttack) || (isLightScreen && !usesPhysicalAttack) && !isCrit)
-		{
-			if (format.equals("Doubles"))
-			{
-				finalModifiers.add(0xAAC);
-			}
-			else //Singles multiplier
-			{
-				finalModifiers.add(0x800);
-			}
-			
-			String screen = isAuroraVeil ? "Aurora Veil" : usesPhysicalAttack ? "Reflect" : "Light Screen";
-			description.setScreen(screen);
-		}
-		
-		if (attackerAbility.equals("Neuroforce") && typeMod > 1)
-		{
-			finalModifiers.add(0x1400);
-			description.setAttackerAbility(attackerAbility);
-		}
-		
-		if (attackerAbility.equals("Sniper") && isCrit)
-		{
-			finalModifiers.add(0x1800);
-			description.setAttackerAbility(attackerAbility);
-		}
-		
-		if (attackerAbility.equals("Tinted Lens") && typeMod < 1)
-		{
-			finalModifiers.add(0x2000);
-			description.setAttackerAbility(attackerAbility);
-		}
-
-		//Multiscale / Shadow Shield requires the target is at full HP.
-		if ((defenderAbility.equals("Multiscale") || defenderAbility.equals("Shadow Shield")) && ((defenderCurrentHP == defenderHPStat) && !isBabyHit))
-		{
-			finalModifiers.add(0x800);
-			description.setDefenderAbility(defenderAbility);
-		}
-		
-		if (defenderAbility.equals("Fluffy") && move.getMakesContact())
-		{
-			finalModifiers.add(0x800);
-			description.setDefenderAbility(defenderAbility);
-		}
-
-		if (isFriendGuard)
-		{
-			finalModifiers.add(0xC00);
-			description.setFriendGuard(true);
-		}
-
-		if ((defenderAbility.equals("Solid Rock") || defenderAbility.equals("Filter") || defenderAbility.equals("Prism Armor")) && typeMod > 1)
-		{
-			finalModifiers.add(0xC00);
-			description.setDefenderAbility(defenderAbility);
-		}
-
-		//Metronome
-		if (attackerItem.getName().equals("Metronome"))
-		{
-			//Atm do nothing because it requires a specific turn count passed in.
-			//description.setAttackerItem(attackerItem.getName());
-		}
-		
-		if (defenderAbility.equals("Fluffy") && moveType.equals("Fire"))
-		{
-			finalModifiers.add(0x2000);
-			description.setDefenderAbility(defenderAbility);
-		}
-
-		//Expert Belt
-		if (attackerItem.getName().equals("Expert Belt") && typeMod > 1)
-		{
-			finalModifiers.add(0x1333);
-			description.setAttackerItem(attackerItem.getName());
-		}
-
-		//Life Orb
-		if (attackerItem.getName().equals("Life Orb"))
-		{
-			finalModifiers.add(0x14CC);
-			description.setAttackerItem(attackerItem.getName());
-		}
-
-		//Calls a couple functions to check if it is a resist Berry, and what type it is.
-		if (defenderItem.isResistBerry())
-		{
-			if (defenderItem.getTypeAssociated().equals(moveType) && (typeMod > 1 || moveType.equals("Normal")))
-			{
-				finalModifiers.add(0x800);
-				description.setDefenderItem(defenderItem.getName());
-			}
-		}
-
-		//TODO Double-powered moves are yet to be implemented.
 
 		//Applying the final modifiers
-		int finalMod = chainMods(finalModifiers);
+		int finalMod = calculateFinalModifiers();
 		for (int i = 0; i < 16; i++)
 		{
 			damageRolls[i] = applyMod(damageRolls[i], finalMod);
@@ -1371,6 +1363,70 @@ public class CalculateDamage
 			stat = (int) ((stat * 2) / (2 - statChange));
 		}
 		return stat;
+	}
+	
+	public boolean checkSpecialCase()
+	{
+		boolean isSpecialCase = true;
+		switch (move.getName())
+		{
+			case "Endeavor":
+				if (attackerCurrentHP < defenderCurrentHP)
+				{
+					for (int i = 0; i < 16; i++)
+					{
+						damageRolls[i] = defenderCurrentHP - attackerCurrentHP;
+					}
+				}
+				else
+				{
+					damageRolls = zeroDamageArray;
+				}
+				break;
+			case "Final Gambit":
+				for (int i = 0; i < 16; i++)
+				{
+					damageRolls[i] = attackerCurrentHP;
+				}
+				break;
+			case "Guardian of Alola":
+				break;
+			case "Nature's Madness":
+			case "Super Fang":
+				break;
+			case "Seismic Toss":
+			case "Night Shade":
+				break;
+			case "Psywave":
+				break;
+			case "Dragon Rage":
+				break;
+			case "Sonic Boom":
+				break;
+			case "Fissure":
+			case "Sheer Cold":
+			case "Horn Drill":
+			case "Guillotine":
+				break;
+			default:
+				isSpecialCase = false;
+				break;
+		}
+		//Does not work with Parental Bond
+		//Endeavor
+		//Final Gambit
+		//Guardian of Alola
+		
+		//Works with Parental Bond
+		//Nature's Madness / Super Fang
+		//Night Shade / Seismic Toss
+		//Psywave? (maybe min and max range)
+		//Dragon Rage
+		//Sonic Boom
+		//Fissure, Gullotine, Horn Drill, Sheer Cold
+		
+		//TODO make custom damage description for these moves
+		return isSpecialCase;
 	}
 	
 	//Calculate weight with modifiers (no Autotomize)
