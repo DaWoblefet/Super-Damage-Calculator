@@ -165,11 +165,12 @@ public class CalculateDamage
 			else if (Arrays.asList("Mold Breaker", "Turboblaze", "Teravolt").contains(attackerAbility))
 			{
 				//Technically doesn't display when Mold Breaker actually suppresses, only the potential to suppress
-				if (Arrays.asList("Heatproof", "Dry Skin", "Unaware", "Thick Fat", "Water Bubble",
-						"Flower Gift", "Marvel Scale", "Grass Pelt", "Fur Coat", "Multiscale",
-						"Fluffy", "Solid Rock", "Filter", "Prism Armor").contains(defenderAbility))
+				if (Arrays.asList("Dry Skin", "Filter", "Flower Gift", "Fluffy", "Fur Coat", "Grass Pelt", "Heatproof",
+						"Heavy Metal", "Light Metal", "Marvel Scale", "Multiscale", "Prism Armor", "Solid Rock",
+						"Thick Fat", "Unaware", "Water Bubble").contains(defenderAbility))
 				{
 					description.setAttackerAbility(attackerAbility);
+					isFriendGuard = false; //Mold Breaker ignores Friend Guard too
 				}
 				defenderAbility = ""; //Suppress Ability
 			}
