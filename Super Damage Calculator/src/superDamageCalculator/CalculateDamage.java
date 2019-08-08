@@ -402,8 +402,8 @@ public class CalculateDamage
 				break;
 			case "Wring Out":
 			case "Crush Grip":
-				//Taken from https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js
-				int fancyCalculation = (int) Math.floor((120 * (100 * Math.floor((defenderCurrentHP * 4096.0 / defenderHPStat)) + 2048 - 1) / 4096) / 100);	
+				//TODO: test if 184/362 HP gives 60 BP
+				int fancyCalculation = (int) Math.floor(pokeRound(120 * (100 * Math.floor((defenderCurrentHP * 4096.0 / defenderHPStat))) / 4096) / 100);	
 				initialBP = Math.max(1, fancyCalculation);
 				break;
 			case "Flail":
