@@ -1146,58 +1146,73 @@ public class CalculateDamage
 			System.out.println("After weather: " + damagePreRolls);
 		}
 
-		//Critical hit
+		//Critical hit is NOT 6144/4096. Assuming the most efficient operation, divide by 2 and add to the original.
 		if (isCrit)
 		{
-			damagePreRolls = applyMod(damagePreRolls, 0x1800);
+			damagePreRolls += damagePreRolls >> 1;
 			description.setCrit(true);
 		}
+			
+		/* The random factor would normally get applied here. However,
+		 * to save calculation time, right now it's just checked whether or not
+		 * the conditions are met; they are applied in order later.
+		 */
 		
-		long[] damageRolls = new long[16];
-		
-		//Random factor; from now on, all modifiers are applied to each roll separately.
-		long tempMultiplication;
-		for (int i = 0; i < 16; i++)
-		{
-			tempMultiplication = (long) (damagePreRolls * (85 + i)) & MAX_UNSIGNED_INT;
-			damageRolls[i] = (long) (tempMultiplication / 100.0);
-		}
-		
-		if (debugMode)
-		{
-			System.out.println("After random factor: " + Arrays.toString(damageRolls));
-		}
-
-		//Automatically account for STAB if the ability is Protean
-		if (Arrays.asList(attackerTypes).contains(moveType) || attackerAbility.equals("Protean"))
-		{
-			int stabMod = 0x1800;
-			if (attackerAbility.equals("Adaptability"))
-			{
-				stabMod = 0x2000;
-				description.setAttackerAbility(attackerAbility);
-			}
-			for (int i = 0; i < 16; i++)
-			{
-				damageRolls[i] = applyMod(damageRolls[i], stabMod);
-			}
-		}
-		
-		if (debugMode)
-		{
-			System.out.println("After STAB: " + Arrays.toString(damageRolls));
-		}
-		
-		
-		//Type modifier. If some dynamic change to change move type reached this far (e.g. from -ate abilities), break out.
+		//If some dynamic change to change move type reached this far (e.g. from -ate abilities), break out.
 		if (typeMod == 0)
 		{
 			damageOutput = description.getNoDamageDescription("nice move there m8");
 			damageOutputShort = description.getNoDamageShortDescription();
 			return zeroDamageArray;
 		}
+		
+		int stabMod = 1;
+		//Automatically account for STAB if the ability is Protean
+		if (Arrays.asList(attackerTypes).contains(moveType) || attackerAbility.equals("Protean"))
+		{
+			stabMod = 0x1800;
+			if (attackerAbility.equals("Adaptability"))
+			{
+				stabMod = 0x2000;
+				description.setAttackerAbility(attackerAbility);
+			}
+			//Don't say the attack is Protean-boosted if Protean wouldn't have changed STAB
+			else if (attackerAbility.equals("Protean") && !Arrays.asList(attackerTypes).contains(moveType))
+			{
+				description.setAttackerAbility(attackerAbility);
+			}
+		}
+		
+		//Type mod has already been calculated, or it would be done here
+		
+		boolean isBurned = false;
+		//If burned. Guts/Facade ignores the effects of burn, but the boosts are applied elsewhere.
+		if (attackerStatus.equals("Burned") && !(attackerAbility.equals("Guts")) && !(move.getName().equals("Facade") && usesPhysicalAttack))
+		{
+			isBurned = true;
+			description.setBurnt(true);
+		}
+		
+		int finalMod = calculateFinalModifiers();
+		
+		boolean isProtectedZ = false;
+		if (isZ && isProtect)
+		{
+			isProtectedZ = true;
+			description.setProtect(true);
+		}
+		
+		long tempMultiplication;
+		long[] damageRolls = new long[16];
+		
+		//The loop for all general damage modifiers after crits.
 		for (int i = 0; i < 16; i++)
 		{
+			tempMultiplication = (long) (damagePreRolls * (85 + i)) & MAX_UNSIGNED_INT;
+			damageRolls[i] = (long) (tempMultiplication / 100.0);
+			
+			if (stabMod > 1) {damageRolls[i] = applyMod(damageRolls[i], stabMod);}
+			
 			if (typeMod > 1) //Only necessary to check for overflow if the attack is super effective
 			{
 				damageRolls[i] = (damageRolls[i] * (long) typeMod) & MAX_UNSIGNED_INT;
@@ -1206,50 +1221,21 @@ public class CalculateDamage
 			{
 				damageRolls[i] = (long) (damageRolls[i] * typeMod);
 			}
-		}
-		
-		if (debugMode)
-		{
-			System.out.println("typeMod: " + typeMod);
-			System.out.println("After typeMod: " + Arrays.toString(damageRolls));
-			System.out.println(); //extra space for readability in console
-		}
-
-		//If burned. Guts/Facade ignores the effects of burn, but the boosts are applied elsewhere.
-		//OZY says that burn is pokeRounded, in contrast to the BW documentation.
-		if (attackerStatus.equals("Burned") && !(attackerAbility.equals("Guts")) && !(move.getName().equals("Facade") && usesPhysicalAttack))
-		{
-			for (int i = 0; i < 16; i++)
-			{
-				damageRolls[i] = applyMod(damageRolls[i], 0x800);
-			}
-			description.setBurnt(true);
-		}
-
-		//Applying the final modifiers
-		int finalMod = calculateFinalModifiers();
-		for (int i = 0; i < 16; i++)
-		{
-			damageRolls[i] = applyMod(damageRolls[i], finalMod);
-		}
-
-		if (isZ && isProtect)
-		{
-			for (int i = 0; i < 16; i++)
-			{
-				damageRolls[i] = applyMod(damageRolls[i], 0x400);
-			}
-			description.setProtect(true);
-		}
-		
-		//Check for 1 damage and 16-bit cutoffs
-		for (int i = 0; i < 16; i++)
-		{
-			if (damageRolls[i] < 1)
-			{
-				damageRolls[i] = 1;
-			}
-			damageRolls[i] = damageRolls[i] & 0xFFFF; //It is possible to do 0 damage if this is 65536n.
+			
+			//SadisticMystic has proved burn is 2048/4096.
+			if (isBurned) {damageRolls[i] = applyMod(damageRolls[i], 0x800);}
+			
+			//Always apply final mod, even if 4096/4096.
+			damageRolls[i] = applyMod(damageRolls[i], finalMod); 
+			
+			//If Z-move through Protecting move
+			if (isProtectedZ) {damageRolls[i] = applyMod(damageRolls[i], 0x400);}
+			
+			//Check for 1 damage.
+			if (damageRolls[i] < 1) {damageRolls[i] = 1;}
+			
+			//Check for 65535 damage.
+			damageRolls[i] = damageRolls[i] & 0xFFFF; //It is possible to do 0 damage if this is 65536n.			
 		}
 		
 		return damageRolls;
@@ -1364,15 +1350,16 @@ public class CalculateDamage
 		return result;
 	}
 	
+	//If the numerator * stat > 65535, reduce by 65535.
 	public int applyStatChange(int stat, int statChange)
 	{
 		if (statChange > 0)
 		{
-			stat = (int) ((stat * (2 + statChange)) / 2);
+			stat = (int) (((stat * (2 + statChange)) & 0xFFFF) / 2);
 		}
 		else
 		{
-			stat = (int) ((stat * 2) / (2 - statChange));
+			stat = (int) (((stat * 2) & 0xFFFF) / (2 - statChange));
 		}
 		return stat;
 	}
@@ -1468,13 +1455,13 @@ public class CalculateDamage
 	//Calculate Speed with modifiers (no Tailwind or Pledge Swamp atm)
 	public int calculateSpeed(int stat, int statChange, Item item, String ability, String status)
 	{
-		int baseSpeed = stat;
+		long startingSpeed;
 		
 		//-6 to +6
-		baseSpeed = applyStatChange(baseSpeed, statChange);
+		startingSpeed = applyStatChange(stat, statChange);
 		
-		//It's possible these are chained together TODO test (if mathematically significant)
-		double otherSpeedMods = 1;
+		//This doesn't have to be a chained modifier, but for consistency's sake I've done so.
+		ArrayList<Integer> speedModifiers = new ArrayList<Integer>();
 		
 		if ((ability.equals("Chlorophyll") && weather.equals("Sun"))
 				|| (ability.equals("Swift Swim") && weather.equals("Rain"))
@@ -1484,39 +1471,40 @@ public class CalculateDamage
 				|| (ability.equals("Unburden") && item.getName().equals("(none)"))
 				|| (item.getName().equals("Quick Powder"))) //Technically not checking for Ditto
 		{
-			otherSpeedMods *= 2;
+			speedModifiers.add(0x2000);
 		}
 		
 		if (ability.equals("Slow Start"))
 		{
-			otherSpeedMods *= 0.5;
+			speedModifiers.add(0x800);
 		}
 		if (item.isHalvesSpeed())
 		{
-			otherSpeedMods *= 0.5;
+			speedModifiers.add(0x800);
 		}
 		
 		if (ability.equals("Quick Feet") && !status.equals("Healthy"))
 		{
-			otherSpeedMods *= 1.5;
+			speedModifiers.add(0x1800);
 		}
 		
 		if (item.getName().equals("Choice Scarf"))
 		{
-			otherSpeedMods *= 1.5;
+			speedModifiers.add(0x1800);
 		}
 		
-		baseSpeed = pokeRound(baseSpeed * otherSpeedMods);
+		int finalSpeed = (int) applyMod(startingSpeed, (int) chainMods(speedModifiers));
 		
 		//Don't apply para if Ability was Quick Feet
 		if (status.equals("Paralyzed") && !ability.equals("Quick Feet"))
 		{
-			baseSpeed = (int) (baseSpeed / 2);
+			finalSpeed = finalSpeed >> 1;
 		}
 		
-		if (baseSpeed > 10000) {baseSpeed = 10000;}
+		finalSpeed = finalSpeed & 0xFFFF; //Speed can't be greater than 65535
+		if (finalSpeed > 10000) {finalSpeed = 10000;}
 		
-		return baseSpeed;
+		return finalSpeed;
 	}
 
 	public String getDamageRolls()
