@@ -19,7 +19,7 @@ public class CalculateDamage
 	private HashMap<String, Integer> types = new Type().types;
 	private double typechart[][] = new Type().typeChart;
 	private boolean debugMode = false;
-	private long SIZE_UNSIGNED_INT = (long) Math.pow(2, 32); //4294967296
+	private long SIZE_UNSIGNED_INT = 0xFFFFFFFF; //4294967295
 
 	private int attackerLevel;
 	private int attackerHPStat;
@@ -739,7 +739,7 @@ public class CalculateDamage
 		}
 		//Chain modifiers; attack must be 1 at a minimum, and 65535 at a maximum (though the second check can cause 0 BP).
 		int returnMod = Math.max(1, (int) applyMod(startingBP, chainMods(bpModifiers)));
-		returnMod = returnMod > 65535 ? returnMod % 65536 : returnMod; 
+		returnMod = returnMod & 0xFFFF;; 
 		return returnMod;
 	}
 	
@@ -902,7 +902,7 @@ public class CalculateDamage
 		
 		//Chain modifiers; attack must be 1 at a minimum, and 65535 at a maximum (though the second check can cause 0 Attack).
 		int returnMod = Math.max(1, (int) applyMod(baseAttack, chainMods(attackModifiers)));
-		returnMod = returnMod > 65535 ? returnMod % 65536 : returnMod; 
+		returnMod = returnMod & 0xFFFF; 
 		return returnMod;
 	}
 
@@ -995,7 +995,7 @@ public class CalculateDamage
 		
 		//Chain modifiers; attack must be 1 at a minimum, and 65535 at a maximum (though the second check can cause 0 Defense).
 		int returnMod = Math.max(1, (int) applyMod(baseDefense, chainMods(defenseModifiers)));
-		returnMod = returnMod > 65535 ? returnMod % 65536 : returnMod; 
+		returnMod = returnMod & 0xFFFF;
 		return returnMod;
 	}
 	
@@ -1107,7 +1107,7 @@ public class CalculateDamage
 	public long[] mainCalculation(int finalBasePower, int finalAttack, int finalDefense)
 	{
 		int levelCalculation = (int) ((2.0 * attackerLevel / 5.0) + 2);
-		long levelBPAttack = (levelCalculation * finalBasePower * finalAttack) % SIZE_UNSIGNED_INT; //Check for 32-bit overflow
+		long levelBPAttack = (levelCalculation * finalBasePower * finalAttack) & SIZE_UNSIGNED_INT; //Check for 32-bit overflow
 		long baseDamage = (long) (levelBPAttack / (double) finalDefense);
 		baseDamage = (long) ((baseDamage / 50.0) + 2);
 
@@ -1159,7 +1159,7 @@ public class CalculateDamage
 		long tempMultiplication;
 		for (int i = 0; i < 16; i++)
 		{
-			tempMultiplication = (long) (damagePreRolls * (85 + i)) % SIZE_UNSIGNED_INT;
+			tempMultiplication = (long) (damagePreRolls * (85 + i)) & SIZE_UNSIGNED_INT;
 			damageRolls[i] = (long) (tempMultiplication / 100.0);
 		}
 		
@@ -1200,7 +1200,7 @@ public class CalculateDamage
 		{
 			if (typeMod > 1) //Only necessary to check for overflow if the attack is super effective
 			{
-				damageRolls[i] = (damageRolls[i] * (long) typeMod) % SIZE_UNSIGNED_INT;
+				damageRolls[i] = (damageRolls[i] * (long) typeMod) & SIZE_UNSIGNED_INT;
 			}
 			else
 			{
@@ -1249,10 +1249,7 @@ public class CalculateDamage
 			{
 				damageRolls[i] = 1;
 			}
-			if (damageRolls[i] > 65535) //It is possible to do 0 damage if this is 65536n.
-			{
-				damageRolls[i] = damageRolls[i] % 65536;
-			}
+			damageRolls[i] = damageRolls[i] & 0xFFFF; //It is possible to do 0 damage if this is 65536n.
 		}
 		
 		return damageRolls;
@@ -1269,7 +1266,7 @@ public class CalculateDamage
 	//Accounts for damage overflow in modifiers
 	public long applyMod(long initialValue, int modifier)
 	{
-		long multiplicationResult = (initialValue * modifier) % SIZE_UNSIGNED_INT;
+		long multiplicationResult = (initialValue * modifier) & SIZE_UNSIGNED_INT;
 		return (long) pokeRound((multiplicationResult) / 0x1000);
 	}
 
