@@ -19,7 +19,7 @@ public class CalculateDamage
 	private HashMap<String, Integer> types = new Type().types;
 	private double typechart[][] = new Type().typeChart;
 	private boolean debugMode = false;
-	private long SIZE_UNSIGNED_INT = 0xFFFFFFFF; //4294967295
+	private long MAX_UNSIGNED_INT = 0xFFFFFFFF; //4294967295
 
 	private int attackerLevel;
 	private int attackerHPStat;
@@ -1107,7 +1107,7 @@ public class CalculateDamage
 	public long[] mainCalculation(int finalBasePower, int finalAttack, int finalDefense)
 	{
 		int levelCalculation = (int) ((2.0 * attackerLevel / 5.0) + 2);
-		long levelBPAttack = (levelCalculation * finalBasePower * finalAttack) & SIZE_UNSIGNED_INT; //Check for 32-bit overflow
+		long levelBPAttack = (levelCalculation * finalBasePower * finalAttack) & MAX_UNSIGNED_INT; //Check for 32-bit overflow
 		long baseDamage = (long) (levelBPAttack / (double) finalDefense);
 		baseDamage = (long) ((baseDamage / 50.0) + 2);
 
@@ -1159,7 +1159,7 @@ public class CalculateDamage
 		long tempMultiplication;
 		for (int i = 0; i < 16; i++)
 		{
-			tempMultiplication = (long) (damagePreRolls * (85 + i)) & SIZE_UNSIGNED_INT;
+			tempMultiplication = (long) (damagePreRolls * (85 + i)) & MAX_UNSIGNED_INT;
 			damageRolls[i] = (long) (tempMultiplication / 100.0);
 		}
 		
@@ -1200,7 +1200,7 @@ public class CalculateDamage
 		{
 			if (typeMod > 1) //Only necessary to check for overflow if the attack is super effective
 			{
-				damageRolls[i] = (damageRolls[i] * (long) typeMod) & SIZE_UNSIGNED_INT;
+				damageRolls[i] = (damageRolls[i] * (long) typeMod) & MAX_UNSIGNED_INT;
 			}
 			else
 			{
@@ -1266,7 +1266,7 @@ public class CalculateDamage
 	//Accounts for damage overflow in modifiers
 	public long applyMod(long initialValue, int modifier)
 	{
-		long multiplicationResult = (initialValue * modifier) & SIZE_UNSIGNED_INT;
+		long multiplicationResult = (initialValue * modifier) & MAX_UNSIGNED_INT;
 		return (long) pokeRound((multiplicationResult) / 0x1000);
 	}
 
