@@ -1273,16 +1273,19 @@ public class CalculateDamage
 	//See how to chain a modifier.
 	public int chainMods(ArrayList<Integer> mods)
 	{
-	    double m = 0x1000;
+		int m = 0x1000;
 	    for (int i = 0; i < mods.size(); i++)
 	    {
 	        if (mods.get(i) != 0x1000)
 	        {
-	        	//Chained modifiers use school rounding, i.e. regular and NOT pokeRounding.
-	        	m = Math.round((m * mods.get(i)) / 0x1000);
+	        	/* Chained modifiers use normal rounding, i.e. regular and NOT pokeRounding.
+	        	An equivalent, more human-readable version would be this (with m as a double)
+	        	m = Math.round((m * mods.get(i)) / 0x1000); */
+	        	
+	        	m = (m * mods.get(i)) + 0x800 >> 12;
 	        }
 	    }
-	    return (int) m;
+	    return m;
 	}
 	
 	public double getTypeMod()
